@@ -21,7 +21,7 @@ require_once ACF_PLUGIN_DIR . 'libs/plugin-update-checker/plugin-update-checker.
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $acf_update_checker = PucFactory::buildUpdateChecker(
-    'https://github.com/Douzhebag/WP-Plugins',
+    'https://github.com/Douzhebag/ISX-Form-WP-Plugin',
     __FILE__,
     'insightx-form'
 );
