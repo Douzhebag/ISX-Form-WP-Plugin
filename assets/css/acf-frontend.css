@@ -1,0 +1,144 @@
+.acf-form-container { 
+    max-width: 900px; 
+    margin: 0 auto; 
+    font-family: "Line Seeds Sans TH", Sans-serif; 
+    color: #1f2937; 
+}
+.acf-form-grid { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px 24px; 
+}
+.acf-col-100 { grid-column: span 2; } 
+.acf-col-50 { grid-column: span 1; }
+@media (max-width: 650px) { .acf-col-50 { grid-column: span 2; } }
+
+.acf-form-heading { 
+    margin: 32px 0 8px 0; 
+    font-size: 18px; 
+    font-weight: 700; 
+    color: #111827; 
+}
+.acf-col-100:first-child .acf-form-heading {
+    margin-top: 0; 
+}
+
+.acf-field-wrapper { position: relative; box-sizing: border-box; }
+.acf-form-container label.acf-field-label { 
+    display: block; 
+    margin-bottom: 6px; 
+    font-weight: 600; 
+    font-size: 14px; 
+    color: #1f2937; 
+}
+.acf-req-mark { color: #ef4444; font-weight: bold; margin-left: 2px; }
+
+.acf-checkbox-group{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 40px;
+}
+.acf-form-container input:not([type="radio"]):not([type="checkbox"]), 
+.acf-form-container select, 
+.acf-form-container textarea { 
+    width: 100%; 
+    padding: 10px 14px; 
+    border: 1px solid #d1d5db; 
+    border-radius: 6px; 
+    box-sizing: border-box; 
+    transition: all 0.2s ease; 
+    background: #fff; 
+    font-size: 15px; 
+    color: #374151; 
+    box-shadow: none;
+}
+.acf-form-container input::placeholder, 
+.acf-form-container textarea::placeholder { 
+    color: #9ca3af; 
+    font-weight: 400;
+}
+.acf-form-container input:focus, 
+.acf-form-container select:focus, 
+.acf-form-container textarea:focus { 
+    border-color: #60a5fa; 
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15); 
+    outline: none; 
+}
+
+.acf-modern-date { 
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="%239ca3af" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>'); 
+    background-repeat: no-repeat; 
+    background-position: right 12px center; 
+    padding-right: 40px !important; 
+    cursor: pointer;
+}
+
+.acf-submit-btn { 
+    background: #0f172a; 
+    color: #fff; 
+    padding: 14px 24px; 
+    border: none; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    font-weight: 600; 
+    width: 100%; 
+    transition: background 0.3s; 
+    margin-top: 30px; 
+}
+.acf-submit-btn:hover { background: #1e293b; }
+.acf-submit-btn:disabled {
+    background: #9ca3af !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.acf-toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%; 
+    transform: translateX(-50%);
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center; 
+}
+
+.acf-toast {
+    min-width: 280px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    font-family: "Line Seeds Sans TH", Sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.acf-toast.show { opacity: 1; transform: translateY(0); }
+.acf-toast.success { background-color: #10b981; border-left: 6px solid #059669; }
+.acf-toast.error { background-color: #ef4444; border-left: 6px solid #b91c1c; }
+.acf-toast-close { cursor: pointer; font-size: 20px; margin-left: 15px; opacity: 0.8; transition: opacity 0.2s; }
+.acf-toast-close:hover { opacity: 1; }
+
+.acf-spinner {
+    display: none; 
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: acf-spin 0.8s linear infinite;
+    vertical-align: middle;
+}
+@keyframes acf-spin { to { transform: rotate(360deg); } }
+.acf-submit-btn.is-loading .acf-spinner { display: inline-block; }
