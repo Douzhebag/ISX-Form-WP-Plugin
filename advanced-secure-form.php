@@ -2,7 +2,7 @@
 /**
  * Plugin Name: InsightX Form
  * Plugin URI:  https://insightx.in.th/
- * Version:     0.2.0
+ * Version:     0.2.1
  * Author:      InsightX
  * Author URI:  https://www.insightx.in.th
  * Text Domain: InsightX
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ACF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ACF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ACF_PLUGIN_VERSION', '0.2.0' );
+define( 'ACF_PLUGIN_VERSION', '0.2.1' );
 
 // === GitHub Plugin Update Checker ===
 require_once ACF_PLUGIN_DIR . 'libs/plugin-update-checker/plugin-update-checker.php';

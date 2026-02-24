@@ -143,7 +143,7 @@ class ACF_Entries {
         }
         if ( $search_query ) {
             $where_clauses[] = "(entry_data LIKE %s OR user_ip LIKE %s OR form_title LIKE %s)";
-            $like_s = $wpdb->esc_like( $search_query ) . '%';
+            $like_s = '%' . $wpdb->esc_like( $search_query ) . '%';
             $where_values[] = $like_s;
             $where_values[] = $like_s;
             $where_values[] = $like_s;
