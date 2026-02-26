@@ -240,12 +240,12 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                                     result.style.background = '#edfaef';
                                     result.style.border = '1px solid #46b450';
                                     result.style.color = '#2e7d32';
-                                    result.innerHTML = '✅ ' + data.data.message;
+                                    result.textContent = '✅ ' + data.data.message;
                                 } else {
                                     result.style.background = '#fef0f0';
                                     result.style.border = '1px solid #dc3232';
                                     result.style.color = '#a00';
-                                    result.innerHTML = '❌ ' + data.data.message;
+                                    result.textContent = '❌ ' + data.data.message;
                                 }
                             })
                             .catch(function() {

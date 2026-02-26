@@ -419,7 +419,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
                 if ( ! empty( $this->mail_errors ) ) {
                     $error_message = implode( '; ', $this->mail_errors );
                     error_log( '[InsightX Form] Email failed for form #' . $form_id . ': ' . $error_message );
-                    wp_send_json_error( [ 'message' => 'บันทึกข้อมูลแล้ว แต่ส่งอีเมลไม่ผ่าน: ' . $error_message ] );
+                    wp_send_json_error( [ 'message' => 'บันทึกข้อมูลแล้ว แต่ส่งอีเมลไม่ผ่าน: ' . esc_html( $error_message ) ] );
                 } else {
                     wp_send_json_success( [ 'message' => 'บันทึกข้อมูลเรียบร้อยแล้ว' ] );
                 }
