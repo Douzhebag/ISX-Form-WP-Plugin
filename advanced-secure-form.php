@@ -2,7 +2,7 @@
 /**
  * Plugin Name: InsightX Form
  * Plugin URI:  https://insightx.in.th/
- * Version:     0.2.1
+ * Version:     0.4.0
  * Author:      InsightX
  * Author URI:  https://www.insightx.in.th
  * Text Domain: InsightX
@@ -13,7 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ACF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ACF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ACF_PLUGIN_VERSION', '0.2.1' );
+define( 'ACF_PLUGIN_VERSION', '0.4.0' );
+define( 'ACF_DB_VERSION', '1.0' );
 
 // === GitHub Plugin Update Checker ===
 require_once ACF_PLUGIN_DIR . 'libs/plugin-update-checker/plugin-update-checker.php';
@@ -50,7 +51,21 @@ function acf_create_db_table() {
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
+
+    update_option( 'acf_db_version', ACF_DB_VERSION );
 }
+
+/**
+ * Auto-upgrade database when ACF_DB_VERSION changes.
+ * dbDelta() handles ALTER TABLE for adding new columns safely.
+ */
+function acf_maybe_upgrade_db() {
+    $current = get_option( 'acf_db_version', '0' );
+    if ( version_compare( $current, ACF_DB_VERSION, '<' ) ) {
+        acf_create_db_table();
+    }
+}
+add_action( 'admin_init', 'acf_maybe_upgrade_db' );
 
 register_uninstall_hook( __FILE__, 'acf_plugin_uninstall' );
 
@@ -69,11 +84,15 @@ function acf_plugin_uninstall() {
         'acf_smtp_secure',
         'acf_smtp_from_email',
         'acf_smtp_from_name',
+        'acf_smtp_disable_ssl_verify',
         'acf_captcha_service',
         'acf_recaptcha_site_key',
         'acf_recaptcha_secret_key',
         'acf_turnstile_site_key',
-        'acf_turnstile_secret_key'
+        'acf_turnstile_secret_key',
+        'acf_admin_notify_enable',
+        'acf_admin_notify_email',
+        'acf_db_version'
     ];
 
     foreach ( $options_to_delete as $option ) {

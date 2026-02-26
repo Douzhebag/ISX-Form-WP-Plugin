@@ -21,6 +21,34 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
 
         private $admin_notify_enable = 'acf_admin_notify_enable';
         private $admin_notify_email  = 'acf_admin_notify_email';
+        private $smtp_ssl_verify_off = 'acf_smtp_disable_ssl_verify';
+
+        /**
+         * Encrypt a password using AES-256-CBC with WordPress salts.
+         */
+        private function encrypt_password( $plain ) {
+            if ( empty( $plain ) ) return '';
+            if ( ! function_exists( 'openssl_encrypt' ) ) return $plain;
+            $key = wp_salt( 'auth' );
+            $iv  = substr( hash( 'sha256', wp_salt( 'secure_auth' ) ), 0, 16 );
+            $encrypted = openssl_encrypt( $plain, 'AES-256-CBC', $key, 0, $iv );
+            return base64_encode( 'ENC:' . $encrypted );
+        }
+
+        /**
+         * Decrypt a stored password. Falls back to plain text if not encrypted.
+         */
+        public function decrypt_password( $stored ) {
+            if ( empty( $stored ) ) return '';
+            $decoded = base64_decode( $stored, true );
+            if ( $decoded === false || strpos( $decoded, 'ENC:' ) !== 0 ) return $stored;
+            if ( ! function_exists( 'openssl_decrypt' ) ) return '';
+            $encrypted = substr( $decoded, 4 );
+            $key = wp_salt( 'auth' );
+            $iv  = substr( hash( 'sha256', wp_salt( 'secure_auth' ) ), 0, 16 );
+            $decrypted = openssl_decrypt( $encrypted, 'AES-256-CBC', $key, 0, $iv );
+            return ( $decrypted !== false ) ? $decrypted : '';
+        }
 
         public function __construct() {
             add_action( 'init', [ $this, 'register_form_cpt' ] );
@@ -31,6 +59,7 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
             add_filter( 'manage_acf_form_posts_columns', [ $this, 'custom_form_columns' ] );
             add_action( 'manage_acf_form_posts_custom_column', [ $this, 'fill_form_columns' ], 10, 2 );
             add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
+            add_action( 'admin_init', [ $this, 'maybe_migrate_smtp_password' ], 5 );
         }
 
         public function enqueue_admin_scripts( $hook ) {
@@ -79,7 +108,8 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                 $this->captcha_service_opt, $this->recaptcha_site_opt, $this->recaptcha_secret_opt, 
                 $this->turnstile_site_opt, $this->turnstile_secret_opt, 
                 $this->smtp_enable, $this->smtp_host, $this->smtp_port, $this->smtp_user, $this->smtp_pass, $this->smtp_secure, $this->smtp_from_e, $this->smtp_from_n,
-                $this->admin_notify_enable, $this->admin_notify_email 
+                $this->admin_notify_enable, $this->admin_notify_email,
+                $this->smtp_ssl_verify_off
             ];
             foreach ( $options as $opt ) {
                 $callback = ( $opt === $this->smtp_pass ) ? [ $this, 'sanitize_smtp_password' ] : 'sanitize_text_field';
@@ -136,8 +166,16 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                                 <tr><th>Host</th><td><input type="text" name="<?php echo $this->smtp_host; ?>" value="<?php echo esc_attr(get_option($this->smtp_host)); ?>" class="regular-text" placeholder="smtp.gmail.com"></td></tr>
                                 <tr><th>Port</th><td><input type="number" name="<?php echo $this->smtp_port; ?>" value="<?php echo esc_attr(get_option($this->smtp_port)); ?>" class="small-text" placeholder="587"></td></tr>
                                 <tr><th>Username</th><td><input type="text" name="<?php echo $this->smtp_user; ?>" value="<?php echo esc_attr(get_option($this->smtp_user)); ?>" class="regular-text" placeholder="your-email@gmail.com"></td></tr>
-                                <tr><th>Password</th><td><input type="password" name="<?php echo $this->smtp_pass; ?>" value="<?php echo esc_attr(get_option($this->smtp_pass)); ?>" class="regular-text" placeholder="รหัสผ่านแอป 16 หลัก"></td></tr>
+                                <tr><th>Password</th><td><input type="password" name="<?php echo $this->smtp_pass; ?>" value="" class="regular-text" placeholder="<?php echo get_option($this->smtp_pass) ? '••••••••••••••••' : 'รหัสผ่านแอป 16 หลัก'; ?>"><p class="description" style="margin-top:5px;">🔒 รหัสผ่านถูกเข้ารหัสก่อนบันทึก — เว้นว่างหากไม่ต้องการเปลี่ยน</p></td></tr>
                             </table>
+
+                            <div style="margin-top:10px; padding:10px 15px; background:#fff8e5; border:1px solid #ffe0b2; border-radius:4px;">
+                                <label>
+                                    <input type="checkbox" name="<?php echo $this->smtp_ssl_verify_off; ?>" value="yes" <?php checked(get_option($this->smtp_ssl_verify_off), 'yes'); ?>>
+                                    <strong>⚠️ ปิดการตรวจสอบ SSL Certificate</strong> <span style="color:#996800; font-size:12px;">(สำหรับ Development เท่านั้น)</span>
+                                </label>
+                                <p class="description" style="margin:5px 0 0; font-size:12px; color:#666;">เปิดใช้เฉพาะเมื่อเซิร์ฟเวอร์ไม่มี SSL certificate ที่ถูกต้อง — <strong>ไม่แนะนำสำหรับ Production</strong></p>
+                            </div>
 
                             <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 15px; border-radius: 4px; margin: 15px 0;">
                                 <strong style="color: #004085; display:block; margin-bottom:5px;">💡 วิธีขอรหัสผ่านแอป (App Password) สำหรับ Gmail:</strong>
@@ -236,11 +274,15 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
             
             $fields = get_post_meta( $post->ID, '_acf_form_fields', true );
             $email_type = get_post_meta( $post->ID, '_acf_form_email_type', true );
+            $custom_subject = get_post_meta( $post->ID, '_acf_form_email_subject', true );
+            $custom_body = get_post_meta( $post->ID, '_acf_form_email_body', true );
             
             if ( ! is_array($fields) || empty($fields) ) {
                 $fields = [[ 'name' => 'your_name', 'label' => 'ชื่อของคุณ', 'type' => 'text', 'width' => '100', 'options' => '', 'required' => 'yes' ]];
             }
             if ( empty($email_type) ) $email_type = 'booking';
+            if ( empty($custom_subject) ) $custom_subject = 'ขอบคุณที่ติดต่อ - {site_name}';
+            if ( empty($custom_body) ) $custom_body = "สวัสดีครับ\n\nเราได้รับข้อมูลของคุณเรียบร้อยแล้ว รายละเอียดดังนี้:\n\n{all_fields}\n\nขอบคุณครับ\n{site_name}";
             ?>
             <style>
                 .drag-handle { cursor: grab; font-size: 20px; color: #8c8f94; text-align: center; vertical-align: middle !important; width: 3%; }
@@ -248,15 +290,51 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                 .ui-sortable-helper { display: table-row; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
                 .ui-sortable-placeholder { visibility: visible !important; background: #f0f0f1; border: 1px dashed #b4b9be; }
                 .acf-settings-panel { background: #f6f7f7; border: 1px solid #dcdcde; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+                .acf-custom-email-panel { display: none; margin-top: 15px; padding: 15px; background: #fff; border: 1px solid #dcdcde; border-radius: 4px; }
+                .acf-custom-email-panel.active { display: block; }
+                .acf-custom-email-panel label { display: block; font-weight: 600; margin-bottom: 5px; color: #1d2327; }
+                .acf-custom-email-panel input[type="text"],
+                .acf-custom-email-panel textarea { width: 100%; padding: 8px 10px; border: 1px solid #8c8f94; border-radius: 4px; font-size: 13px; font-family: inherit; }
+                .acf-custom-email-panel textarea { min-height: 180px; line-height: 1.6; }
+                .acf-merge-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+                .acf-merge-tag { display: inline-block; padding: 3px 10px; background: #e8f0fe; color: #2271b1; border-radius: 12px; font-size: 12px; font-family: monospace; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+                .acf-merge-tag:hover { background: #2271b1; color: #fff; }
             </style>
             
             <div class="acf-settings-panel">
                 <label style="font-weight:bold; font-size:14px; margin-right:10px;">✉️ รูปแบบอีเมลตอบกลับลูกค้า (Email Template):</label>
-                <select name="acf_form_email_type" style="min-width: 250px;">
-                    <option value="booking" <?php selected($email_type, 'booking'); ?>>ยืนยันการจองห้องพัก (Booking Confirmation)</option>
-                    <option value="inquiry" <?php selected($email_type, 'inquiry'); ?>>สอบถามข้อมูลทั่วไป (General Inquiry)</option>
+                <select name="acf_form_email_type" id="acf-email-type-select" style="min-width: 280px;">
+                    <option value="booking" <?php selected($email_type, 'booking'); ?>>🏨 ยืนยันการจองห้องพัก (Booking Confirmation)</option>
+                    <option value="inquiry" <?php selected($email_type, 'inquiry'); ?>>📩 สอบถามทั่วไป (General Inquiry)</option>
+                    <option value="custom" <?php selected($email_type, 'custom'); ?>>✏️ กำหนดเอง (Custom Template)</option>
                 </select>
                 <p class="description" style="margin-top:5px;">เลือกรูปแบบเนื้อหาอีเมลที่จะส่งกลับหาลูกค้าเมื่อกดส่งฟอร์มนี้</p>
+
+                <div id="acf-custom-email-panel" class="acf-custom-email-panel <?php echo $email_type === 'custom' ? 'active' : ''; ?>">
+                    <div style="margin-bottom: 12px;">
+                        <label>📌 หัวข้ออีเมล (Subject):</label>
+                        <input type="text" name="acf_form_email_subject" value="<?php echo esc_attr($custom_subject); ?>" placeholder="เช่น ขอบคุณที่ติดต่อ - {site_name}">
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <label>📝 เนื้อหาอีเมล (Body):</label>
+                        <textarea name="acf_form_email_body" placeholder="พิมพ์เนื้อหาอีเมล รองรับ HTML..."><?php echo esc_textarea($custom_body); ?></textarea>
+                        <p class="description" style="margin-top:5px;">รองรับทั้งข้อความธรรมดาและ HTML — ระบบจะครอบด้วย layout สวยงามอัตโนมัติ</p>
+                    </div>
+
+                    <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 12px 15px; border-radius: 4px;">
+                        <strong style="color: #004085; font-size: 13px;">🏷️ Merge Tags ที่ใช้ได้ (คลิกเพื่อแทรก):</strong>
+                        <div class="acf-merge-tags" style="margin-top: 8px;">
+                            <span class="acf-merge-tag" data-tag="{site_name}">{site_name}</span>
+                            <span class="acf-merge-tag" data-tag="{form_title}">{form_title}</span>
+                            <span class="acf-merge-tag" data-tag="{all_fields}">{all_fields}</span>
+                            <?php foreach ( $fields as $f ) : if ( !isset($f['type']) || $f['type'] === 'heading' ) continue; ?>
+                                <span class="acf-merge-tag" data-tag="{field:<?php echo esc_attr($f['label']); ?>}">{field:<?php echo esc_html($f['label']); ?>}</span>
+                            <?php endforeach; ?>
+                        </div>
+                        <p style="margin: 8px 0 0; font-size: 12px; color: #666;">คลิกที่ tag เพื่อแทรกลงในช่องเนื้อหาอีเมล • <code>{all_fields}</code> = ตารางข้อมูลทั้งหมด • <code>{field:ชื่อ}</code> = ค่าของฟิลด์นั้น</p>
+                    </div>
+                </div>
             </div>
 
             <div id="field-list-wrapper" style="margin-top: 10px;">
@@ -379,6 +457,30 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                         r++;
                     });
 
+                    // Email type toggle
+                    var emailSelect = document.getElementById('acf-email-type-select');
+                    var customPanel = document.getElementById('acf-custom-email-panel');
+                    if (emailSelect && customPanel) {
+                        emailSelect.addEventListener('change', function() {
+                            customPanel.classList.toggle('active', this.value === 'custom');
+                        });
+                    }
+
+                    // Merge tag click-to-insert
+                    $(document).on('click', '.acf-merge-tag', function() {
+                        var tag = $(this).data('tag');
+                        var textarea = $('textarea[name="acf_form_email_body"]');
+                        if (textarea.length) {
+                            var el = textarea[0];
+                            var start = el.selectionStart;
+                            var end = el.selectionEnd;
+                            var text = el.value;
+                            el.value = text.substring(0, start) + tag + text.substring(end);
+                            el.selectionStart = el.selectionEnd = start + tag.length;
+                            el.focus();
+                        }
+                    });
+
                     $('#field-list').on('click', '.remove-row', function() { $(this).closest('tr').remove(); });
                 });
             </script>
@@ -386,7 +488,28 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
         }
 
         public function sanitize_smtp_password( $value ) {
-            return wp_strip_all_tags( trim( $value ) );
+            $value = wp_strip_all_tags( trim( $value ) );
+            if ( empty( $value ) ) {
+                // ถ้าเว้นว่าง ให้ใช้ค่าเดิม (ไม่เปลี่ยน password)
+                return get_option( $this->smtp_pass, '' );
+            }
+            return $this->encrypt_password( $value );
+        }
+
+        /**
+         * Auto-migrate existing plain text password to encrypted format.
+         */
+        public function maybe_migrate_smtp_password() {
+            $stored = get_option( $this->smtp_pass, '' );
+            if ( empty( $stored ) ) return;
+
+            // ตรวจว่าเป็น encrypted แล้วหรือยัง
+            $decoded = base64_decode( $stored, true );
+            if ( $decoded !== false && strpos( $decoded, 'ENC:' ) === 0 ) return;
+
+            // ยังเป็น plain text → encrypt
+            $encrypted = $this->encrypt_password( $stored );
+            update_option( $this->smtp_pass, $encrypted );
         }
 
         public function save_form_fields( $post_id ) {
@@ -396,6 +519,14 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
 
             if ( isset( $_POST['acf_form_email_type'] ) ) {
                 update_post_meta( $post_id, '_acf_form_email_type', sanitize_text_field( $_POST['acf_form_email_type'] ) );
+            }
+
+            // Save custom email template fields
+            if ( isset( $_POST['acf_form_email_subject'] ) ) {
+                update_post_meta( $post_id, '_acf_form_email_subject', sanitize_text_field( $_POST['acf_form_email_subject'] ) );
+            }
+            if ( isset( $_POST['acf_form_email_body'] ) ) {
+                update_post_meta( $post_id, '_acf_form_email_body', wp_kses_post( $_POST['acf_form_email_body'] ) );
             }
 
             if ( isset( $_POST['acf_fields'] ) && is_array( $_POST['acf_fields'] ) ) {
@@ -451,7 +582,7 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                         <div class="step"><span class="step-num">1</span><span class="step-text">ไปที่ <strong>แบบฟอร์ม → สร้างฟอร์มใหม่</strong></span></div>
                         <div class="step"><span class="step-num">2</span><span class="step-text">ตั้ง <strong>ชื่อฟอร์ม</strong> (เช่น "แบบฟอร์มจองห้องพัก")</span></div>
                         <div class="step"><span class="step-num">3</span><span class="step-text">เพิ่มฟิลด์ตามต้องการจากตารางด้านล่าง</span></div>
-                        <div class="step"><span class="step-num">4</span><span class="step-text">เลือก <strong>รูปแบบอีเมลตอบกลับ</strong> (Booking / Inquiry)</span></div>
+                        <div class="step"><span class="step-num">4</span><span class="step-text">เลือก <strong>รูปแบบอีเมลตอบกลับ</strong> (Booking / Inquiry / กำหนดเอง)</span></div>
                         <div class="step"><span class="step-num">5</span><span class="step-text">กด <strong>เผยแพร่ (Publish)</strong></span></div>
 
                         <h4>ประเภทฟิลด์ที่รองรับ</h4>
@@ -498,6 +629,12 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                         </table>
                         <div class="warn-box">⚠️ ต้องเปิด 2-Step Verification ใน Google Account แล้วสร้าง App Password จึงจะใช้งานได้</div>
 
+                        <h4>🔐 ความปลอดภัย SMTP</h4>
+                        <ul style="margin:8px 0; padding-left:20px; font-size:13px;">
+                            <li>🔒 <strong>Password เข้ารหัส AES-256-CBC</strong> ก่อนบันทึกอัตโนมัติ — เว้นว่างหากไม่ต้องการเปลี่ยน</li>
+                            <li>🔒 <strong>SSL Verification</strong> เปิดเป็น default — ติ๊ก checkbox "ปิด SSL" เฉพาะ Development</li>
+                        </ul>
+
                         <h4>การแจ้งเตือนแอดมิน</h4>
                         <p>ติ๊ก "เปิดใช้งานการส่งอีเมลแจ้งเตือน Admin" แล้วระบุอีเมลผู้รับ — ทุกครั้งที่มีคนส่งฟอร์ม แอดมินจะได้รับ Email แจ้งเตือนทันที</p>
                     </div>
@@ -514,6 +651,28 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                         </table>
                         <p>เลือกบริการจาก Dropdown → กรอก Site Key + Secret Key → บันทึก</p>
                         <div class="tip-box">💡 ระบบจะตรวจสอบ Token ทั้งฝั่ง Frontend และ Server-side อัตโนมัติ</div>
+                    </div>
+                </div>
+
+                <div class="acf-docs-section">
+                    <div class="acf-docs-header">✉️ Custom Email Template (ใหม่) <span class="acf-docs-arrow">▼</span></div>
+                    <div class="acf-docs-body">
+                        <p>ตั้งแต่ v0.3.0 สามารถกำหนดเนื้อหาอีเมลตอบกลับลูกค้าได้เองจากหน้าแก้ไขฟอร์ม</p>
+
+                        <h4>วิธีใช้</h4>
+                        <div class="step"><span class="step-num">1</span><span class="step-text">แก้ไขฟอร์ม → เลือก <strong>"✏️ กำหนดเอง (Custom Template)"</strong></span></div>
+                        <div class="step"><span class="step-num">2</span><span class="step-text">กรอก <strong>หัวข้ออีเมล (Subject)</strong> และ <strong>เนื้อหา (Body)</strong></span></div>
+                        <div class="step"><span class="step-num">3</span><span class="step-text">ใช้ <strong>Merge Tags</strong> เพื่อแทรกข้อมูลอัตโนมัติ (คลิกที่ tag เพื่อแทรก)</span></div>
+
+                        <h4>Merge Tags ที่รองรับ</h4>
+                        <table>
+                            <tr><th>Tag</th><th>ผลลัพธ์</th></tr>
+                            <tr><td><code>{site_name}</code></td><td>ชื่อเว็บไซต์</td></tr>
+                            <tr><td><code>{form_title}</code></td><td>ชื่อฟอร์ม</td></tr>
+                            <tr><td><code>{all_fields}</code></td><td>ตาราง HTML ของข้อมูลทั้งหมด</td></tr>
+                            <tr><td><code>{field:ชื่อฟิลด์}</code></td><td>ค่าของฟิลด์ที่ระบุ เช่น <code>{field:ชื่อ}</code></td></tr>
+                        </table>
+                        <div class="tip-box">💡 ระบบจะครอบเนื้อหาด้วย layout สวยงาม (header + footer) อัตโนมัติ</div>
                     </div>
                 </div>
 
@@ -578,6 +737,9 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
 
                         <h4>อัพเดตปลั๊กอินแล้วข้อมูลเก่าหายไหม?</h4>
                         <p>ไม่หาย ข้อมูลเก็บในฐานข้อมูล WordPress แยกจากไฟล์ปลั๊กอิน</p>
+
+                        <h4>Password SMTP ปลอดภัยไหม?</h4>
+                        <p>ปลอดภัย — Password ถูกเข้ารหัสด้วย AES-256-CBC ก่อนบันทึกลงฐานข้อมูล โดยใช้ WordPress authentication salts เป็น key</p>
 
                         <h4>Uninstall ปลั๊กอินแล้วข้อมูลจะหายไหม?</h4>
                         <p>จะหาย — เมื่อ Uninstall (ลบ) ปลั๊กอิน ระบบจะลบตารางข้อมูลและการตั้งค่าทั้งหมด หากต้องการเก็บข้อมูลไว้ ให้ Export CSV ก่อน</p>

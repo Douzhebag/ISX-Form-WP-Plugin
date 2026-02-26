@@ -14,6 +14,21 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
             add_action( 'wp_ajax_acf_update_entry_note', [ $this, 'handle_update_note' ] );
         }
 
+        /**
+         * Decrypt SMTP password stored in options.
+         */
+        private function decrypt_smtp_password( $stored ) {
+            if ( empty( $stored ) ) return '';
+            $decoded = base64_decode( $stored, true );
+            if ( $decoded === false || strpos( $decoded, 'ENC:' ) !== 0 ) return $stored;
+            if ( ! function_exists( 'openssl_decrypt' ) ) return '';
+            $encrypted = substr( $decoded, 4 );
+            $key = wp_salt( 'auth' );
+            $iv  = substr( hash( 'sha256', wp_salt( 'secure_auth' ) ), 0, 16 );
+            $decrypted = openssl_decrypt( $encrypted, 'AES-256-CBC', $key, 0, $iv );
+            return ( $decrypted !== false ) ? $decrypted : '';
+        }
+
         private function get_client_ip() {
             $ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
             return $ip;
@@ -150,6 +165,74 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
             return ob_get_clean();
         }
 
+        /**
+         * Process merge tags in custom email templates.
+         */
+        private function process_merge_tags( $text, $entry_data, $form_id ) {
+            $site_name = get_bloginfo( 'name' );
+            $form_title = get_the_title( $form_id );
+
+            // Basic tags
+            $text = str_replace( '{site_name}', esc_html( $site_name ), $text );
+            $text = str_replace( '{form_title}', esc_html( $form_title ), $text );
+
+            // {all_fields} → HTML table
+            if ( strpos( $text, '{all_fields}' ) !== false ) {
+                $table = '<table style="width:100%; background-color:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; border-collapse:separate; border-spacing:0;">';
+                foreach ( $entry_data as $label => $value ) {
+                    $table .= '<tr>';
+                    $table .= '<td style="padding:12px 15px; border-bottom:1px solid #EDF2F7; width:35%; color:#574319; font-weight:600; font-size:14px; vertical-align:top;">' . esc_html( $label ) . '</td>';
+                    $table .= '<td style="padding:12px 15px; border-bottom:1px solid #EDF2F7; width:65%; color:#0F1E32; font-size:15px; vertical-align:top;">' . nl2br( esc_html( $value ) ) . '</td>';
+                    $table .= '</tr>';
+                }
+                $table .= '</table>';
+                $text = str_replace( '{all_fields}', $table, $text );
+            }
+
+            // {field:LABEL} → value
+            if ( preg_match_all( '/\{field:(.+?)\}/', $text, $matches ) ) {
+                foreach ( $matches[1] as $i => $label ) {
+                    $value = isset( $entry_data[ $label ] ) ? esc_html( $entry_data[ $label ] ) : '';
+                    $text = str_replace( $matches[0][$i], $value, $text );
+                }
+            }
+
+            return $text;
+        }
+
+        /**
+         * Wrap custom email content in the standard email layout.
+         */
+        private function wrap_in_email_layout( $content, $form_id ) {
+            $site_name = get_bloginfo( 'name' );
+            $form_title = get_the_title( $form_id );
+            // Convert newlines to <br> for plain text content
+            $content = nl2br( $content );
+            ob_start();
+            ?>
+            <!DOCTYPE html>
+            <html>
+            <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><?php echo $this->get_email_header_style(); ?></head>
+            <body style="margin:0; padding:0; background-color:#F3F4F6;">
+                <br>
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr><td align="center"><div class="email-container">
+                        <div class="header-bg">
+                            <h1 class="site-title"><?php echo esc_html($site_name); ?></h1>
+                            <p class="sub-title"><?php echo esc_html($form_title); ?></p>
+                        </div>
+                        <div class="content-body">
+                            <?php echo $content; ?>
+                        </div>
+                        <div class="footer"><p class="footer-text"><strong><?php echo esc_html($site_name); ?></strong><br>&copy; <?php echo wp_date('Y'); ?> All rights reserved.</p></div>
+                    </div></td></tr>
+                </table><br>
+            </body>
+            </html>
+            <?php
+            return ob_get_clean();
+        }
+
         public function capture_mail_error( $wp_error ) {
             if ( is_wp_error( $wp_error ) ) {
                 $this->mail_errors[] = $wp_error->get_error_message();
@@ -163,7 +246,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
             $phpmailer->Host       = get_option( 'acf_smtp_host' );
             $phpmailer->SMTPAuth   = true;
             $phpmailer->Username   = get_option( 'acf_smtp_user' );
-            $phpmailer->Password   = get_option( 'acf_smtp_pass' );
+            $phpmailer->Password   = $this->decrypt_smtp_password( get_option( 'acf_smtp_pass' ) );
             
             $port = intval( get_option( 'acf_smtp_port' ) );
             $phpmailer->Port = $port;
@@ -176,13 +259,16 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
                 $phpmailer->SMTPSecure = get_option( 'acf_smtp_secure' );
             }
 
-            $phpmailer->SMTPOptions = [
-                'ssl' => [
-                    'verify_peer'       => false,
-                    'verify_peer_name'  => false,
-                    'allow_self_signed' => true
-                ]
-            ];
+            // Only disable SSL verification if explicitly set (for development)
+            if ( get_option( 'acf_smtp_disable_ssl_verify' ) === 'yes' ) {
+                $phpmailer->SMTPOptions = [
+                    'ssl' => [
+                        'verify_peer'       => false,
+                        'verify_peer_name'  => false,
+                        'allow_self_signed' => true
+                    ]
+                ];
+            }
             
             $from_email = get_option( 'acf_smtp_from_email' );
             if ( empty( $from_email ) || !is_email($from_email) ) {
@@ -286,6 +372,12 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
                 if ( $email_type === 'inquiry' ) {
                     $email_subject = 'เราได้รับข้อความของคุณแล้ว - ' . $site_name;
                     $email_body = $this->get_general_inquiry_email_template( $entry_data );
+                } elseif ( $email_type === 'custom' ) {
+                    $raw_subject = get_post_meta( $form_id, '_acf_form_email_subject', true );
+                    $raw_body    = get_post_meta( $form_id, '_acf_form_email_body', true );
+                    $email_subject = $this->process_merge_tags( $raw_subject ?: 'ขอบคุณที่ติดต่อ - {site_name}', $entry_data, $form_id );
+                    $processed_body = $this->process_merge_tags( $raw_body ?: '{all_fields}', $entry_data, $form_id );
+                    $email_body = $this->wrap_in_email_layout( $processed_body, $form_id );
                 } else {
                     $email_subject = 'ยืนยันการจองห้องพัก - ' . $site_name;
                     $email_body = $this->get_hotel_booking_email_template( $entry_data );
@@ -326,6 +418,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
             } else {
                 if ( ! empty( $this->mail_errors ) ) {
                     $error_message = implode( '; ', $this->mail_errors );
+                    error_log( '[InsightX Form] Email failed for form #' . $form_id . ': ' . $error_message );
                     wp_send_json_error( [ 'message' => 'บันทึกข้อมูลแล้ว แต่ส่งอีเมลไม่ผ่าน: ' . $error_message ] );
                 } else {
                     wp_send_json_success( [ 'message' => 'บันทึกข้อมูลเรียบร้อยแล้ว' ] );
