@@ -5,6 +5,7 @@ if ( ! class_exists( 'ISXF_Frontend' ) ) {
     class ISXF_Frontend {
         public function __construct() {
             add_shortcode( 'advanced_form', [ $this, 'render_dynamic_form' ] );
+            add_shortcode( 'isxf_form', [ $this, 'render_dynamic_form' ] );
             add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets_conditionally' ] );
         }
 
@@ -16,7 +17,7 @@ if ( ! class_exists( 'ISXF_Frontend' ) ) {
         }, 1);
 
         global $post;
-        if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'advanced_form' ) ) {
+        if ( is_a( $post, 'WP_Post' ) && ( has_shortcode( $post->post_content, 'advanced_form' ) || has_shortcode( $post->post_content, 'isxf_form' ) ) ) {
             $service = get_option('isxf_captcha_service', 'google');
             if ( $service === 'google' ) {
                 $site_key = get_option('isxf_recaptcha_site_key');

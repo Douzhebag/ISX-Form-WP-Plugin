@@ -2,7 +2,7 @@
 /**
  * Plugin Name: InsightX Form
  * Plugin URI:  https://insightx.in.th/
- * Version:     0.5.1
+ * Version:     0.5.2
  * Author:      InsightX
  * Author URI:  https://www.insightx.in.th
  * Text Domain: InsightX
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ISXF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ISXF_PLUGIN_VERSION', '0.5.1' );
+define( 'ISXF_PLUGIN_VERSION', '0.5.2' );
 define( 'ISXF_DB_VERSION', '1.0' );
 
 // === GitHub Plugin Update Checker ===
@@ -78,6 +78,9 @@ function isxf_maybe_upgrade_db() {
             }
         }
     }
+    // Migration: Update Custom Post Type and meta keys from acf_form to isxf_form
+    $wpdb->query( "UPDATE {$wpdb->posts} SET post_type = 'isxf_form' WHERE post_type = 'acf_form'" );
+    $wpdb->query( "UPDATE {$wpdb->postmeta} SET meta_key = REPLACE(meta_key, '_acf_', '_isxf_') WHERE meta_key LIKE '_acf_%'" );
 }
 add_action( 'admin_init', 'isxf_maybe_upgrade_db' );
 

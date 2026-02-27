@@ -97,7 +97,7 @@ if ( ! class_exists( 'ISXF_Admin' ) ) {
 
         public function fill_form_columns( $column, $post_id ) {
             if ( $column === 'shortcode' ) {
-                echo '<input type="text" readonly="readonly" value="[advanced_form id=&quot;' . $post_id . '&quot;]" style="width: 100%; max-width: 250px; background: #f0f0f1; border-color: #8c8f94; cursor: text;" onclick="this.select();">';
+                echo '<input type="text" readonly="readonly" value="[isxf_form id=&quot;' . $post_id . '&quot;]" style="width: 100%; max-width: 250px; background: #f0f0f1; border-color: #8c8f94; cursor: text;" onclick="this.select();">';
             }
         }
 
