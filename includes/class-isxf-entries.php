@@ -1,7 +1,8 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class ACF_Entries {
+if ( ! class_exists( 'ISXF_Entries' ) ) {
+class ISXF_Entries {
 
     private $status_map = [
         'new'         => [ 'label' => 'ใหม่',           'color' => '#2271b1', 'bg' => '#e8f0fe', 'icon' => '🔵' ],
@@ -12,11 +13,11 @@ class ACF_Entries {
 
     public function __construct() {
         add_action( 'admin_menu', [ $this, 'register_menu' ] );
-        add_action( 'acf_form_after_submission', [ $this, 'save_to_db' ], 10, 3 );
+        add_action( 'isxf_form_after_submission', [ $this, 'save_to_db' ], 10, 3 );
         add_action( 'admin_init', [ $this, 'handle_backend_actions' ] );
         add_action( 'wp_dashboard_setup', [ $this, 'register_dashboard_widget' ] );
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_entries_assets' ] );
-        add_action( 'wp_ajax_acf_get_analytics_data', [ $this, 'handle_analytics_ajax' ] );
+        add_action( 'wp_ajax_isxf_get_analytics_data', [ $this, 'handle_analytics_ajax' ] );
     }
 
     /**
@@ -24,33 +25,33 @@ class ACF_Entries {
      */
     public function enqueue_entries_assets( $hook ) {
         // Load on entries page
-        if ( isset($_GET['page']) && $_GET['page'] === 'acf-entries' ) {
-            wp_enqueue_style( 'acf-entries-css', ACF_PLUGIN_URL . 'assets/css/acf-entries.css', [], ACF_PLUGIN_VERSION );
-            wp_enqueue_script( 'acf-entries-js', ACF_PLUGIN_URL . 'assets/js/acf-entries.js', [], ACF_PLUGIN_VERSION, true );
-            wp_localize_script( 'acf-entries-js', 'acf_entries_env', [
+        if ( isset($_GET['page']) && $_GET['page'] === 'isxf-entries' ) {
+            wp_enqueue_style( 'isxf-entries-css', ISXF_PLUGIN_URL . 'assets/css/isxf-entries.css', [], ISXF_PLUGIN_VERSION );
+            wp_enqueue_script( 'isxf-entries-js', ISXF_PLUGIN_URL . 'assets/js/isxf-entries.js', [], ISXF_PLUGIN_VERSION, true );
+            wp_localize_script( 'isxf-entries-js', 'isxf_entries_env', [
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce'    => wp_create_nonce('acf_entry_action_nonce')
+                'nonce'    => wp_create_nonce('isxf_entry_action_nonce')
             ]);
         }
         // Load CSS on dashboard (for widget)
         if ( $hook === 'index.php' ) {
-            wp_enqueue_style( 'acf-entries-css', ACF_PLUGIN_URL . 'assets/css/acf-entries.css', [], ACF_PLUGIN_VERSION );
+            wp_enqueue_style( 'isxf-entries-css', ISXF_PLUGIN_URL . 'assets/css/isxf-entries.css', [], ISXF_PLUGIN_VERSION );
         }
         // Load on analytics page
-        if ( isset($_GET['page']) && $_GET['page'] === 'acf-analytics' ) {
-            wp_enqueue_style( 'acf-analytics-css', ACF_PLUGIN_URL . 'assets/css/acf-analytics.css', [], ACF_PLUGIN_VERSION );
+        if ( isset($_GET['page']) && $_GET['page'] === 'isxf-analytics' ) {
+            wp_enqueue_style( 'isxf-analytics-css', ISXF_PLUGIN_URL . 'assets/css/isxf-analytics.css', [], ISXF_PLUGIN_VERSION );
             wp_enqueue_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js', [], '4.4.1', true );
-            wp_enqueue_script( 'acf-analytics-js', ACF_PLUGIN_URL . 'assets/js/acf-analytics.js', ['chart-js'], ACF_PLUGIN_VERSION, true );
-            wp_localize_script( 'acf-analytics-js', 'acf_analytics_env', [
+            wp_enqueue_script( 'isxf-analytics-js', ISXF_PLUGIN_URL . 'assets/js/isxf-analytics.js', ['chart-js'], ISXF_PLUGIN_VERSION, true );
+            wp_localize_script( 'isxf-analytics-js', 'isxf_analytics_env', [
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce'    => wp_create_nonce('acf_analytics_nonce')
+                'nonce'    => wp_create_nonce('isxf_analytics_nonce')
             ]);
         }
     }
 
     public function register_dashboard_widget() {
         wp_add_dashboard_widget(
-            'acf_entries_dashboard',
+            'isxf_entries_dashboard',
             '📊 InsightX Form — ภาพรวม',
             [ $this, 'render_dashboard_widget' ]
         );
@@ -58,19 +59,19 @@ class ACF_Entries {
 
     public function register_menu() {
         add_submenu_page( 
-            'edit.php?post_type=acf_form', 
+            'edit.php?post_type=isxf_form', 
             'Entries', 
             '📥 รายการข้อมูล', 
             'manage_options', 
-            'acf-entries', 
+            'isxf-entries', 
             [ $this, 'render_page' ] 
         );
         add_submenu_page( 
-            'edit.php?post_type=acf_form', 
+            'edit.php?post_type=isxf_form', 
             'Analytics', 
             '📊 Analytics', 
             'manage_options', 
-            'acf-analytics', 
+            'isxf-analytics', 
             [ $this, 'render_analytics_page' ] 
         );
     }
@@ -84,12 +85,12 @@ class ACF_Entries {
             $entry_id = intval( $_GET['entry_id'] );
             check_admin_referer( 'delete_entry_' . $entry_id );
             global $wpdb;
-            $wpdb->delete( $wpdb->prefix . 'acf_form_entries', [ 'id' => $entry_id ], ['%d'] );
-            wp_redirect( admin_url( 'edit.php?post_type=acf_form&page=acf-entries&msg=deleted' ) );
+            $wpdb->delete( $wpdb->prefix . 'isxf_form_entries', [ 'id' => $entry_id ], ['%d'] );
+            wp_redirect( admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries&msg=deleted' ) );
             exit;
         }
 
-        if ( isset($_POST['acf_bulk_action_nonce']) && wp_verify_nonce($_POST['acf_bulk_action_nonce'], 'acf_bulk_action') ) {
+        if ( isset($_POST['isxf_bulk_action_nonce']) && wp_verify_nonce($_POST['isxf_bulk_action_nonce'], 'isxf_bulk_action') ) {
             $bulk_action = isset($_POST['bulk_action']) ? sanitize_text_field($_POST['bulk_action']) : '';
             
             if ( ! empty($_POST['entry_ids']) ) {
@@ -98,27 +99,27 @@ class ACF_Entries {
                 $ids_placeholder = implode(',', array_fill(0, count($ids), '%d'));
 
                 if ( $bulk_action === 'delete' ) {
-                    $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}acf_form_entries WHERE id IN ($ids_placeholder)", $ids) );
-                    wp_redirect( admin_url( 'edit.php?post_type=acf_form&page=acf-entries&msg=bulk_deleted' ) );
+                    $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}isxf_form_entries WHERE id IN ($ids_placeholder)", $ids) );
+                    wp_redirect( admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries&msg=bulk_deleted' ) );
                     exit;
                 }
 
                 if ( in_array( $bulk_action, ['mark_done', 'mark_in_progress', 'mark_junk'], true ) ) {
                     $status_val = str_replace('mark_', '', $bulk_action);
                     foreach ( $ids as $id ) {
-                        $wpdb->update( $wpdb->prefix . 'acf_form_entries', [ 'entry_status' => $status_val ], [ 'id' => $id ], ['%s'], ['%d'] );
+                        $wpdb->update( $wpdb->prefix . 'isxf_form_entries', [ 'entry_status' => $status_val ], [ 'id' => $id ], ['%s'], ['%d'] );
                     }
-                    wp_redirect( admin_url( 'edit.php?post_type=acf_form&page=acf-entries&msg=status_updated' ) );
+                    wp_redirect( admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries&msg=status_updated' ) );
                     exit;
                 }
             }
         }
 
-        if ( $action === 'acf_export_csv' ) {
+        if ( $action === 'isxf_export_csv' ) {
             if ( ! current_user_can( 'manage_options' ) ) {
                 wp_die( 'คุณไม่มีสิทธิ์ในการส่งออกข้อมูล', 'ข้อผิดพลาดด้านสิทธิ์', 403 );
             }
-            if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'acf_export_csv_action' ) ) {
+            if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'isxf_export_csv_action' ) ) {
                 wp_die( 'การยืนยันความปลอดภัยล้มเหลว', 'ข้อผิดพลาดด้านความปลอดภัย', 403 );
             }
             $this->process_csv_export();
@@ -127,7 +128,7 @@ class ACF_Entries {
 
     public function save_to_db( $entry_data, $form_id, $user_ip ) {
         global $wpdb;
-        $wpdb->insert( $wpdb->prefix . 'acf_form_entries', [
+        $wpdb->insert( $wpdb->prefix . 'isxf_form_entries', [
             'form_id'      => $form_id,
             'form_title'   => get_the_title( $form_id ),
             'entry_data'   => wp_json_encode( $entry_data, JSON_UNESCAPED_UNICODE ),
@@ -141,7 +142,7 @@ class ACF_Entries {
     private function get_form_headers( $form_id ) {
         $headers = [];
         if ( $form_id ) {
-            $fields = get_post_meta( $form_id, '_acf_form_fields', true );
+            $fields = get_post_meta( $form_id, '_isxf_form_fields', true );
             if ( is_array( $fields ) ) {
                 foreach ( $fields as $f ) {
                     if ( isset($f['type']) && $f['type'] !== 'heading' ) {
@@ -207,7 +208,7 @@ class ACF_Entries {
         if ( function_exists( 'set_time_limit' ) ) set_time_limit( 0 );
         @ini_set( 'memory_limit', '512M' );
 
-        $table_name = $wpdb->prefix . 'acf_form_entries';
+        $table_name = $wpdb->prefix . 'isxf_form_entries';
         $filter_form_id = isset( $_GET['filter_form'] ) ? intval( $_GET['filter_form'] ) : 0;
         
         $filename = 'entries-' . date('Y-m-d-His') . '.csv';
@@ -274,7 +275,7 @@ class ACF_Entries {
 
     public function render_page() {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'acf_form_entries';
+        $table_name = $wpdb->prefix . 'isxf_form_entries';
         
         $filter_form_id = isset( $_GET['filter_form'] ) ? intval( $_GET['filter_form'] ) : 0;
         $filter_status  = isset( $_GET['filter_status'] ) ? sanitize_text_field( $_GET['filter_status'] ) : '';
@@ -294,12 +295,12 @@ class ACF_Entries {
         $query = "SELECT * FROM $table_name $where_sql ORDER BY id DESC LIMIT %d OFFSET %d";
         $results = $wpdb->get_results( $wpdb->prepare( $query, $per_page, $offset ) );
 
-        $forms = get_posts( [ 'post_type' => 'acf_form', 'numberposts' => -1 ] );
+        $forms = get_posts( [ 'post_type' => 'isxf_form', 'numberposts' => -1 ] );
         $dynamic_headers = $filter_form_id ? $this->get_form_headers($filter_form_id) : [];
 
         $export_url = wp_nonce_url(
-            admin_url( 'edit.php?post_type=acf_form&page=acf-entries&action=acf_export_csv' ),
-            'acf_export_csv_action'
+            admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries&action=isxf_export_csv' ),
+            'isxf_export_csv_action'
         );
         if ( $filter_form_id ) $export_url = add_query_arg( 'filter_form', $filter_form_id, $export_url );
         if ( $filter_status )  $export_url = add_query_arg( 'filter_status', $filter_status, $export_url );
@@ -308,9 +309,12 @@ class ACF_Entries {
         if ( $end_date )       $export_url = add_query_arg( 'end_date', $end_date, $export_url );
 
 
-        $status_counts = [];
-        foreach ( array_keys($this->status_map) as $sk ) {
-            $status_counts[$sk] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $table_name WHERE entry_status = %s", $sk ) );
+        $status_counts = array_fill_keys( array_keys($this->status_map), 0 );
+        $status_rows = $wpdb->get_results( "SELECT entry_status, COUNT(id) as cnt FROM $table_name GROUP BY entry_status" );
+        foreach ( $status_rows as $row ) {
+            if ( isset($status_counts[ $row->entry_status ]) ) {
+                $status_counts[ $row->entry_status ] = (int) $row->cnt;
+            }
         }
         $status_counts['all'] = array_sum($status_counts);
         ?>
@@ -318,7 +322,7 @@ class ACF_Entries {
         <div class="wrap ix-wrap">
             <?php if ( isset( $_GET['msg'] ) ) :
                 $msgs = [ 'deleted' => 'ลบข้อมูลเรียบร้อยแล้ว!', 'bulk_deleted' => 'ลบข้อมูลที่เลือกเรียบร้อยแล้ว!', 'status_updated' => 'อัพเดตสถานะเรียบร้อยแล้ว!' ];
-                $msg_text = $msgs[$_GET['msg']] ?? '';
+                $msg_text = $msgs[ sanitize_text_field( $_GET['msg'] ) ] ?? '';
                 if ( $msg_text ) : ?>
                 <div class="notice notice-success is-dismissible"><p><?php echo $msg_text; ?></p></div>
             <?php endif; endif; ?>
@@ -349,7 +353,7 @@ class ACF_Entries {
             <!-- Status Tabs -->
             <div class="ix-tabs">
                 <?php
-                $base_url = admin_url( 'edit.php?post_type=acf_form&page=acf-entries' );
+                $base_url = admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries' );
                 if ( $filter_form_id ) $base_url = add_query_arg( 'filter_form', $filter_form_id, $base_url );
                 if ( $search_query ) $base_url = add_query_arg( 's', $search_query, $base_url );
                 ?>
@@ -364,8 +368,8 @@ class ACF_Entries {
             <!-- Filter Card -->
             <div class="ix-filter-card">
                 <form method="get" class="ix-filter-form">
-                    <input type="hidden" name="post_type" value="acf_form">
-                    <input type="hidden" name="page" value="acf-entries">
+                    <input type="hidden" name="post_type" value="isxf_form">
+                    <input type="hidden" name="page" value="isxf-entries">
                     <?php if ( $filter_status ) : ?><input type="hidden" name="filter_status" value="<?php echo esc_attr($filter_status); ?>"><?php endif; ?>
 
                     <div class="ix-filter-group">
@@ -395,15 +399,15 @@ class ACF_Entries {
                     <div class="ix-filter-actions">
                         <button type="submit" class="ix-btn ix-btn-primary">ค้นหา</button>
                         <?php if ( $filter_form_id || $search_query || $start_date || $end_date || $filter_status ) : ?>
-                            <a href="<?php echo admin_url( 'edit.php?post_type=acf_form&page=acf-entries' ); ?>" class="ix-btn ix-btn-ghost">ล้างค่า</a>
+                            <a href="<?php echo admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries' ); ?>" class="ix-btn ix-btn-ghost">ล้างค่า</a>
                         <?php endif; ?>
                     </div>
                 </form>
             </div>
 
             <!-- Bulk Actions & Table -->
-            <form method="post" id="acf-bulk-form">
-                <?php wp_nonce_field('acf_bulk_action', 'acf_bulk_action_nonce'); ?>
+            <form method="post" id="isxf-bulk-form">
+                <?php wp_nonce_field('isxf_bulk_action', 'isxf_bulk_action_nonce'); ?>
 
                 <div class="ix-bulk-bar">
                     <div class="ix-bulk-left">
@@ -497,7 +501,7 @@ class ACF_Entries {
                                         </td>
 
                                         <td>
-                                            <?php $del_url = wp_nonce_url( admin_url( 'edit.php?post_type=acf_form&page=acf-entries&action=delete&entry_id=' . $row->id ), 'delete_entry_' . $row->id ); ?>
+                                            <?php $del_url = wp_nonce_url( admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries&action=delete&entry_id=' . $row->id ), 'delete_entry_' . $row->id ); ?>
                                             <a href="<?php echo $del_url; ?>" class="ix-delete-link" onclick="return confirm('ยืนยันการลบ?')">🗑️ ลบ</a>
                                         </td>
                                     </tr>
@@ -518,7 +522,7 @@ class ACF_Entries {
                     <?php if ( $total_pages > 1 ) : ?>
                         <div class="ix-pagination">
                             <?php
-                            $page_url = admin_url( 'edit.php?post_type=acf_form&page=acf-entries' );
+                            $page_url = admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries' );
                             if ( $filter_form_id ) $page_url = add_query_arg( 'filter_form', $filter_form_id, $page_url );
                             if ( $filter_status )  $page_url = add_query_arg( 'filter_status', $filter_status, $page_url );
                             if ( $search_query )   $page_url = add_query_arg( 's', $search_query, $page_url );
@@ -546,11 +550,11 @@ class ACF_Entries {
      * AJAX handler for analytics data.
      */
     public function handle_analytics_ajax() {
-        check_ajax_referer( 'acf_analytics_nonce', 'nonce' );
+        check_ajax_referer( 'isxf_analytics_nonce', 'nonce' );
         if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error();
 
         global $wpdb;
-        $table = $wpdb->prefix . 'acf_form_entries';
+        $table = $wpdb->prefix . 'isxf_form_entries';
         $range = sanitize_text_field( $_POST['range'] ?? '30' );
         $today = current_time('Y-m-d');
 
@@ -608,12 +612,15 @@ class ACF_Entries {
         }
 
         // Status counts
-        $status_counts = [];
-        foreach ( array_keys($this->status_map) as $sk ) {
-            $status_counts[$sk] = (int) $wpdb->get_var( $wpdb->prepare(
-                "SELECT COUNT(id) FROM $table WHERE entry_status = %s AND DATE(created_at) BETWEEN %s AND %s",
-                $sk, $start, $end
-            ));
+        $status_counts = array_fill_keys( array_keys($this->status_map), 0 );
+        $status_rows = $wpdb->get_results( $wpdb->prepare(
+            "SELECT entry_status, COUNT(id) as cnt FROM $table WHERE DATE(created_at) BETWEEN %s AND %s GROUP BY entry_status",
+            $start, $end
+        ));
+        foreach ( $status_rows as $row ) {
+            if ( isset($status_counts[ $row->entry_status ]) ) {
+                $status_counts[ $row->entry_status ] = (int) $row->cnt;
+            }
         }
 
         // Top forms
@@ -747,7 +754,7 @@ class ACF_Entries {
 
     public function render_dashboard_widget() {
         global $wpdb;
-        $table = $wpdb->prefix . 'acf_form_entries';
+        $table = $wpdb->prefix . 'isxf_form_entries';
         $today = current_time('Y-m-d');
         $week_ago = date('Y-m-d', strtotime('-7 days', strtotime($today)));
         $month_ago = date('Y-m-d', strtotime('-30 days', strtotime($today)));
@@ -757,48 +764,51 @@ class ACF_Entries {
         $week_c    = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $table WHERE DATE(created_at) >= %s", $week_ago ) );
         $month_c   = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $table WHERE DATE(created_at) >= %s", $month_ago ) );
 
-        $status_counts = [];
-        foreach ( array_keys($this->status_map) as $sk ) {
-            $status_counts[$sk] = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $table WHERE entry_status = %s", $sk ) );
+        $status_counts = array_fill_keys( array_keys($this->status_map), 0 );
+        $status_rows = $wpdb->get_results( "SELECT entry_status, COUNT(id) as cnt FROM $table GROUP BY entry_status" );
+        foreach ( $status_rows as $row ) {
+            if ( isset($status_counts[ $row->entry_status ]) ) {
+                $status_counts[ $row->entry_status ] = (int) $row->cnt;
+            }
         }
 
         $recent = $wpdb->get_results( "SELECT * FROM $table ORDER BY id DESC LIMIT 5" );
 
-        $entries_url = admin_url('edit.php?post_type=acf_form&page=acf-entries');
+        $entries_url = admin_url('edit.php?post_type=isxf_form&page=isxf-entries');
         ?>
 
-        <div class="acf-dash-stats">
-            <div class="acf-dash-card">
+        <div class="isxf-dash-stats">
+            <div class="isxf-dash-card">
                 <div class="num" style="color:#2271b1;"><?php echo $today_c; ?></div>
                 <div class="lbl">วันนี้</div>
             </div>
-            <div class="acf-dash-card">
+            <div class="isxf-dash-card">
                 <div class="num" style="color:#996800;"><?php echo $week_c; ?></div>
                 <div class="lbl">7 วันล่าสุด</div>
             </div>
-            <div class="acf-dash-card">
+            <div class="isxf-dash-card">
                 <div class="num" style="color:#2e7d32;"><?php echo $month_c; ?></div>
                 <div class="lbl">30 วันล่าสุด</div>
             </div>
-            <div class="acf-dash-card">
+            <div class="isxf-dash-card">
                 <div class="num" style="color:#50575e;"><?php echo $total; ?></div>
                 <div class="lbl">ทั้งหมด</div>
             </div>
         </div>
 
         <?php if ( $total > 0 ) : ?>
-            <div class="acf-dash-bar">
+            <div class="isxf-dash-bar">
                 <?php foreach ( $this->status_map as $skey => $sinfo ) :
                     $pct = $total > 0 ? round( ($status_counts[$skey] / $total) * 100, 1 ) : 0;
                     if ( $pct <= 0 ) continue;
                 ?>
-                    <div class="acf-dash-bar-seg" style="width:<?php echo $pct; ?>%; background:<?php echo $sinfo['color']; ?>;" title="<?php echo $sinfo['label'] . ': ' . $status_counts[$skey]; ?>"></div>
+                    <div class="isxf-dash-bar-seg" style="width:<?php echo $pct; ?>%; background:<?php echo $sinfo['color']; ?>;" title="<?php echo $sinfo['label'] . ': ' . $status_counts[$skey]; ?>"></div>
                 <?php endforeach; ?>
             </div>
-            <div class="acf-dash-legend">
+            <div class="isxf-dash-legend">
                 <?php foreach ( $this->status_map as $skey => $sinfo ) : ?>
-                    <div class="acf-dash-legend-item">
-                        <span class="acf-dash-legend-dot" style="background:<?php echo $sinfo['color']; ?>;"></span>
+                    <div class="isxf-dash-legend-item">
+                        <span class="isxf-dash-legend-dot" style="background:<?php echo $sinfo['color']; ?>;"></span>
                         <?php echo $sinfo['icon'] . ' ' . $sinfo['label']; ?>
                         <strong><?php echo $status_counts[$skey]; ?></strong>
                     </div>
@@ -806,8 +816,8 @@ class ACF_Entries {
             </div>
         <?php endif; ?>
 
-        <div class="acf-dash-recent">
-            <div class="acf-dash-recent-title">
+        <div class="isxf-dash-recent">
+            <div class="isxf-dash-recent-title">
                 <span>📥 รายการล่าสุด</span>
                 <a href="<?php echo esc_url($entries_url); ?>">ดูทั้งหมด →</a>
             </div>
@@ -815,19 +825,20 @@ class ACF_Entries {
                 $rs = $this->status_map[ $row->entry_status ?? 'new' ] ?? $this->status_map['new'];
                 $time_diff = human_time_diff( strtotime($row->created_at), current_time('timestamp') );
             ?>
-                <div class="acf-dash-entry">
-                    <div class="acf-dash-entry-info">
-                        <div class="acf-dash-entry-form"><?php echo esc_html($row->form_title); ?></div>
-                        <div class="acf-dash-entry-meta"><?php echo $time_diff; ?> ที่แล้ว · <?php echo esc_html($row->user_ip); ?></div>
+                <div class="isxf-dash-entry">
+                    <div class="isxf-dash-entry-info">
+                        <div class="isxf-dash-entry-form"><?php echo esc_html($row->form_title); ?></div>
+                        <div class="isxf-dash-entry-meta"><?php echo $time_diff; ?> ที่แล้ว · <?php echo esc_html($row->user_ip); ?></div>
                     </div>
-                    <span class="acf-dash-entry-badge" style="color:<?php echo $rs['color']; ?>; background:<?php echo $rs['bg']; ?>;">
+                    <span class="isxf-dash-entry-badge" style="color:<?php echo $rs['color']; ?>; background:<?php echo $rs['bg']; ?>;">
                         <?php echo $rs['icon'] . ' ' . $rs['label']; ?>
                     </span>
                 </div>
             <?php endforeach; else : ?>
-                <div class="acf-dash-empty">ยังไม่มีข้อมูล</div>
+                <div class="isxf-dash-empty">ยังไม่มีข้อมูล</div>
             <?php endif; ?>
         </div>
         <?php
     }
+}
 }

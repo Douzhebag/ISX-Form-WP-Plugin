@@ -1,37 +1,38 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
-    class ACF_AJAX_Handler {
+if ( ! class_exists( 'ISXF_AJAX_Handler' ) ) {
+    class ISXF_AJAX_Handler {
         
         private $mail_errors = [];
 
         public function __construct() {
-            add_action( 'wp_ajax_acf_submit_form', [ $this, 'handle_secure_submission' ] );
-            add_action( 'wp_ajax_nopriv_acf_submit_form', [ $this, 'handle_secure_submission' ] );
-            add_action( 'wp_ajax_acf_send_test_email', [ $this, 'handle_test_email' ] );
-            add_action( 'wp_ajax_acf_update_entry_status', [ $this, 'handle_update_status' ] );
-            add_action( 'wp_ajax_acf_update_entry_note', [ $this, 'handle_update_note' ] );
+            add_action( 'wp_ajax_isxf_submit_form', [ $this, 'handle_secure_submission' ] );
+            add_action( 'wp_ajax_nopriv_isxf_submit_form', [ $this, 'handle_secure_submission' ] );
+            add_action( 'wp_ajax_isxf_send_test_email', [ $this, 'handle_test_email' ] );
+            add_action( 'wp_ajax_isxf_update_entry_status', [ $this, 'handle_update_status' ] );
+            add_action( 'wp_ajax_isxf_update_entry_note', [ $this, 'handle_update_note' ] );
         }
 
-        /**
-         * Decrypt SMTP password stored in options.
-         */
-        private function decrypt_smtp_password( $stored ) {
-            if ( empty( $stored ) ) return '';
-            $decoded = base64_decode( $stored, true );
-            if ( $decoded === false || strpos( $decoded, 'ENC:' ) !== 0 ) return $stored;
-            if ( ! function_exists( 'openssl_decrypt' ) ) return '';
-            $encrypted = substr( $decoded, 4 );
-            $key = wp_salt( 'auth' );
-            $iv  = substr( hash( 'sha256', wp_salt( 'secure_auth' ) ), 0, 16 );
-            $decrypted = openssl_decrypt( $encrypted, 'AES-256-CBC', $key, 0, $iv );
-            return ( $decrypted !== false ) ? $decrypted : '';
-        }
+
 
         private function get_client_ip() {
-            $ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
-            return $ip;
+            $headers = [
+                'HTTP_CF_CONNECTING_IP',   // Cloudflare
+                'HTTP_X_FORWARDED_FOR',    // General proxy
+                'HTTP_X_REAL_IP',          // Nginx proxy
+                'REMOTE_ADDR'
+            ];
+            foreach ( $headers as $header ) {
+                if ( ! empty( $_SERVER[ $header ] ) ) {
+                    // X-Forwarded-For may contain comma-separated IPs; take the first (client)
+                    $ip = trim( explode( ',', $_SERVER[ $header ] )[0] );
+                    if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+                        return $ip;
+                    }
+                }
+            }
+            return '0.0.0.0';
         }
 
         private function get_email_header_style() {
@@ -155,7 +156,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
                             <li><strong>IP Address:</strong> <?php echo esc_html($user_ip); ?></li>
                         </ul>
                         <p style="text-align:center; margin-top:20px;">
-                            <a href="<?php echo admin_url('edit.php?post_type=acf_form&page=acf-entries'); ?>" style="background:#2271b1; color:#fff; padding:10px 20px; text-decoration:none; border-radius:3px;">เข้าสู่ระบบเพื่อจัดการข้อมูล</a>
+                            <a href="<?php echo admin_url('edit.php?post_type=isxf_form&page=isxf-entries'); ?>" style="background:#2271b1; color:#fff; padding:10px 20px; text-decoration:none; border-radius:3px;">เข้าสู่ระบบเพื่อจัดการข้อมูล</a>
                         </p>
                     </div>
                 </div>
@@ -240,15 +241,15 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
         }
 
         public function configure_smtp( $phpmailer ) {
-            if ( get_option( 'acf_smtp_enable' ) !== 'yes' ) return;
+            if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) return;
             
             $phpmailer->isSMTP();
-            $phpmailer->Host       = get_option( 'acf_smtp_host' );
+            $phpmailer->Host       = get_option( 'isxf_smtp_host' );
             $phpmailer->SMTPAuth   = true;
-            $phpmailer->Username   = get_option( 'acf_smtp_user' );
-            $phpmailer->Password   = $this->decrypt_smtp_password( get_option( 'acf_smtp_pass' ) );
+            $phpmailer->Username   = get_option( 'isxf_smtp_user' );
+            $phpmailer->Password   = ISXF_Crypto::decrypt( get_option( 'isxf_smtp_pass' ) );
             
-            $port = intval( get_option( 'acf_smtp_port' ) );
+            $port = intval( get_option( 'isxf_smtp_port' ) );
             $phpmailer->Port = $port;
 
             if ( $port === 465 ) {
@@ -256,11 +257,11 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
             } elseif ( $port === 587 ) {
                 $phpmailer->SMTPSecure = 'tls'; 
             } else {
-                $phpmailer->SMTPSecure = get_option( 'acf_smtp_secure' );
+                $phpmailer->SMTPSecure = get_option( 'isxf_smtp_secure' );
             }
 
             // Only disable SSL verification if explicitly set (for development)
-            if ( get_option( 'acf_smtp_disable_ssl_verify' ) === 'yes' ) {
+            if ( get_option( 'isxf_smtp_disable_ssl_verify' ) === 'yes' ) {
                 $phpmailer->SMTPOptions = [
                     'ssl' => [
                         'verify_peer'       => false,
@@ -270,24 +271,24 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
                 ];
             }
             
-            $from_email = get_option( 'acf_smtp_from_email' );
+            $from_email = get_option( 'isxf_smtp_from_email' );
             if ( empty( $from_email ) || !is_email($from_email) ) {
-                $from_email = get_option( 'acf_smtp_user' );
+                $from_email = get_option( 'isxf_smtp_user' );
             }
             
             $phpmailer->From     = $from_email;
-            $phpmailer->FromName = get_option( 'acf_smtp_from_name' ) ?: get_bloginfo('name');
+            $phpmailer->FromName = get_option( 'isxf_smtp_from_name' ) ?: get_bloginfo('name');
         }
 
         public function handle_secure_submission() {
-            check_ajax_referer( 'acf_secure_nonce', 'acf_nonce' );
+            check_ajax_referer( 'isxf_secure_nonce', 'isxf_nonce' );
             
-            if ( ! empty( $_POST['acf_website_url_trap'] ) ) wp_send_json_success( [ 'message' => 'Success' ] );
+            if ( ! empty( $_POST['isxf_website_url_trap'] ) ) wp_send_json_success( [ 'message' => 'Success' ] );
 
-            $captcha_service = get_option( 'acf_captcha_service', 'google' );
+            $captcha_service = get_option( 'isxf_captcha_service', 'google' );
             
             if ( $captcha_service === 'google' ) {
-                $secret_key = get_option( 'acf_recaptcha_secret_key' );
+                $secret_key = get_option( 'isxf_recaptcha_secret_key' );
                 if ( ! empty( $secret_key ) ) {
                     $token = isset( $_POST['g-recaptcha-response'] ) ? sanitize_text_field( $_POST['g-recaptcha-response'] ) : '';
                     if ( empty( $token ) ) {
@@ -302,7 +303,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
                     }
                 }
             } elseif ( $captcha_service === 'cloudflare' ) {
-                $secret_key = get_option( 'acf_turnstile_secret_key' );
+                $secret_key = get_option( 'isxf_turnstile_secret_key' );
                 if ( ! empty( $secret_key ) ) {
                     $token = isset( $_POST['cf-turnstile-response'] ) ? sanitize_text_field( $_POST['cf-turnstile-response'] ) : '';
                     if ( empty( $token ) ) {
@@ -319,13 +320,13 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
             }
 
             $user_ip = $this->get_client_ip();
-            $limit_key = 'acf_limit_' . md5($user_ip);
+            $limit_key = 'isxf_limit_' . md5($user_ip);
             if ( get_transient( $limit_key ) ) {
                 wp_send_json_error( [ 'message' => 'คุณส่งข้อมูลเร็วเกินไป กรุณารอสักครู่' ] );
             }
 
-            $form_id = intval( $_POST['acf_form_id'] );
-            $fields = get_post_meta( $form_id, '_acf_form_fields', true );
+            $form_id = intval( $_POST['isxf_form_id'] );
+            $fields = get_post_meta( $form_id, '_isxf_form_fields', true );
             $entry_data = [];
             $customer_email = ''; 
 
@@ -355,7 +356,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
                 $entry_data[$field['label']] = $clean_val;
             }
 
-            do_action( 'acf_form_after_submission', $entry_data, $form_id, $user_ip );
+            do_action( 'isxf_form_after_submission', $entry_data, $form_id, $user_ip );
             set_transient( $limit_key, true, 30 );
 
             add_action( 'wp_mail_failed', [ $this, 'capture_mail_error' ] );
@@ -367,14 +368,14 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
             $error_message = '';
 
             if ( ! empty( $customer_email ) && is_email( $customer_email ) ) {
-                $email_type = get_post_meta( $form_id, '_acf_form_email_type', true );
+                $email_type = get_post_meta( $form_id, '_isxf_form_email_type', true );
                 
                 if ( $email_type === 'inquiry' ) {
                     $email_subject = 'เราได้รับข้อความของคุณแล้ว - ' . $site_name;
                     $email_body = $this->get_general_inquiry_email_template( $entry_data );
                 } elseif ( $email_type === 'custom' ) {
-                    $raw_subject = get_post_meta( $form_id, '_acf_form_email_subject', true );
-                    $raw_body    = get_post_meta( $form_id, '_acf_form_email_body', true );
+                    $raw_subject = get_post_meta( $form_id, '_isxf_form_email_subject', true );
+                    $raw_body    = get_post_meta( $form_id, '_isxf_form_email_body', true );
                     $email_subject = $this->process_merge_tags( $raw_subject ?: 'ขอบคุณที่ติดต่อ - {site_name}', $entry_data, $form_id );
                     $processed_body = $this->process_merge_tags( $raw_body ?: '{all_fields}', $entry_data, $form_id );
                     $email_body = $this->wrap_in_email_layout( $processed_body, $form_id );
@@ -389,8 +390,8 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
                 $error_message = 'ไม่พบอีเมลลูกค้า';
             }
 
-            if ( get_option( 'acf_admin_notify_enable' ) === 'yes' ) {
-                $admin_email = get_option( 'acf_admin_notify_email' );
+            if ( get_option( 'isxf_admin_notify_enable' ) === 'yes' ) {
+                $admin_email = get_option( 'isxf_admin_notify_email' );
                 if ( empty( $admin_email ) ) {
                     $admin_email = get_option( 'admin_email' );
                 }
@@ -418,7 +419,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
             } else {
                 if ( ! empty( $this->mail_errors ) ) {
                     $error_message = implode( '; ', $this->mail_errors );
-                    error_log( '[InsightX Form] Email failed for form #' . $form_id . ': ' . $error_message );
+                    isxf_log_error( 'Email failed for form #' . $form_id . ': ' . $error_message );
                     wp_send_json_error( [ 'message' => 'บันทึกข้อมูลแล้ว แต่ส่งอีเมลไม่ผ่าน: ' . esc_html( $error_message ) ] );
                 } else {
                     wp_send_json_success( [ 'message' => 'บันทึกข้อมูลเรียบร้อยแล้ว' ] );
@@ -427,7 +428,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
         }
 
         public function handle_test_email() {
-            check_ajax_referer( 'acf_test_email_nonce', 'nonce' );
+            check_ajax_referer( 'isxf_test_email_nonce', 'nonce' );
             if ( ! current_user_can( 'manage_options' ) ) {
                 wp_send_json_error( [ 'message' => 'คุณไม่มีสิทธิ์ดำเนินการนี้' ] );
             }
@@ -468,7 +469,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
         }
 
         public function handle_update_status() {
-            check_ajax_referer( 'acf_entry_action_nonce', 'nonce' );
+            check_ajax_referer( 'isxf_entry_action_nonce', 'nonce' );
             if ( ! current_user_can( 'manage_options' ) ) {
                 wp_send_json_error( [ 'message' => 'ไม่มีสิทธิ์' ] );
             }
@@ -483,7 +484,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
 
             global $wpdb;
             $wpdb->update(
-                $wpdb->prefix . 'acf_form_entries',
+                $wpdb->prefix . 'isxf_form_entries',
                 [ 'entry_status' => $status ],
                 [ 'id' => $entry_id ],
                 [ '%s' ],
@@ -495,7 +496,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
         }
 
         public function handle_update_note() {
-            check_ajax_referer( 'acf_entry_action_nonce', 'nonce' );
+            check_ajax_referer( 'isxf_entry_action_nonce', 'nonce' );
             if ( ! current_user_can( 'manage_options' ) ) {
                 wp_send_json_error( [ 'message' => 'ไม่มีสิทธิ์' ] );
             }
@@ -509,7 +510,7 @@ if ( ! class_exists( 'ACF_AJAX_Handler' ) ) {
 
             global $wpdb;
             $wpdb->update(
-                $wpdb->prefix . 'acf_form_entries',
+                $wpdb->prefix . 'isxf_form_entries',
                 [ 'admin_note' => $note ],
                 [ 'id' => $entry_id ],
                 [ '%s' ],

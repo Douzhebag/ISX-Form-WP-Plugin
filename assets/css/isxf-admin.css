@@ -1,0 +1,95 @@
+/* === InsightX Form — Admin (Builder + Settings) === */
+
+/* Form Builder Meta Box */
+.drag-handle {
+    cursor: grab;
+    font-size: 20px;
+    color: #8c8f94;
+    text-align: center;
+    vertical-align: middle !important;
+    width: 3%;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.ui-sortable-helper {
+    display: table-row;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.ui-sortable-placeholder {
+    visibility: visible !important;
+    background: #f0f0f1;
+    border: 1px dashed #b4b9be;
+}
+
+.isxf-settings-panel {
+    background: #f6f7f7;
+    border: 1px solid #dcdcde;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.isxf-custom-email-panel {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+}
+
+.isxf-custom-email-panel.active {
+    display: block;
+}
+
+.isxf-custom-email-panel label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #1d2327;
+}
+
+.isxf-custom-email-panel input[type="text"],
+.isxf-custom-email-panel textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.isxf-custom-email-panel textarea {
+    min-height: 180px;
+    line-height: 1.6;
+}
+
+.isxf-merge-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.isxf-merge-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #e8f0fe;
+    color: #2271b1;
+    border-radius: 12px;
+    font-size: 12px;
+    font-family: monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.isxf-merge-tag:hover {
+    background: #2271b1;
+    color: #fff;
+}

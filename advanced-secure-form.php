@@ -2,7 +2,7 @@
 /**
  * Plugin Name: InsightX Form
  * Plugin URI:  https://insightx.in.th/
- * Version:     0.4.0
+ * Version:     0.5.0
  * Author:      InsightX
  * Author URI:  https://www.insightx.in.th
  * Text Domain: InsightX
@@ -11,30 +11,30 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'ACF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
-define( 'ACF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ACF_PLUGIN_VERSION', '0.4.0' );
-define( 'ACF_DB_VERSION', '1.0' );
+define( 'ISXF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'ISXF_PLUGIN_VERSION', '0.5.0' );
+define( 'ISXF_DB_VERSION', '1.0' );
 
 // === GitHub Plugin Update Checker ===
-require_once ACF_PLUGIN_DIR . 'libs/plugin-update-checker/plugin-update-checker.php';
+require_once ISXF_PLUGIN_DIR . 'libs/plugin-update-checker/plugin-update-checker.php';
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-$acf_update_checker = PucFactory::buildUpdateChecker(
+$isxf_update_checker = PucFactory::buildUpdateChecker(
     'https://github.com/Douzhebag/ISX-Form-WP-Plugin',
     __FILE__,
     'insightx-form'
 );
 
 // ใช้ GitHub Releases เป็นตัวกำหนด version ที่จะอัพเดท
-$acf_update_checker->getVcsApi()->enableReleaseAssets();
+$isxf_update_checker->getVcsApi()->enableReleaseAssets();
 
-register_activation_hook( __FILE__, 'acf_create_db_table' );
+register_activation_hook( __FILE__, 'isxf_create_db_table' );
 
-function acf_create_db_table() {
+function isxf_create_db_table() {
     global $wpdb;
-    $table_name = $wpdb->prefix . 'acf_form_entries';
+    $table_name = $wpdb->prefix . 'isxf_form_entries';
     $charset_collate = $wpdb->get_charset_collate();
 
     $sql = "CREATE TABLE $table_name (
@@ -52,47 +52,55 @@ function acf_create_db_table() {
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta( $sql );
 
-    update_option( 'acf_db_version', ACF_DB_VERSION );
+    update_option( 'isxf_db_version', ISXF_DB_VERSION );
 }
 
 /**
- * Auto-upgrade database when ACF_DB_VERSION changes.
+ * Auto-upgrade database when ISXF_DB_VERSION changes.
  * dbDelta() handles ALTER TABLE for adding new columns safely.
  */
-function acf_maybe_upgrade_db() {
-    $current = get_option( 'acf_db_version', '0' );
-    if ( version_compare( $current, ACF_DB_VERSION, '<' ) ) {
-        acf_create_db_table();
+function isxf_maybe_upgrade_db() {
+    $current = get_option( 'isxf_db_version', '0' );
+    if ( version_compare( $current, ISXF_DB_VERSION, '<' ) ) {
+        isxf_create_db_table();
     }
 }
-add_action( 'admin_init', 'acf_maybe_upgrade_db' );
+add_action( 'admin_init', 'isxf_maybe_upgrade_db' );
 
-register_uninstall_hook( __FILE__, 'acf_plugin_uninstall' );
+register_uninstall_hook( __FILE__, 'isxf_plugin_uninstall' );
 
-function acf_plugin_uninstall() {
+/**
+ * Load plugin textdomain for translation.
+ */
+function isxf_load_textdomain() {
+    load_plugin_textdomain( 'insightx-form', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+add_action( 'init', 'isxf_load_textdomain' );
+
+function isxf_plugin_uninstall() {
     global $wpdb;
 
-    $table_name = $wpdb->prefix . 'acf_form_entries';
+    $table_name = $wpdb->prefix . 'isxf_form_entries';
     $wpdb->query( "DROP TABLE IF EXISTS $table_name" );
 
     $options_to_delete = [
-        'acf_smtp_enable',
-        'acf_smtp_host',
-        'acf_smtp_port',
-        'acf_smtp_user',
-        'acf_smtp_pass',
-        'acf_smtp_secure',
-        'acf_smtp_from_email',
-        'acf_smtp_from_name',
-        'acf_smtp_disable_ssl_verify',
-        'acf_captcha_service',
-        'acf_recaptcha_site_key',
-        'acf_recaptcha_secret_key',
-        'acf_turnstile_site_key',
-        'acf_turnstile_secret_key',
-        'acf_admin_notify_enable',
-        'acf_admin_notify_email',
-        'acf_db_version'
+        'isxf_smtp_enable',
+        'isxf_smtp_host',
+        'isxf_smtp_port',
+        'isxf_smtp_user',
+        'isxf_smtp_pass',
+        'isxf_smtp_secure',
+        'isxf_smtp_from_email',
+        'isxf_smtp_from_name',
+        'isxf_smtp_disable_ssl_verify',
+        'isxf_captcha_service',
+        'isxf_recaptcha_site_key',
+        'isxf_recaptcha_secret_key',
+        'isxf_turnstile_site_key',
+        'isxf_turnstile_secret_key',
+        'isxf_admin_notify_enable',
+        'isxf_admin_notify_email',
+        'isxf_db_version'
     ];
 
     foreach ( $options_to_delete as $option ) {
@@ -101,22 +109,40 @@ function acf_plugin_uninstall() {
 }
 
 $files_to_load = [
-    'includes/class-acf-admin.php',
-    'includes/class-acf-frontend.php',
-    'includes/class-acf-ajax-handler.php',
-    'includes/class-acf-entries.php'
+    'includes/class-isxf-crypto.php',
+    'includes/class-isxf-admin.php',
+    'includes/class-isxf-frontend.php',
+    'includes/class-isxf-ajax-handler.php',
+    'includes/class-isxf-entries.php'
 ];
 
 foreach ( $files_to_load as $file ) {
-    if ( file_exists( ACF_PLUGIN_DIR . $file ) ) {
-        require_once ACF_PLUGIN_DIR . $file;
+    if ( file_exists( ISXF_PLUGIN_DIR . $file ) ) {
+        require_once ISXF_PLUGIN_DIR . $file;
+    }
+}
+
+/**
+ * Custom error logger for InsightX Form
+ * 
+ * @param mixed $message The message to log.
+ */
+if ( ! function_exists( 'isxf_log_error' ) ) {
+    function isxf_log_error( $message ) {
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            if ( is_array( $message ) || is_object( $message ) ) {
+                error_log( '[InsightX Form Debug] ' . print_r( $message, true ) );
+            } else {
+                error_log( '[InsightX Form Debug] ' . $message );
+            }
+        }
     }
 }
 
 function run_advanced_contact_form() {
-    if ( class_exists( 'ACF_Admin' ) ) new ACF_Admin();
-    if ( class_exists( 'ACF_Frontend' ) ) new ACF_Frontend();
-    if ( class_exists( 'ACF_AJAX_Handler' ) ) new ACF_AJAX_Handler();
-    if ( class_exists( 'ACF_Entries' ) ) new ACF_Entries();
+    if ( class_exists( 'ISXF_Admin' ) ) new ISXF_Admin();
+    if ( class_exists( 'ISXF_Frontend' ) ) new ISXF_Frontend();
+    if ( class_exists( 'ISXF_AJAX_Handler' ) ) new ISXF_AJAX_Handler();
+    if ( class_exists( 'ISXF_Entries' ) ) new ISXF_Entries();
 }
 run_advanced_contact_form();

@@ -1,76 +1,79 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'ACF_Admin' ) ) {
-    class ACF_Admin {
+if ( ! class_exists( 'ISXF_Admin' ) ) {
+    class ISXF_Admin {
 
-        private $captcha_service_opt  = 'acf_captcha_service'; 
-        private $recaptcha_site_opt   = 'acf_recaptcha_site_key';
-        private $recaptcha_secret_opt = 'acf_recaptcha_secret_key';
-        private $turnstile_site_opt   = 'acf_turnstile_site_key';
-        private $turnstile_secret_opt = 'acf_turnstile_secret_key';
+        private $captcha_service_opt  = 'isxf_captcha_service'; 
+        private $recaptcha_site_opt   = 'isxf_recaptcha_site_key';
+        private $recaptcha_secret_opt = 'isxf_recaptcha_secret_key';
+        private $turnstile_site_opt   = 'isxf_turnstile_site_key';
+        private $turnstile_secret_opt = 'isxf_turnstile_secret_key';
         
-        private $smtp_enable = 'acf_smtp_enable';
-        private $smtp_host   = 'acf_smtp_host';
-        private $smtp_port   = 'acf_smtp_port';
-        private $smtp_user   = 'acf_smtp_user';
-        private $smtp_pass   = 'acf_smtp_pass';
-        private $smtp_secure = 'acf_smtp_secure';
-        private $smtp_from_e = 'acf_smtp_from_email';
-        private $smtp_from_n = 'acf_smtp_from_name';
+        private $smtp_enable = 'isxf_smtp_enable';
+        private $smtp_host   = 'isxf_smtp_host';
+        private $smtp_port   = 'isxf_smtp_port';
+        private $smtp_user   = 'isxf_smtp_user';
+        private $smtp_pass   = 'isxf_smtp_pass';
+        private $smtp_secure = 'isxf_smtp_secure';
+        private $smtp_from_e = 'isxf_smtp_from_email';
+        private $smtp_from_n = 'isxf_smtp_from_name';
 
-        private $admin_notify_enable = 'acf_admin_notify_enable';
-        private $admin_notify_email  = 'acf_admin_notify_email';
-        private $smtp_ssl_verify_off = 'acf_smtp_disable_ssl_verify';
+        private $admin_notify_enable = 'isxf_admin_notify_enable';
+        private $admin_notify_email  = 'isxf_admin_notify_email';
+        private $smtp_ssl_verify_off = 'isxf_smtp_disable_ssl_verify';
 
-        /**
-         * Encrypt a password using AES-256-CBC with WordPress salts.
-         */
-        private function encrypt_password( $plain ) {
-            if ( empty( $plain ) ) return '';
-            if ( ! function_exists( 'openssl_encrypt' ) ) return $plain;
-            $key = wp_salt( 'auth' );
-            $iv  = substr( hash( 'sha256', wp_salt( 'secure_auth' ) ), 0, 16 );
-            $encrypted = openssl_encrypt( $plain, 'AES-256-CBC', $key, 0, $iv );
-            return base64_encode( 'ENC:' . $encrypted );
-        }
 
-        /**
-         * Decrypt a stored password. Falls back to plain text if not encrypted.
-         */
-        public function decrypt_password( $stored ) {
-            if ( empty( $stored ) ) return '';
-            $decoded = base64_decode( $stored, true );
-            if ( $decoded === false || strpos( $decoded, 'ENC:' ) !== 0 ) return $stored;
-            if ( ! function_exists( 'openssl_decrypt' ) ) return '';
-            $encrypted = substr( $decoded, 4 );
-            $key = wp_salt( 'auth' );
-            $iv  = substr( hash( 'sha256', wp_salt( 'secure_auth' ) ), 0, 16 );
-            $decrypted = openssl_decrypt( $encrypted, 'AES-256-CBC', $key, 0, $iv );
-            return ( $decrypted !== false ) ? $decrypted : '';
-        }
 
         public function __construct() {
             add_action( 'init', [ $this, 'register_form_cpt' ] );
             add_action( 'admin_menu', [ $this, 'setup_admin_menus' ] );
             add_action( 'add_meta_boxes', [ $this, 'register_meta_boxes' ] ); 
-            add_action( 'save_post_acf_form', [ $this, 'save_form_fields' ] );
+            add_action( 'save_post_isxf_form', [ $this, 'save_form_fields' ] );
             add_action( 'admin_init', [ $this, 'register_global_settings' ] );
-            add_filter( 'manage_acf_form_posts_columns', [ $this, 'custom_form_columns' ] );
-            add_action( 'manage_acf_form_posts_custom_column', [ $this, 'fill_form_columns' ], 10, 2 );
+            add_filter( 'manage_isxf_form_posts_columns', [ $this, 'custom_form_columns' ] );
+            add_action( 'manage_isxf_form_posts_custom_column', [ $this, 'fill_form_columns' ], 10, 2 );
             add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
             add_action( 'admin_init', [ $this, 'maybe_migrate_smtp_password' ], 5 );
         }
 
         public function enqueue_admin_scripts( $hook ) {
-            global $post_type;
-            if ( $post_type === 'acf_form' ) {
-                wp_enqueue_script( 'jquery-ui-sortable' );
-            }
+            global $post_type, $post;
+
+            // Load on isxf_form post type screens and settings page
+            $is_isxf_screen = ( $post_type === 'isxf_form' ) || ( $hook === 'isxf_form_page_isxf-form-settings' );
+            if ( ! $is_isxf_screen ) return;
+
+            wp_enqueue_script( 'jquery-ui-sortable' );
+
+            wp_enqueue_style(
+                'isxf-admin-css',
+                plugin_dir_url( __DIR__ ) . 'assets/css/isxf-admin.css',
+                [],
+                ISXF_PLUGIN_VERSION
+            );
+
+            wp_enqueue_script(
+                'isxf-admin-js',
+                plugin_dir_url( __DIR__ ) . 'assets/js/isxf-admin.js',
+                [ 'jquery', 'jquery-ui-sortable' ],
+                ISXF_PLUGIN_VERSION,
+                true
+            );
+
+            // Localize PHP data for the JS
+            $fields = ( $post && $post->ID ) ? get_post_meta( $post->ID, '_isxf_form_fields', true ) : [];
+            if ( ! is_array( $fields ) ) $fields = [];
+
+            wp_localize_script( 'isxf-admin-js', 'isxf_admin_env', [
+                'ajax_url'         => admin_url( 'admin-ajax.php' ),
+                'test_email_nonce' => wp_create_nonce( 'isxf_test_email_nonce' ),
+                'field_count'      => count( $fields ),
+            ]);
         }
 
         public function register_form_cpt() {
-            register_post_type( 'acf_form', [
+            register_post_type( 'isxf_form', [
                 'labels' => [
                     'name' => 'แบบฟอร์ม (Forms)', 
                     'singular_name' => 'แบบฟอร์ม',
@@ -83,7 +86,7 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                 'show_in_menu' => true,
                 'menu_icon' => 'dashicons-feedback', 
                 'supports' => [ 'title' ], 
-                'menu_position' => 25
+                'menu_position' => 25.5
             ]);
         }
 
@@ -99,8 +102,8 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
         }
 
         public function setup_admin_menus() {
-            add_submenu_page( 'edit.php?post_type=acf_form', 'ตั้งค่าระบบ', '⚙️ ตั้งค่าระบบ', 'manage_options', 'acf-global-settings', [ $this, 'render_settings_page' ] );
-            add_submenu_page( 'edit.php?post_type=acf_form', 'คู่มือการใช้งาน', '📖 คู่มือการใช้งาน', 'manage_options', 'acf-docs', [ $this, 'render_docs_page' ] );
+            add_submenu_page( 'edit.php?post_type=isxf_form', 'ตั้งค่าระบบ', '⚙️ ตั้งค่าระบบ', 'manage_options', 'isxf-global-settings', [ $this, 'render_settings_page' ] );
+            add_submenu_page( 'edit.php?post_type=isxf_form', 'คู่มือการใช้งาน', '📖 คู่มือการใช้งาน', 'manage_options', 'isxf-docs', [ $this, 'render_docs_page' ] );
         }
 
         public function register_global_settings() {
@@ -113,17 +116,30 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
             ];
             foreach ( $options as $opt ) {
                 $callback = ( $opt === $this->smtp_pass ) ? [ $this, 'sanitize_smtp_password' ] : 'sanitize_text_field';
-                register_setting( 'acf_global_group', $opt, [ 'sanitize_callback' => $callback ] );
+                register_setting( 'isxf_global_group', $opt, [ 'sanitize_callback' => $callback ] );
             }
         }
 
         public function render_settings_page() {
             $service = get_option($this->captcha_service_opt, 'google');
+
+            // CAPTCHA warning
+            $captcha_configured = false;
+            if ( $service === 'google' ) {
+                $captcha_configured = ! empty( get_option( $this->recaptcha_site_opt ) ) && ! empty( get_option( $this->recaptcha_secret_opt ) );
+            } else {
+                $captcha_configured = ! empty( get_option( $this->turnstile_site_opt ) ) && ! empty( get_option( $this->turnstile_secret_opt ) );
+            }
             ?>
             <div class="wrap">
                 <h1>⚙️ ตั้งค่าระบบส่วนกลาง (Global Settings)</h1>
+                <?php if ( ! $captcha_configured ) : ?>
+                    <div class="notice notice-warning" style="border-left-color:#dba617; padding:12px 16px;">
+                        <p style="margin:0; font-size:13px;">⚠️ <strong>ยังไม่ได้ตั้งค่า CAPTCHA</strong> — ฟอร์มทั้งหมดจะไม่มีระบบป้องกันบอท กรุณาตั้งค่า Site Key และ Secret Key ด้านล่างเพื่อเปิดใช้งาน</p>
+                    </div>
+                <?php endif; ?>
                 <form method="post" action="options.php">
-                    <?php settings_fields( 'acf_global_group' ); ?>
+                    <?php settings_fields( 'isxf_global_group' ); ?>
                     <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
                         
                         <div style="flex: 1; min-width: 400px; display: flex; flex-direction: column; gap: 20px;">
@@ -198,84 +214,29 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
                         <div style="flex:1; min-width:250px;">
                             <label style="display:block; font-weight:600; margin-bottom:5px; color:#1d2327;">อีเมลปลายทาง:</label>
-                            <input type="email" id="acf-test-email-to" value="<?php echo esc_attr( get_option('admin_email') ); ?>" class="regular-text" style="width:100%;" placeholder="your@email.com">
+                            <input type="email" id="isxf-test-email-to" value="<?php echo esc_attr( get_option('admin_email') ); ?>" class="regular-text" style="width:100%;" placeholder="your@email.com">
                         </div>
-                        <button type="button" id="acf-test-email-btn" class="button button-primary" style="height:36px; min-width:160px;">
+                        <button type="button" id="isxf-test-email-btn" class="button button-primary" style="height:36px; min-width:160px;">
                             📨 ส่งอีเมลทดสอบ
                         </button>
                     </div>
-                    <div id="acf-test-email-result" style="margin-top:12px; display:none; padding:12px 16px; border-radius:4px; font-size:13px; line-height:1.5; transition: all 0.3s ease;"></div>
+                    <div id="isxf-test-email-result" style="margin-top:12px; display:none; padding:12px 16px; border-radius:4px; font-size:13px; line-height:1.5; transition: all 0.3s ease;"></div>
                 </div>
             </div>
-            <script>
-                document.getElementById('captcha_select').onchange = function() {
-                    document.getElementById('settings_google').style.display = (this.value === 'google') ? 'block' : 'none';
-                    document.getElementById('settings_cloudflare').style.display = (this.value === 'cloudflare') ? 'block' : 'none';
-                };
-
-                (function(){
-                    var btn = document.getElementById('acf-test-email-btn');
-                    var input = document.getElementById('acf-test-email-to');
-                    var result = document.getElementById('acf-test-email-result');
-                    var nonce = '<?php echo wp_create_nonce("acf_test_email_nonce"); ?>';
-
-                    btn.addEventListener('click', function() {
-                        var email = input.value.trim();
-                        if (!email) { input.focus(); return; }
-
-                        btn.disabled = true;
-                        btn.textContent = '⏳ กำลังส่ง...';
-                        result.style.display = 'none';
-
-                        var fd = new FormData();
-                        fd.append('action', 'acf_send_test_email');
-                        fd.append('nonce', nonce);
-                        fd.append('test_email', email);
-
-                        fetch('<?php echo admin_url("admin-ajax.php"); ?>', { method: 'POST', body: fd })
-                            .then(function(r) { return r.json(); })
-                            .then(function(data) {
-                                result.style.display = 'block';
-                                if (data.success) {
-                                    result.style.background = '#edfaef';
-                                    result.style.border = '1px solid #46b450';
-                                    result.style.color = '#2e7d32';
-                                    result.textContent = '✅ ' + data.data.message;
-                                } else {
-                                    result.style.background = '#fef0f0';
-                                    result.style.border = '1px solid #dc3232';
-                                    result.style.color = '#a00';
-                                    result.textContent = '❌ ' + data.data.message;
-                                }
-                            })
-                            .catch(function() {
-                                result.style.display = 'block';
-                                result.style.background = '#fef0f0';
-                                result.style.border = '1px solid #dc3232';
-                                result.style.color = '#a00';
-                                result.innerHTML = '❌ เกิดข้อผิดพลาดในการเชื่อมต่อ';
-                            })
-                            .finally(function() {
-                                btn.disabled = false;
-                                btn.textContent = '📨 ส่งอีเมลทดสอบ';
-                            });
-                    });
-                })();
-            </script>
             <?php
         }
 
         public function register_meta_boxes() {
-            add_meta_box( 'acf_builder_meta', '📝 จัดการโครงสร้างแบบฟอร์ม', [ $this, 'render_builder_meta_box' ], 'acf_form', 'normal', 'high' );
+            add_meta_box( 'isxf_builder_meta', '📝 จัดการโครงสร้างแบบฟอร์ม', [ $this, 'render_builder_meta_box' ], 'isxf_form', 'normal', 'high' );
         }
 
         public function render_builder_meta_box( $post ) {
-            wp_nonce_field( 'save_acf_form', 'acf_form_nonce' );
+            wp_nonce_field( 'save_isxf_form', 'isxf_form_nonce' );
             
-            $fields = get_post_meta( $post->ID, '_acf_form_fields', true );
-            $email_type = get_post_meta( $post->ID, '_acf_form_email_type', true );
-            $custom_subject = get_post_meta( $post->ID, '_acf_form_email_subject', true );
-            $custom_body = get_post_meta( $post->ID, '_acf_form_email_body', true );
+            $fields = get_post_meta( $post->ID, '_isxf_form_fields', true );
+            $email_type = get_post_meta( $post->ID, '_isxf_form_email_type', true );
+            $custom_subject = get_post_meta( $post->ID, '_isxf_form_email_subject', true );
+            $custom_body = get_post_meta( $post->ID, '_isxf_form_email_body', true );
             
             if ( ! is_array($fields) || empty($fields) ) {
                 $fields = [[ 'name' => 'your_name', 'label' => 'ชื่อของคุณ', 'type' => 'text', 'width' => '100', 'options' => '', 'required' => 'yes' ]];
@@ -284,52 +245,37 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
             if ( empty($custom_subject) ) $custom_subject = 'ขอบคุณที่ติดต่อ - {site_name}';
             if ( empty($custom_body) ) $custom_body = "สวัสดีครับ\n\nเราได้รับข้อมูลของคุณเรียบร้อยแล้ว รายละเอียดดังนี้:\n\n{all_fields}\n\nขอบคุณครับ\n{site_name}";
             ?>
-            <style>
-                .drag-handle { cursor: grab; font-size: 20px; color: #8c8f94; text-align: center; vertical-align: middle !important; width: 3%; }
-                .drag-handle:active { cursor: grabbing; }
-                .ui-sortable-helper { display: table-row; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-                .ui-sortable-placeholder { visibility: visible !important; background: #f0f0f1; border: 1px dashed #b4b9be; }
-                .acf-settings-panel { background: #f6f7f7; border: 1px solid #dcdcde; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
-                .acf-custom-email-panel { display: none; margin-top: 15px; padding: 15px; background: #fff; border: 1px solid #dcdcde; border-radius: 4px; }
-                .acf-custom-email-panel.active { display: block; }
-                .acf-custom-email-panel label { display: block; font-weight: 600; margin-bottom: 5px; color: #1d2327; }
-                .acf-custom-email-panel input[type="text"],
-                .acf-custom-email-panel textarea { width: 100%; padding: 8px 10px; border: 1px solid #8c8f94; border-radius: 4px; font-size: 13px; font-family: inherit; }
-                .acf-custom-email-panel textarea { min-height: 180px; line-height: 1.6; }
-                .acf-merge-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-                .acf-merge-tag { display: inline-block; padding: 3px 10px; background: #e8f0fe; color: #2271b1; border-radius: 12px; font-size: 12px; font-family: monospace; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
-                .acf-merge-tag:hover { background: #2271b1; color: #fff; }
-            </style>
+
             
-            <div class="acf-settings-panel">
+            <div class="isxf-settings-panel">
                 <label style="font-weight:bold; font-size:14px; margin-right:10px;">✉️ รูปแบบอีเมลตอบกลับลูกค้า (Email Template):</label>
-                <select name="acf_form_email_type" id="acf-email-type-select" style="min-width: 280px;">
+                <select name="isxf_form_email_type" id="isxf-email-type-select" style="min-width: 280px;">
                     <option value="booking" <?php selected($email_type, 'booking'); ?>>🏨 ยืนยันการจองห้องพัก (Booking Confirmation)</option>
                     <option value="inquiry" <?php selected($email_type, 'inquiry'); ?>>📩 สอบถามทั่วไป (General Inquiry)</option>
                     <option value="custom" <?php selected($email_type, 'custom'); ?>>✏️ กำหนดเอง (Custom Template)</option>
                 </select>
                 <p class="description" style="margin-top:5px;">เลือกรูปแบบเนื้อหาอีเมลที่จะส่งกลับหาลูกค้าเมื่อกดส่งฟอร์มนี้</p>
 
-                <div id="acf-custom-email-panel" class="acf-custom-email-panel <?php echo $email_type === 'custom' ? 'active' : ''; ?>">
+                <div id="isxf-custom-email-panel" class="isxf-custom-email-panel <?php echo $email_type === 'custom' ? 'active' : ''; ?>">
                     <div style="margin-bottom: 12px;">
                         <label>📌 หัวข้ออีเมล (Subject):</label>
-                        <input type="text" name="acf_form_email_subject" value="<?php echo esc_attr($custom_subject); ?>" placeholder="เช่น ขอบคุณที่ติดต่อ - {site_name}">
+                        <input type="text" name="isxf_form_email_subject" value="<?php echo esc_attr($custom_subject); ?>" placeholder="เช่น ขอบคุณที่ติดต่อ - {site_name}">
                     </div>
 
                     <div style="margin-bottom: 12px;">
                         <label>📝 เนื้อหาอีเมล (Body):</label>
-                        <textarea name="acf_form_email_body" placeholder="พิมพ์เนื้อหาอีเมล รองรับ HTML..."><?php echo esc_textarea($custom_body); ?></textarea>
+                        <textarea name="isxf_form_email_body" placeholder="พิมพ์เนื้อหาอีเมล รองรับ HTML..."><?php echo esc_textarea($custom_body); ?></textarea>
                         <p class="description" style="margin-top:5px;">รองรับทั้งข้อความธรรมดาและ HTML — ระบบจะครอบด้วย layout สวยงามอัตโนมัติ</p>
                     </div>
 
                     <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 12px 15px; border-radius: 4px;">
                         <strong style="color: #004085; font-size: 13px;">🏷️ Merge Tags ที่ใช้ได้ (คลิกเพื่อแทรก):</strong>
-                        <div class="acf-merge-tags" style="margin-top: 8px;">
-                            <span class="acf-merge-tag" data-tag="{site_name}">{site_name}</span>
-                            <span class="acf-merge-tag" data-tag="{form_title}">{form_title}</span>
-                            <span class="acf-merge-tag" data-tag="{all_fields}">{all_fields}</span>
+                        <div class="isxf-merge-tags" style="margin-top: 8px;">
+                            <span class="isxf-merge-tag" data-tag="{site_name}">{site_name}</span>
+                            <span class="isxf-merge-tag" data-tag="{form_title}">{form_title}</span>
+                            <span class="isxf-merge-tag" data-tag="{all_fields}">{all_fields}</span>
                             <?php foreach ( $fields as $f ) : if ( !isset($f['type']) || $f['type'] === 'heading' ) continue; ?>
-                                <span class="acf-merge-tag" data-tag="{field:<?php echo esc_attr($f['label']); ?>}">{field:<?php echo esc_html($f['label']); ?>}</span>
+                                <span class="isxf-merge-tag" data-tag="{field:<?php echo esc_attr($f['label']); ?>}">{field:<?php echo esc_html($f['label']); ?>}</span>
                             <?php endforeach; ?>
                         </div>
                         <p style="margin: 8px 0 0; font-size: 12px; color: #666;">คลิกที่ tag เพื่อแทรกลงในช่องเนื้อหาอีเมล • <code>{all_fields}</code> = ตารางข้อมูลทั้งหมด • <code>{field:ชื่อ}</code> = ค่าของฟิลด์นั้น</p>
@@ -356,10 +302,10 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                         <?php foreach ( $fields as $index => $field ) : ?>
                             <tr class="field-row">
                                 <td class="drag-handle" title="คลิกค้างเพื่อเลื่อนสลับตำแหน่ง">☰</td>
-                                <td><input type="text" name="acf_fields[<?php echo $index; ?>][label]" value="<?php echo esc_attr( $field['label'] ); ?>" required style="width:100%;"></td>
-                                <td><input type="text" name="acf_fields[<?php echo $index; ?>][name]" value="<?php echo esc_attr( $field['name'] ); ?>" style="width:100%;"></td>
+                                <td><input type="text" name="isxf_fields[<?php echo $index; ?>][label]" value="<?php echo esc_attr( $field['label'] ); ?>" required style="width:100%;"></td>
+                                <td><input type="text" name="isxf_fields[<?php echo $index; ?>][name]" value="<?php echo esc_attr( $field['name'] ); ?>" style="width:100%;"></td>
                                 <td>
-                                    <select name="acf_fields[<?php echo $index; ?>][type]" class="field-type-select" style="width:100%;">
+                                    <select name="isxf_fields[<?php echo $index; ?>][type]" class="field-type-select" style="width:100%;">
                                         <option value="text" <?php selected($field['type'], 'text'); ?>>Text (ข้อความสั้น)</option>
                                         <option value="textarea" <?php selected($field['type'], 'textarea'); ?>>Textarea (ข้อความยาว)</option>
                                         <option value="email" <?php selected($field['type'], 'email'); ?>>Email</option>
@@ -374,10 +320,10 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                                         <option value="heading" <?php selected($field['type'], 'heading'); ?>>Heading (หัวข้อฟอร์ม)</option>
                                     </select>
                                 </td>
-                                <td><input type="text" name="acf_fields[<?php echo $index; ?>][placeholder]" class="field-placeholder-input" value="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>" placeholder="พิมพ์ข้อความตัวอย่าง" style="width:100%;"></td>
-                                <td><input type="text" name="acf_fields[<?php echo $index; ?>][options]" class="field-options-input" value="<?php echo esc_attr( $field['options'] ?? '' ); ?>" placeholder="เช่น แดง,เขียว,น้ำเงิน" style="width:100%;"></td>
-                                <td><select name="acf_fields[<?php echo $index; ?>][width]" style="width:100%"><option value="100" <?php selected($field['width'] ?? '100', '100'); ?>>100%</option><option value="50" <?php selected($field['width'] ?? '100', '50'); ?>>50%</option></select></td>
-                                <td><select name="acf_fields[<?php echo $index; ?>][required]" class="field-required-select"><option value="yes" <?php selected($field['required'], 'yes'); ?>>Yes</option><option value="no" <?php selected($field['required'], 'no'); ?>>No</option></select></td>
+                                <td><input type="text" name="isxf_fields[<?php echo $index; ?>][placeholder]" class="field-placeholder-input" value="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>" placeholder="พิมพ์ข้อความตัวอย่าง" style="width:100%;"></td>
+                                <td><input type="text" name="isxf_fields[<?php echo $index; ?>][options]" class="field-options-input" value="<?php echo esc_attr( $field['options'] ?? '' ); ?>" placeholder="เช่น แดง,เขียว,น้ำเงิน" style="width:100%;"></td>
+                                <td><select name="isxf_fields[<?php echo $index; ?>][width]" style="width:100%"><option value="100" <?php selected($field['width'] ?? '100', '100'); ?>>100%</option><option value="50" <?php selected($field['width'] ?? '100', '50'); ?>>50%</option></select></td>
+                                <td><select name="isxf_fields[<?php echo $index; ?>][required]" class="field-required-select"><option value="yes" <?php selected($field['required'], 'yes'); ?>>Yes</option><option value="no" <?php selected($field['required'], 'no'); ?>>No</option></select></td>
                                 <td style="text-align: center;"><button type="button" class="button remove-row" style="color:red;" title="ลบฟิลด์นี้">❌</button></td>
                             </tr>
                         <?php endforeach; ?>
@@ -386,104 +332,7 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                 <br><button type="button" class="button button-primary" id="add-row">+ เพิ่มฟิลด์ใหม่</button>
             </div>
             
-            <script>
-                jQuery(document).ready(function($) {
-                    $('#field-list').sortable({
-                        handle: '.drag-handle', axis: 'y', cursor: 'grabbing', opacity: 0.8,
-                        helper: function(e, ui) { ui.children().each(function() { $(this).width($(this).width()); }); return ui; }
-                    });
 
-                    function updateFieldState(selectElement) {
-                        const tr = $(selectElement).closest('tr');
-                        const type = $(selectElement).val();
-                        const optionsInput = tr.find('.field-options-input');
-                        const placeholderInput = tr.find('.field-placeholder-input');
-                        const requiredSelect = tr.find('.field-required-select');
-
-                        if (['select', 'radio', 'checkbox'].includes(type)) {
-                            optionsInput.prop('disabled', false).prop('placeholder', 'เช่น แดง,เขียว,น้ำเงิน').css('opacity', '1');
-                        } else {
-                            optionsInput.prop('disabled', true).prop('placeholder', 'ไม่ใช้ตัวเลือก').val('').css('opacity', '0.3');
-                        }
-
-                        if (['text', 'textarea', 'email', 'tel', 'number', 'date', 'check_in', 'check_out'].includes(type)) {
-                            placeholderInput.prop('disabled', false).prop('placeholder', 'พิมพ์ข้อความตัวอย่าง').css('opacity', '1');
-                        } else {
-                            placeholderInput.prop('disabled', true).prop('placeholder', 'ไม่ใช้ placeholder').val('').css('opacity', '0.3');
-                        }
-
-                        if (type === 'heading') {
-                            requiredSelect.val('no').prop('disabled', true).css('opacity', '0.3');
-                        } else {
-                            requiredSelect.prop('disabled', false).css('opacity', '1');
-                        }
-                    }
-
-                    $('.field-type-select').each(function() { updateFieldState(this); });
-                    $('#field-list').on('change', '.field-type-select', function() { updateFieldState(this); });
-
-                    let r = <?php echo count($fields); ?> + 100;
-                    $('#add-row').on('click', function() {
-                        const tr = `
-                            <tr class="field-row">
-                                <td class="drag-handle" title="คลิกค้างเพื่อเลื่อนสลับตำแหน่ง">☰</td>
-                                <td><input type="text" name="acf_fields[${r}][label]" required style="width:100%;"></td>
-                                <td><input type="text" name="acf_fields[${r}][name]" style="width:100%;"></td>
-                                <td>
-                                    <select name="acf_fields[${r}][type]" class="field-type-select" style="width:100%">
-                                        <option value="text">Text (ข้อความสั้น)</option>
-                                        <option value="textarea">Textarea (ข้อความยาว)</option>
-                                        <option value="email">Email</option>
-                                        <option value="tel">Telephone</option>
-                                        <option value="number">Number (ตัวเลข)</option>
-                                        <option value="date">Date (ปฏิทินทั่วไป)</option>
-                                        <option value="check_in">📅 Check-in Date (วันเช็คอิน)</option>
-                                        <option value="check_out">📅 Check-out Date (วันเช็คเอาท์)</option>
-                                        <option value="select">Select (Dropdown)</option>
-                                        <option value="radio">Radio (เลือกได้ 1 ข้อ)</option>
-                                        <option value="checkbox">Checkbox (เลือกได้หลายข้อ)</option>
-                                        <option value="heading">Heading (หัวข้อฟอร์ม)</option>
-                                    </select>
-                                </td>
-                                <td><input type="text" name="acf_fields[${r}][placeholder]" class="field-placeholder-input" placeholder="พิมพ์ข้อความตัวอย่าง" style="width:100%;"></td>
-                                <td><input type="text" name="acf_fields[${r}][options]" class="field-options-input" placeholder="ไม่ใช้ตัวเลือก" disabled style="width:100%; opacity:0.3;"></td>
-                                <td><select name="acf_fields[${r}][width]" style="width:100%"><option value="100">100%</option><option value="50">50%</option></select></td>
-                                <td><select name="acf_fields[${r}][required]" class="field-required-select"><option value="yes">Yes</option><option value="no">No</option></select></td>
-                                <td style="text-align: center;"><button type="button" class="button remove-row" style="color:red;" title="ลบฟิลด์นี้">❌</button></td>
-                            </tr>
-                        `;
-                        $('#field-list').append(tr);
-                        updateFieldState($('#field-list tr:last .field-type-select'));
-                        r++;
-                    });
-
-                    // Email type toggle
-                    var emailSelect = document.getElementById('acf-email-type-select');
-                    var customPanel = document.getElementById('acf-custom-email-panel');
-                    if (emailSelect && customPanel) {
-                        emailSelect.addEventListener('change', function() {
-                            customPanel.classList.toggle('active', this.value === 'custom');
-                        });
-                    }
-
-                    // Merge tag click-to-insert
-                    $(document).on('click', '.acf-merge-tag', function() {
-                        var tag = $(this).data('tag');
-                        var textarea = $('textarea[name="acf_form_email_body"]');
-                        if (textarea.length) {
-                            var el = textarea[0];
-                            var start = el.selectionStart;
-                            var end = el.selectionEnd;
-                            var text = el.value;
-                            el.value = text.substring(0, start) + tag + text.substring(end);
-                            el.selectionStart = el.selectionEnd = start + tag.length;
-                            el.focus();
-                        }
-                    });
-
-                    $('#field-list').on('click', '.remove-row', function() { $(this).closest('tr').remove(); });
-                });
-            </script>
             <?php
         }
 
@@ -493,7 +342,7 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                 // ถ้าเว้นว่าง ให้ใช้ค่าเดิม (ไม่เปลี่ยน password)
                 return get_option( $this->smtp_pass, '' );
             }
-            return $this->encrypt_password( $value );
+            return ISXF_Crypto::encrypt( $value );
         }
 
         /**
@@ -504,34 +353,33 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
             if ( empty( $stored ) ) return;
 
             // ตรวจว่าเป็น encrypted แล้วหรือยัง
-            $decoded = base64_decode( $stored, true );
-            if ( $decoded !== false && strpos( $decoded, 'ENC:' ) === 0 ) return;
+            if ( ISXF_Crypto::is_encrypted( $stored ) ) return;
 
-            // ยังเป็น plain text → encrypt
-            $encrypted = $this->encrypt_password( $stored );
+            // ยังเป็น plain text → encrypt ด้วย random IV format ใหม่
+            $encrypted = ISXF_Crypto::encrypt( $stored );
             update_option( $this->smtp_pass, $encrypted );
         }
 
         public function save_form_fields( $post_id ) {
-            if ( ! isset( $_POST['acf_form_nonce'] ) || ! wp_verify_nonce( $_POST['acf_form_nonce'], 'save_acf_form' ) ) return;
+            if ( ! isset( $_POST['isxf_form_nonce'] ) || ! wp_verify_nonce( $_POST['isxf_form_nonce'], 'save_isxf_form' ) ) return;
             if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
             if ( ! current_user_can( 'edit_post', $post_id ) ) return;
 
-            if ( isset( $_POST['acf_form_email_type'] ) ) {
-                update_post_meta( $post_id, '_acf_form_email_type', sanitize_text_field( $_POST['acf_form_email_type'] ) );
+            if ( isset( $_POST['isxf_form_email_type'] ) ) {
+                update_post_meta( $post_id, '_isxf_form_email_type', sanitize_text_field( $_POST['isxf_form_email_type'] ) );
             }
 
             // Save custom email template fields
-            if ( isset( $_POST['acf_form_email_subject'] ) ) {
-                update_post_meta( $post_id, '_acf_form_email_subject', sanitize_text_field( $_POST['acf_form_email_subject'] ) );
+            if ( isset( $_POST['isxf_form_email_subject'] ) ) {
+                update_post_meta( $post_id, '_isxf_form_email_subject', sanitize_text_field( $_POST['isxf_form_email_subject'] ) );
             }
-            if ( isset( $_POST['acf_form_email_body'] ) ) {
-                update_post_meta( $post_id, '_acf_form_email_body', wp_kses_post( $_POST['acf_form_email_body'] ) );
+            if ( isset( $_POST['isxf_form_email_body'] ) ) {
+                update_post_meta( $post_id, '_isxf_form_email_body', wp_kses_post( $_POST['isxf_form_email_body'] ) );
             }
 
-            if ( isset( $_POST['acf_fields'] ) && is_array( $_POST['acf_fields'] ) ) {
+            if ( isset( $_POST['isxf_fields'] ) && is_array( $_POST['isxf_fields'] ) ) {
                 $sanitized_fields = [];
-                foreach ( $_POST['acf_fields'] as $field ) {
+                foreach ( $_POST['isxf_fields'] as $field ) {
                     if ( empty( $field['label'] ) ) continue;
                     $sanitized_fields[] = [
                         'label'    => sanitize_text_field( $field['label'] ),
@@ -543,42 +391,42 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                         'required' => sanitize_text_field( $field['required'] )
                     ];
                 }
-                update_post_meta( $post_id, '_acf_form_fields', $sanitized_fields );
+                update_post_meta( $post_id, '_isxf_form_fields', $sanitized_fields );
             }
         }
 
         public function render_docs_page() {
             ?>
             <style>
-                .acf-docs-wrap { max-width:900px; }
-                .acf-docs-wrap h1 { display:flex; align-items:center; gap:10px; }
-                .acf-docs-ver { font-size:12px; background:#2271b1; color:#fff; padding:2px 10px; border-radius:12px; font-weight:400; }
-                .acf-docs-section { background:#fff; border:1px solid #ccd0d4; border-radius:6px; margin-bottom:12px; overflow:hidden; }
-                .acf-docs-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; user-select:none; transition:background 0.2s; font-weight:600; font-size:14px; color:#1d2327; }
-                .acf-docs-header:hover { background:#f6f7f7; }
-                .acf-docs-arrow { transition:transform 0.3s; font-size:12px; color:#999; }
-                .acf-docs-section.open .acf-docs-arrow { transform:rotate(180deg); }
-                .acf-docs-body { display:none; padding:0 20px 20px; color:#50575e; font-size:13px; line-height:1.8; }
-                .acf-docs-section.open .acf-docs-body { display:block; }
-                .acf-docs-body h4 { color:#1d2327; margin:18px 0 8px; font-size:14px; }
-                .acf-docs-body table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
-                .acf-docs-body th { background:#f0f0f1; text-align:left; padding:8px 12px; border:1px solid #ddd; font-weight:600; }
-                .acf-docs-body td { padding:8px 12px; border:1px solid #eee; }
-                .acf-docs-body code { background:#f0f0f1; padding:2px 6px; border-radius:3px; font-size:12px; }
-                .acf-docs-body .step { display:flex; gap:12px; margin:8px 0; }
-                .acf-docs-body .step-num { flex-shrink:0; width:24px; height:24px; background:#2271b1; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; margin-top:1px; }
-                .acf-docs-body .step-text { flex:1; }
-                .acf-docs-body .tip-box { background:#f0f7ff; border-left:4px solid #2271b1; padding:10px 14px; border-radius:0 4px 4px 0; margin:12px 0; font-size:12px; }
-                .acf-docs-body .warn-box { background:#fff8e5; border-left:4px solid #dba617; padding:10px 14px; border-radius:0 4px 4px 0; margin:12px 0; font-size:12px; }
+                .isxf-docs-wrap { max-width:900px; }
+                .isxf-docs-wrap h1 { display:flex; align-items:center; gap:10px; }
+                .isxf-docs-ver { font-size:12px; background:#2271b1; color:#fff; padding:2px 10px; border-radius:12px; font-weight:400; }
+                .isxf-docs-section { background:#fff; border:1px solid #ccd0d4; border-radius:6px; margin-bottom:12px; overflow:hidden; }
+                .isxf-docs-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; user-select:none; transition:background 0.2s; font-weight:600; font-size:14px; color:#1d2327; }
+                .isxf-docs-header:hover { background:#f6f7f7; }
+                .isxf-docs-arrow { transition:transform 0.3s; font-size:12px; color:#999; }
+                .isxf-docs-section.open .isxf-docs-arrow { transform:rotate(180deg); }
+                .isxf-docs-body { display:none; padding:0 20px 20px; color:#50575e; font-size:13px; line-height:1.8; }
+                .isxf-docs-section.open .isxf-docs-body { display:block; }
+                .isxf-docs-body h4 { color:#1d2327; margin:18px 0 8px; font-size:14px; }
+                .isxf-docs-body table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+                .isxf-docs-body th { background:#f0f0f1; text-align:left; padding:8px 12px; border:1px solid #ddd; font-weight:600; }
+                .isxf-docs-body td { padding:8px 12px; border:1px solid #eee; }
+                .isxf-docs-body code { background:#f0f0f1; padding:2px 6px; border-radius:3px; font-size:12px; }
+                .isxf-docs-body .step { display:flex; gap:12px; margin:8px 0; }
+                .isxf-docs-body .step-num { flex-shrink:0; width:24px; height:24px; background:#2271b1; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; margin-top:1px; }
+                .isxf-docs-body .step-text { flex:1; }
+                .isxf-docs-body .tip-box { background:#f0f7ff; border-left:4px solid #2271b1; padding:10px 14px; border-radius:0 4px 4px 0; margin:12px 0; font-size:12px; }
+                .isxf-docs-body .warn-box { background:#fff8e5; border-left:4px solid #dba617; padding:10px 14px; border-radius:0 4px 4px 0; margin:12px 0; font-size:12px; }
             </style>
 
-            <div class="wrap acf-docs-wrap">
-                <h1>📖 คู่มือการใช้งาน <span class="acf-docs-ver">v<?php echo ACF_PLUGIN_VERSION; ?></span></h1>
+            <div class="wrap isxf-docs-wrap">
+                <h1>📖 คู่มือการใช้งาน <span class="isxf-docs-ver">v<?php echo ISXF_PLUGIN_VERSION; ?></span></h1>
                 <p style="color:#50575e; margin-bottom:20px;">InsightX Form — ระบบฟอร์มและจัดการข้อมูลลูกค้าสำหรับธุรกิจ</p>
 
-                <div class="acf-docs-section open">
-                    <div class="acf-docs-header">📝 การสร้างฟอร์ม <span class="acf-docs-arrow">▼</span></div>
-                    <div class="acf-docs-body">
+                <div class="isxf-docs-section open">
+                    <div class="isxf-docs-header">📝 การสร้างฟอร์ม <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
                         <div class="step"><span class="step-num">1</span><span class="step-text">ไปที่ <strong>แบบฟอร์ม → สร้างฟอร์มใหม่</strong></span></div>
                         <div class="step"><span class="step-num">2</span><span class="step-text">ตั้ง <strong>ชื่อฟอร์ม</strong> (เช่น "แบบฟอร์มจองห้องพัก")</span></div>
                         <div class="step"><span class="step-num">3</span><span class="step-text">เพิ่มฟิลด์ตามต้องการจากตารางด้านล่าง</span></div>
@@ -601,9 +449,9 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     </div>
                 </div>
 
-                <div class="acf-docs-section">
-                    <div class="acf-docs-header">🖥️ การแสดงฟอร์มบนหน้าเว็บ <span class="acf-docs-arrow">▼</span></div>
-                    <div class="acf-docs-body">
+                <div class="isxf-docs-section">
+                    <div class="isxf-docs-header">🖥️ การแสดงฟอร์มบนหน้าเว็บ <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
                         <div class="step"><span class="step-num">1</span><span class="step-text">ไปที่ <strong>แบบฟอร์ม → ฟอร์มทั้งหมด</strong></span></div>
                         <div class="step"><span class="step-num">2</span><span class="step-text">คัดลอก Shortcode เช่น <code>[advanced_form id="123"]</code></span></div>
                         <div class="step"><span class="step-num">3</span><span class="step-text">วางในหน้า (Page) หรือโพสต์ (Post) ที่ต้องการ</span></div>
@@ -611,9 +459,9 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     </div>
                 </div>
 
-                <div class="acf-docs-section">
-                    <div class="acf-docs-header">📧 ตั้งค่า SMTP & ทดสอบอีเมล <span class="acf-docs-arrow">▼</span></div>
-                    <div class="acf-docs-body">
+                <div class="isxf-docs-section">
+                    <div class="isxf-docs-header">📧 ตั้งค่า SMTP & ทดสอบอีเมล <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
                         <div class="step"><span class="step-num">1</span><span class="step-text">ไปที่ <strong>แบบฟอร์ม → ⚙️ ตั้งค่าระบบ</strong></span></div>
                         <div class="step"><span class="step-num">2</span><span class="step-text">ติ๊ก <strong>เปิดใช้งาน SMTP</strong></span></div>
                         <div class="step"><span class="step-num">3</span><span class="step-text">กรอก Host, Port, Username, Password</span></div>
@@ -640,9 +488,9 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     </div>
                 </div>
 
-                <div class="acf-docs-section">
-                    <div class="acf-docs-header">🛡️ ตั้งค่า Captcha <span class="acf-docs-arrow">▼</span></div>
-                    <div class="acf-docs-body">
+                <div class="isxf-docs-section">
+                    <div class="isxf-docs-header">🛡️ ตั้งค่า Captcha <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
                         <p>รองรับ 2 บริการ:</p>
                         <table>
                             <tr><th>บริการ</th><th>วิธีขอ Key</th></tr>
@@ -654,9 +502,9 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     </div>
                 </div>
 
-                <div class="acf-docs-section">
-                    <div class="acf-docs-header">✉️ Custom Email Template (ใหม่) <span class="acf-docs-arrow">▼</span></div>
-                    <div class="acf-docs-body">
+                <div class="isxf-docs-section">
+                    <div class="isxf-docs-header">✉️ Custom Email Template (ใหม่) <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
                         <p>ตั้งแต่ v0.3.0 สามารถกำหนดเนื้อหาอีเมลตอบกลับลูกค้าได้เองจากหน้าแก้ไขฟอร์ม</p>
 
                         <h4>วิธีใช้</h4>
@@ -676,9 +524,9 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     </div>
                 </div>
 
-                <div class="acf-docs-section">
-                    <div class="acf-docs-header">📥 จัดการรายการข้อมูล (Entries) <span class="acf-docs-arrow">▼</span></div>
-                    <div class="acf-docs-body">
+                <div class="isxf-docs-section">
+                    <div class="isxf-docs-header">📥 จัดการรายการข้อมูล (Entries) <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
                         <p>ไปที่ <strong>แบบฟอร์ม → 📥 รายการข้อมูล</strong></p>
 
                         <h4>ตัวกรอง</h4>
@@ -705,9 +553,9 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     </div>
                 </div>
 
-                <div class="acf-docs-section">
-                    <div class="acf-docs-header">📊 ส่งออก CSV & Dashboard <span class="acf-docs-arrow">▼</span></div>
-                    <div class="acf-docs-body">
+                <div class="isxf-docs-section">
+                    <div class="isxf-docs-header">📊 ส่งออก CSV & Dashboard <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
                         <h4>ส่งออก CSV</h4>
                         <div class="step"><span class="step-num">1</span><span class="step-text">ตั้งค่าตัวกรองที่ต้องการ (ฟอร์ม / วันที่ / สถานะ)</span></div>
                         <div class="step"><span class="step-num">2</span><span class="step-text">กดปุ่ม <strong>"📊 ส่งออก CSV"</strong> ด้านบนขวา</span></div>
@@ -723,9 +571,9 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     </div>
                 </div>
 
-                <div class="acf-docs-section">
-                    <div class="acf-docs-header">❓ คำถามที่พบบ่อย (FAQ) <span class="acf-docs-arrow">▼</span></div>
-                    <div class="acf-docs-body">
+                <div class="isxf-docs-section">
+                    <div class="isxf-docs-header">❓ คำถามที่พบบ่อย (FAQ) <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
                         <h4>ฟอร์มไม่ส่งอีเมล ทำอย่างไร?</h4>
                         <p>ตรวจสอบการตั้งค่า SMTP → ใช้ปุ่ม "ทดสอบส่งอีเมล" เพื่อดู Error Message</p>
 
@@ -746,11 +594,11 @@ if ( ! class_exists( 'ACF_Admin' ) ) {
                     </div>
                 </div>
 
-                <p style="text-align:center; color:#999; font-size:12px; margin-top:20px;">InsightX Form v<?php echo ACF_PLUGIN_VERSION; ?> — Made by <a href="https://www.insightx.in.th" target="_blank">InsightX</a></p>
+                <p style="text-align:center; color:#999; font-size:12px; margin-top:20px;">InsightX Form v<?php echo ISXF_PLUGIN_VERSION; ?> — Made by <a href="https://www.insightx.in.th" target="_blank">InsightX</a></p>
             </div>
 
             <script>
-                document.querySelectorAll('.acf-docs-header').forEach(function(h) {
+                document.querySelectorAll('.isxf-docs-header').forEach(function(h) {
                     h.addEventListener('click', function() {
                         this.parentElement.classList.toggle('open');
                     });

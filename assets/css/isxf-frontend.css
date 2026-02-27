@@ -1,0 +1,221 @@
+.isxf-form-container {
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: inherit;
+    color: #1f2937;
+}
+
+.isxf-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 24px;
+}
+
+.isxf-col-100 {
+    grid-column: span 2;
+}
+
+.isxf-col-50 {
+    grid-column: span 1;
+}
+
+@media (max-width: 650px) {
+    .isxf-col-50 {
+        grid-column: span 2;
+    }
+}
+
+.isxf-form-heading {
+    margin: 32px 0 8px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.isxf-col-100:first-child .isxf-form-heading {
+    margin-top: 0;
+}
+
+.isxf-field-wrapper {
+    position: relative;
+    box-sizing: border-box;
+}
+
+.isxf-form-container label.isxf-field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1f2937;
+}
+
+.isxf-req-mark {
+    color: #ef4444;
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+.isxf-checkbox-group,
+.isxf-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    min-height: 40px;
+}
+
+.isxf-radio-group label,
+.isxf-checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.isxf-radio-group input[type="radio"] {
+    -webkit-appearance: radio;
+    appearance: radio;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+.isxf-form-container input:not([type="radio"]):not([type="checkbox"]),
+.isxf-form-container select,
+.isxf-form-container textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    background: #fff;
+    font-size: 15px;
+    color: #374151;
+    box-shadow: none;
+}
+
+.isxf-form-container input::placeholder,
+.isxf-form-container textarea::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+.isxf-form-container input:focus,
+.isxf-form-container select:focus,
+.isxf-form-container textarea:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+    outline: none;
+}
+
+.isxf-modern-date {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="%239ca3af" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px !important;
+    cursor: pointer;
+}
+
+.isxf-submit-btn {
+    background: #0f172a;
+    color: #fff;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    transition: background 0.3s;
+    margin-top: 30px;
+}
+
+.isxf-submit-btn:hover {
+    background: #1e293b;
+}
+
+.isxf-submit-btn:disabled {
+    background: #9ca3af !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.isxf-toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.isxf-toast {
+    min-width: 280px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.isxf-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.isxf-toast.success {
+    background-color: #10b981;
+    border-left: 6px solid #059669;
+}
+
+.isxf-toast.error {
+    background-color: #ef4444;
+    border-left: 6px solid #b91c1c;
+}
+
+.isxf-toast-close {
+    cursor: pointer;
+    font-size: 20px;
+    margin-left: 15px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.isxf-toast-close:hover {
+    opacity: 1;
+}
+
+.isxf-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: isxf-spin 0.8s linear infinite;
+    vertical-align: middle;
+}
+
+@keyframes isxf-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.isxf-submit-btn.is-loading .isxf-spinner {
+    display: inline-block;
+}

@@ -622,14 +622,14 @@
 }
 
 /* Dashboard Widget */
-.acf-dash-stats {
+.isxf-dash-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin-bottom: 16px;
 }
 
-.acf-dash-card {
+.isxf-dash-card {
     background: #f8f9fa;
     border-radius: 8px;
     padding: 14px;
@@ -638,25 +638,25 @@
     transition: all 0.2s;
 }
 
-.acf-dash-card:hover {
+.isxf-dash-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
 }
 
-.acf-dash-card .num {
+.isxf-dash-card .num {
     font-size: 28px;
     font-weight: 700;
     line-height: 1.2;
 }
 
-.acf-dash-card .lbl {
+.isxf-dash-card .lbl {
     font-size: 11px;
     color: #757575;
     margin-top: 4px;
     font-weight: 500;
 }
 
-.acf-dash-bar {
+.isxf-dash-bar {
     display: flex;
     height: 10px;
     border-radius: 5px;
@@ -665,12 +665,12 @@
     background: #e2e4e7;
 }
 
-.acf-dash-bar-seg {
+.isxf-dash-bar-seg {
     transition: width 0.5s ease;
     min-width: 0;
 }
 
-.acf-dash-legend {
+.isxf-dash-legend {
     display: flex;
     flex-wrap: wrap;
     gap: 8px 16px;
@@ -678,25 +678,25 @@
     font-size: 12px;
 }
 
-.acf-dash-legend-item {
+.isxf-dash-legend-item {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.acf-dash-legend-dot {
+.isxf-dash-legend-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
-.acf-dash-recent {
+.isxf-dash-recent {
     border-top: 1px solid #eee;
     padding-top: 12px;
 }
 
-.acf-dash-recent-title {
+.isxf-dash-recent-title {
     font-weight: 600;
     font-size: 13px;
     color: #1d2327;
@@ -706,13 +706,13 @@
     align-items: center;
 }
 
-.acf-dash-recent-title a {
+.isxf-dash-recent-title a {
     font-size: 12px;
     font-weight: 400;
     text-decoration: none;
 }
 
-.acf-dash-entry {
+.isxf-dash-entry {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -720,16 +720,16 @@
     border-bottom: 1px solid #f0f0f1;
 }
 
-.acf-dash-entry:last-child {
+.isxf-dash-entry:last-child {
     border-bottom: none;
 }
 
-.acf-dash-entry-info {
+.isxf-dash-entry-info {
     flex: 1;
     min-width: 0;
 }
 
-.acf-dash-entry-form {
+.isxf-dash-entry-form {
     font-size: 13px;
     font-weight: 600;
     color: #1d2327;
@@ -738,13 +738,13 @@
     text-overflow: ellipsis;
 }
 
-.acf-dash-entry-meta {
+.isxf-dash-entry-meta {
     font-size: 11px;
     color: #999;
     margin-top: 2px;
 }
 
-.acf-dash-entry-badge {
+.isxf-dash-entry-badge {
     flex-shrink: 0;
     padding: 2px 8px;
     border-radius: 10px;
@@ -753,7 +753,7 @@
     white-space: nowrap;
 }
 
-.acf-dash-empty {
+.isxf-dash-empty {
     text-align: center;
     padding: 20px;
     color: #999;

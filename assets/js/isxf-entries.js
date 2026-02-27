@@ -3,8 +3,8 @@
  * Handles status updates, notes, and bulk actions via AJAX.
  */
 (function(){
-    var ajaxUrl = acf_entries_env.ajax_url;
-    var nonce = acf_entries_env.nonce;
+    var ajaxUrl = isxf_entries_env.ajax_url;
+    var nonce = isxf_entries_env.nonce;
 
     function showToast(msg, type) {
         var t = document.createElement('div');
@@ -31,7 +31,7 @@
             selectEl.disabled = true;
 
             var fd = new FormData();
-            fd.append('action', 'acf_update_entry_status');
+            fd.append('action', 'isxf_update_entry_status');
             fd.append('nonce', nonce);
             fd.append('entry_id', entryId);
             fd.append('status', status);
@@ -85,7 +85,7 @@
             saveBtn.textContent = '⏳ กำลังบันทึก...';
 
             var fd = new FormData();
-            fd.append('action', 'acf_update_entry_note');
+            fd.append('action', 'isxf_update_entry_note');
             fd.append('nonce', nonce);
             fd.append('entry_id', id);
             fd.append('note', note);

@@ -5,7 +5,7 @@
 (function () {
     'use strict';
 
-    var env = acf_analytics_env || {};
+    var env = isxf_analytics_env || {};
     var lineChart = null;
     var doughnutChart = null;
 
@@ -56,7 +56,7 @@
      */
     function fetchAnalyticsData(range, startDate, endDate) {
         var fd = new FormData();
-        fd.append('action', 'acf_get_analytics_data');
+        fd.append('action', 'isxf_get_analytics_data');
         fd.append('nonce', env.nonce);
         fd.append('range', range);
         fd.append('start_date', startDate);

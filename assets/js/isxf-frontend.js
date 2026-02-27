@@ -1,38 +1,38 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     function showToast(message, type = 'success') {
-        let container = document.querySelector('.acf-toast-container');
+        let container = document.querySelector('.isxf-toast-container');
         if (!container) {
             container = document.createElement('div');
-            container.className = 'acf-toast-container';
+            container.className = 'isxf-toast-container';
             document.body.appendChild(container);
         }
         const toast = document.createElement('div');
-        toast.className = `acf-toast ${type}`;
+        toast.className = `isxf-toast ${type}`;
         const icon = type === 'success' ? '✅ ' : '⚠️ ';
-        toast.innerHTML = `<span>${icon} ${message}</span><span class="acf-toast-close" style="cursor:pointer; margin-left:10px;">&times;</span>`;
+        toast.innerHTML = `<span>${icon} ${message}</span><span class="isxf-toast-close" style="cursor:pointer; margin-left:10px;">&times;</span>`;
         container.appendChild(toast);
         setTimeout(() => toast.classList.add('show'), 10);
-        toast.querySelector('.acf-toast-close').onclick = () => toast.remove();
+        toast.querySelector('.isxf-toast-close').onclick = () => toast.remove();
         setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 4000);
     }
 
-    const forms = document.querySelectorAll('.acf-form-container');
+    const forms = document.querySelectorAll('.isxf-form-container');
 
     forms.forEach(container => {
         const form = container.querySelector('.advanced-contact-form');
-        const submitBtn = container.querySelector('.acf-submit-btn');
+        const submitBtn = container.querySelector('.isxf-submit-btn');
 
         if (!form) return;
 
         if (typeof flatpickr !== 'undefined') {
-            const normalDates = container.querySelectorAll(".acf-modern-date");
+            const normalDates = container.querySelectorAll(".isxf-modern-date");
             normalDates.forEach(el => {
                 flatpickr(el, { locale: "th", dateFormat: "d/m/Y", minDate: "today" });
             });
 
-            const checkInInput = container.querySelector(".acf-date-check-in");
-            const checkOutInput = container.querySelector(".acf-date-check-out");
+            const checkInInput = container.querySelector(".isxf-date-check-in");
+            const checkOutInput = container.querySelector(".isxf-date-check-out");
 
             if (checkInInput && checkOutInput) {
                 const fpCheckIn = flatpickr(checkInInput, {
@@ -67,17 +67,20 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        if (submitBtn && !submitBtn.querySelector('.acf-spinner')) {
-            submitBtn.innerHTML = '<span class="acf-spinner"></span><span class="btn-text">' + submitBtn.innerText + '</span>';
+        if (submitBtn && !submitBtn.querySelector('.isxf-spinner')) {
+            submitBtn.innerHTML = '<span class="isxf-spinner"></span><span class="btn-text">' + submitBtn.innerText + '</span>';
+            submitBtn.setAttribute('aria-label', submitBtn.innerText);
+            submitBtn.setAttribute('aria-busy', 'false');
         }
 
+        const originalBtnText = submitBtn ? submitBtn.innerText : 'ยืนยันส่งแบบฟอร์ม';
         let isSubmitting = false;
 
         function validateFormState() {
             if (isSubmitting) return;
 
             let isAllFilled = true;
-            const requiredFields = form.querySelectorAll('.acf-field-wrapper[data-required="yes"]');
+            const requiredFields = form.querySelectorAll('.isxf-field-wrapper[data-required="yes"]');
 
             requiredFields.forEach(wrapper => {
                 const type = wrapper.dataset.type;
@@ -104,15 +107,16 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             if (isSubmitting) return;
 
-            if (acf_env.service === 'google') {
+            if (isxf_env.service === 'google') {
                 if (typeof grecaptcha !== 'undefined') {
                     isSubmitting = true;
                     submitBtn.classList.add('is-loading');
+                    submitBtn.setAttribute('aria-busy', 'true');
                     submitBtn.disabled = true;
-                    submitBtn.querySelector('.btn-text').innerText = 'กำลังตรวจสอบความปลอดภัย...';
+                    submitBtn.querySelector('.btn-text').innerText = isxf_env.i18n.checking_security;
 
                     grecaptcha.ready(function () {
-                        grecaptcha.execute(acf_env.site_key, { action: 'submit' }).then(function (token) {
+                        grecaptcha.execute(isxf_env.site_key, { action: 'submit' }).then(function (token) {
                             let hiddenInput = form.querySelector('input[name="g-recaptcha-response"]');
                             if (!hiddenInput) {
                                 hiddenInput = document.createElement('input');
@@ -124,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             processFormSubmission();
                         }).catch(function (err) {
                             console.error('reCAPTCHA Error:', err);
-                            showToast('เกิดข้อผิดพลาดในการตรวจสอบความปลอดภัย (reCAPTCHA)', 'error');
+                            showToast(isxf_env.i18n.recaptcha_error, 'error');
                             isSubmitting = false;
                             resetSubmitButton();
                         });
@@ -133,10 +137,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     isSubmitting = true;
                     processFormSubmission();
                 }
-            } else if (acf_env.service === 'cloudflare') {
+            } else if (isxf_env.service === 'cloudflare') {
                 const turnstileInput = form.querySelector('[name="cf-turnstile-response"]');
                 if (turnstileInput && !turnstileInput.value) {
-                    showToast('กรุณารรอสักครู่ ระบบกำลังตรวจสอบความปลอดภัย...', 'error');
+                    showToast(isxf_env.i18n.please_wait, 'error');
                     return;
                 }
                 isSubmitting = true;
@@ -149,23 +153,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function resetSubmitButton() {
             submitBtn.classList.remove('is-loading');
+            submitBtn.setAttribute('aria-busy', 'false');
             submitBtn.disabled = false;
-            submitBtn.querySelector('.btn-text').innerText = 'ตกลง / ส่งข้อมูล';
+            submitBtn.querySelector('.btn-text').innerText = originalBtnText;
             validateFormState();
         }
 
         function processFormSubmission() {
             submitBtn.classList.add('is-loading');
+            submitBtn.setAttribute('aria-busy', 'true');
             submitBtn.disabled = true;
-            submitBtn.querySelector('.btn-text').innerText = 'กำลังประมวลผล...';
+            submitBtn.querySelector('.btn-text').innerText = isxf_env.i18n.processing;
 
-            fetch(acf_env.ajax_url, { method: 'POST', body: new FormData(form) })
+            fetch(isxf_env.ajax_url, { method: 'POST', body: new FormData(form) })
                 .then(r => r.json())
                 .then(data => {
                     if (data.success) {
                         showToast(data.data.message, 'success');
                         form.reset();
-                        container.querySelectorAll('input[class*="acf-date"], input[class*="acf-modern"]').forEach(el => {
+                        container.querySelectorAll('input[class*="isxf-date"], input[class*="isxf-modern"]').forEach(el => {
                             if (el._flatpickr) el._flatpickr.clear();
                         });
                     } else {
@@ -173,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 })
                 .catch(() => {
-                    showToast('เกิดข้อผิดพลาดในการเชื่อมต่อ', 'error');
+                    showToast(isxf_env.i18n.conn_error, 'error');
                 })
                 .finally(() => {
                     isSubmitting = false;
