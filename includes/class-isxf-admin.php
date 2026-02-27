@@ -40,8 +40,8 @@ if ( ! class_exists( 'ISXF_Admin' ) ) {
         public function enqueue_admin_scripts( $hook ) {
             global $post_type, $post;
 
-            // Load on isxf_form post type screens and settings page
-            $is_isxf_screen = ( $post_type === 'isxf_form' ) || ( $hook === 'isxf_form_page_isxf-form-settings' );
+            // Load on isxf_form post type screens, settings page, and docs page
+            $is_isxf_screen = ( $post_type === 'isxf_form' ) || ( $hook === 'isxf_form_page_isxf-global-settings' ) || ( $hook === 'isxf_form_page_isxf-docs' );
             if ( ! $is_isxf_screen ) return;
 
             wp_enqueue_script( 'jquery-ui-sortable' );
