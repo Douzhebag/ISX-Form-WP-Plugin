@@ -2,7 +2,7 @@
 /**
  * Plugin Name: InsightX Form
  * Plugin URI:  https://insightx.in.th/
- * Version:     0.5.0
+ * Version:     0.5.1
  * Author:      InsightX
  * Author URI:  https://www.insightx.in.th
  * Text Domain: InsightX
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ISXF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ISXF_PLUGIN_VERSION', '0.5.0' );
+define( 'ISXF_PLUGIN_VERSION', '0.5.1' );
 define( 'ISXF_DB_VERSION', '1.0' );
 
 // === GitHub Plugin Update Checker ===
@@ -63,6 +63,20 @@ function isxf_maybe_upgrade_db() {
     $current = get_option( 'isxf_db_version', '0' );
     if ( version_compare( $current, ISXF_DB_VERSION, '<' ) ) {
         isxf_create_db_table();
+    }
+    
+    // Migration: Copy data from old acf_form_entries if applicable
+    global $wpdb;
+    $old_table = $wpdb->prefix . 'acf_form_entries';
+    $new_table = $wpdb->prefix . 'isxf_form_entries';
+
+    if ( $wpdb->get_var( "SHOW TABLES LIKE '$old_table'" ) === $old_table ) {
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$new_table'" ) === $new_table ) {
+            $new_count = $wpdb->get_var( "SELECT COUNT(*) FROM $new_table" );
+            if ( $new_count == 0 ) {
+                $wpdb->query( "INSERT INTO $new_table (form_id, form_title, entry_data, user_ip, entry_status, admin_note, created_at) SELECT form_id, form_title, entry_data, user_ip, entry_status, admin_note, created_at FROM $old_table" );
+            }
+        }
     }
 }
 add_action( 'admin_init', 'isxf_maybe_upgrade_db' );
