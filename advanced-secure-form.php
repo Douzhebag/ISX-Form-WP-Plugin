@@ -2,7 +2,7 @@
 /**
  * Plugin Name: InsightX Form
  * Plugin URI:  https://insightx.in.th/
- * Version:     0.5.4
+ * Version:     0.6.0
  * Author:      InsightX
  * Author URI:  https://www.insightx.in.th
  * Text Domain: InsightX
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ISXF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ISXF_PLUGIN_VERSION', '0.5.4' );
+define( 'ISXF_PLUGIN_VERSION', '0.6.0' );
 define( 'ISXF_DB_VERSION', '1.0' );
 
 // === GitHub Plugin Update Checker ===
@@ -113,6 +113,12 @@ function isxf_plugin_uninstall() {
         'isxf_smtp_from_email',
         'isxf_smtp_from_name',
         'isxf_smtp_disable_ssl_verify',
+        'isxf_smtp_auth_method',
+        'isxf_smtp_oauth_client_id',
+        'isxf_smtp_oauth_client_secret',
+        'isxf_smtp_oauth_refresh_token',
+        'isxf_smtp_oauth_tenant',
+        'isxf_smtp_oauth_connected',
         'isxf_captcha_service',
         'isxf_recaptcha_site_key',
         'isxf_recaptcha_secret_key',
@@ -130,6 +136,7 @@ function isxf_plugin_uninstall() {
 
 $files_to_load = [
     'includes/class-isxf-crypto.php',
+    'includes/class-isxf-oauth.php',
     'includes/class-isxf-admin.php',
     'includes/class-isxf-frontend.php',
     'includes/class-isxf-ajax-handler.php',
@@ -160,6 +167,7 @@ if ( ! function_exists( 'isxf_log_error' ) ) {
 }
 
 function run_advanced_contact_form() {
+    if ( class_exists( 'ISXF_OAuth' ) ) new ISXF_OAuth();
     if ( class_exists( 'ISXF_Admin' ) ) new ISXF_Admin();
     if ( class_exists( 'ISXF_Frontend' ) ) new ISXF_Frontend();
     if ( class_exists( 'ISXF_AJAX_Handler' ) ) new ISXF_AJAX_Handler();

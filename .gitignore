@@ -1,1 +1,23 @@
+# OS
 .DS_Store
+Thumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+
+# Build artifacts / packaging
+*.zip
+
+# Local env / secrets
+.env
+.env.*
+
+# หมายเหตุ: libs/plugin-update-checker และ assets/libs/flatpickr เป็น
+# bundled vendor code ที่ deploy จริง (ไม่มี composer/npm build step)
+# ต้อง commit เข้า repo — ห้าม ignore

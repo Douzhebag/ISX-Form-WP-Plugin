@@ -14,6 +14,39 @@
         };
     }
 
+    // === Settings Page: SMTP auth method toggle (Basic vs OAuth2) ===
+    var authSelect = document.getElementById('isxf_auth_method');
+    if (authSelect) {
+        var toggleAuth = function () {
+            var v = authSelect.value;
+            var isOauth = (v === 'oauth_google' || v === 'oauth_microsoft');
+            var basic = document.getElementById('isxf_auth_password');
+            var oauth = document.getElementById('isxf_auth_oauth');
+            var tenantRow = document.getElementById('isxf_oauth_tenant_row');
+            if (basic) basic.style.display = isOauth ? 'none' : 'block';
+            if (oauth) oauth.style.display = isOauth ? 'block' : 'none';
+            if (tenantRow) tenantRow.style.display = (v === 'oauth_microsoft') ? 'table-row' : 'none';
+        };
+        authSelect.onchange = toggleAuth;
+        toggleAuth();
+    }
+
+    // === Settings Page: SMTP basic-auth preset autofill ===
+    var presetSelect = document.getElementById('isxf_smtp_preset');
+    if (presetSelect) {
+        presetSelect.onchange = function () {
+            var host = document.querySelector('input[name="isxf_smtp_host"]');
+            var port = document.querySelector('input[name="isxf_smtp_port"]');
+            if (this.value === 'gmail') {
+                if (host) host.value = 'smtp.gmail.com';
+                if (port) port.value = '587';
+            } else if (this.value === 'm365') {
+                if (host) host.value = 'smtp.office365.com';
+                if (port) port.value = '587';
+            }
+        };
+    }
+
     // === Settings Page: SMTP test email ===
     var testBtn = document.getElementById('isxf-test-email-btn');
     if (testBtn) {

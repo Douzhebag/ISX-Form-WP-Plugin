@@ -23,6 +23,12 @@ if ( ! class_exists( 'ISXF_Admin' ) ) {
         private $admin_notify_email  = 'isxf_admin_notify_email';
         private $smtp_ssl_verify_off = 'isxf_smtp_disable_ssl_verify';
 
+        // OAuth2 (XOAUTH2) settings
+        private $smtp_auth_method   = 'isxf_smtp_auth_method';
+        private $oauth_client_id    = 'isxf_smtp_oauth_client_id';
+        private $oauth_client_secret = 'isxf_smtp_oauth_client_secret';
+        private $oauth_tenant       = 'isxf_smtp_oauth_tenant';
+
 
 
         public function __construct() {
@@ -112,10 +118,17 @@ if ( ! class_exists( 'ISXF_Admin' ) ) {
                 $this->turnstile_site_opt, $this->turnstile_secret_opt, 
                 $this->smtp_enable, $this->smtp_host, $this->smtp_port, $this->smtp_user, $this->smtp_pass, $this->smtp_secure, $this->smtp_from_e, $this->smtp_from_n,
                 $this->admin_notify_enable, $this->admin_notify_email,
-                $this->smtp_ssl_verify_off
+                $this->smtp_ssl_verify_off,
+                $this->smtp_auth_method, $this->oauth_client_id, $this->oauth_client_secret, $this->oauth_tenant
             ];
             foreach ( $options as $opt ) {
-                $callback = ( $opt === $this->smtp_pass ) ? [ $this, 'sanitize_smtp_password' ] : 'sanitize_text_field';
+                if ( $opt === $this->smtp_pass ) {
+                    $callback = [ $this, 'sanitize_smtp_password' ];
+                } elseif ( $opt === $this->oauth_client_secret ) {
+                    $callback = [ $this, 'sanitize_oauth_secret' ];
+                } else {
+                    $callback = 'sanitize_text_field';
+                }
                 register_setting( 'isxf_global_group', $opt, [ 'sanitize_callback' => $callback ] );
             }
         }
@@ -133,6 +146,15 @@ if ( ! class_exists( 'ISXF_Admin' ) ) {
             ?>
             <div class="wrap">
                 <h1>⚙️ ตั้งค่าระบบส่วนกลาง (Global Settings)</h1>
+                <?php
+                $oauth_notice = isset( $_GET['isxf_oauth'] ) ? sanitize_key( $_GET['isxf_oauth'] ) : '';
+                if ( $oauth_notice === 'connected' ) : ?>
+                    <div class="notice notice-success is-dismissible" style="padding:12px 16px;"><p style="margin:0;">✅ เชื่อมต่อบัญชี OAuth สำเร็จแล้ว</p></div>
+                <?php elseif ( $oauth_notice === 'disconnected' ) : ?>
+                    <div class="notice notice-info is-dismissible" style="padding:12px 16px;"><p style="margin:0;">ℹ️ ตัดการเชื่อมต่อบัญชี OAuth แล้ว</p></div>
+                <?php elseif ( $oauth_notice === 'error' ) : ?>
+                    <div class="notice notice-error is-dismissible" style="padding:12px 16px;"><p style="margin:0;">❌ เชื่อมต่อ OAuth ไม่สำเร็จ: <?php echo isset( $_GET['msg'] ) ? esc_html( rawurldecode( wp_unslash( $_GET['msg'] ) ) ) : 'เกิดข้อผิดพลาด'; ?></p></div>
+                <?php endif; ?>
                 <?php if ( ! $captcha_configured ) : ?>
                     <div class="notice notice-warning" style="border-left-color:#dba617; padding:12px 16px;">
                         <p style="margin:0; font-size:13px;">⚠️ <strong>ยังไม่ได้ตั้งค่า CAPTCHA</strong> — ฟอร์มทั้งหมดจะไม่มีระบบป้องกันบอท กรุณาตั้งค่า Site Key และ Secret Key ด้านล่างเพื่อเปิดใช้งาน</p>
@@ -175,33 +197,96 @@ if ( ! class_exists( 'ISXF_Admin' ) ) {
                         </div>
 
                         <div style="flex: 1; min-width: 400px; background: #fff; padding: 20px; border: 1px solid #ccd0d4; border-radius: 6px;">
+                            <?php
+                                $auth_method     = get_option( $this->smtp_auth_method, 'password' );
+                                $is_oauth        = in_array( $auth_method, [ 'oauth_google', 'oauth_microsoft' ], true );
+                                $oauth_provider  = ( $auth_method === 'oauth_microsoft' ) ? 'microsoft' : 'google';
+                                $redirect_uri    = ISXF_OAuth::redirect_uri();
+                                $connected_email = ISXF_OAuth::connected_email();
+                                $is_connected    = ISXF_OAuth::is_connected();
+                                $connect_url     = wp_nonce_url( admin_url( 'admin-post.php?action=isxf_oauth_connect&provider=' . $oauth_provider ), 'isxf_oauth_connect' );
+                                $disconnect_url  = wp_nonce_url( admin_url( 'admin-post.php?action=isxf_oauth_disconnect' ), 'isxf_oauth_disconnect' );
+                            ?>
                             <h3>📧 ตั้งค่าระบบส่งอีเมล (SMTP)</h3>
                             <label><input type="checkbox" name="<?php echo $this->smtp_enable; ?>" value="yes" <?php checked(get_option($this->smtp_enable), 'yes'); ?>> เปิดใช้งาน SMTP</label>
-                            
+
                             <table class="form-table">
-                                <tr><th>Host</th><td><input type="text" name="<?php echo $this->smtp_host; ?>" value="<?php echo esc_attr(get_option($this->smtp_host)); ?>" class="regular-text" placeholder="smtp.gmail.com"></td></tr>
-                                <tr><th>Port</th><td><input type="number" name="<?php echo $this->smtp_port; ?>" value="<?php echo esc_attr(get_option($this->smtp_port)); ?>" class="small-text" placeholder="587"></td></tr>
-                                <tr><th>Username</th><td><input type="text" name="<?php echo $this->smtp_user; ?>" value="<?php echo esc_attr(get_option($this->smtp_user)); ?>" class="regular-text" placeholder="your-email@gmail.com"></td></tr>
-                                <tr><th>Password</th><td><input type="password" name="<?php echo $this->smtp_pass; ?>" value="" class="regular-text" placeholder="<?php echo get_option($this->smtp_pass) ? '••••••••••••••••' : 'รหัสผ่านแอป 16 หลัก'; ?>"><p class="description" style="margin-top:5px;">🔒 รหัสผ่านถูกเข้ารหัสก่อนบันทึก — เว้นว่างหากไม่ต้องการเปลี่ยน</p></td></tr>
+                                <tr><th>วิธียืนยันตัวตน</th><td>
+                                    <select name="<?php echo $this->smtp_auth_method; ?>" id="isxf_auth_method" style="width:100%; max-width:360px;">
+                                        <option value="password" <?php selected($auth_method, 'password'); ?>>App Password / รหัสผ่าน (Basic Auth)</option>
+                                        <option value="oauth_google" <?php selected($auth_method, 'oauth_google'); ?>>Google OAuth2 (Gmail / Workspace)</option>
+                                        <option value="oauth_microsoft" <?php selected($auth_method, 'oauth_microsoft'); ?>>Microsoft 365 OAuth2 (Outlook / Exchange)</option>
+                                    </select>
+                                </td></tr>
                             </table>
 
+                            <!-- ===== Basic Auth (username + password) ===== -->
+                            <div id="isxf_auth_password" style="<?php echo $is_oauth ? 'display:none;' : ''; ?>">
+                                <table class="form-table">
+                                    <tr><th>ผู้ให้บริการ (Preset)</th><td>
+                                        <select id="isxf_smtp_preset" style="width:100%; max-width:360px;">
+                                            <option value="">— เลือกเพื่อกรอก Host/Port อัตโนมัติ —</option>
+                                            <option value="gmail">Gmail (smtp.gmail.com:587)</option>
+                                            <option value="m365">Microsoft 365 (smtp.office365.com:587)</option>
+                                            <option value="custom">กำหนดเอง (Custom)</option>
+                                        </select>
+                                    </td></tr>
+                                    <tr><th>Host</th><td><input type="text" name="<?php echo $this->smtp_host; ?>" value="<?php echo esc_attr(get_option($this->smtp_host)); ?>" class="regular-text" placeholder="smtp.gmail.com"></td></tr>
+                                    <tr><th>Port</th><td><input type="number" name="<?php echo $this->smtp_port; ?>" value="<?php echo esc_attr(get_option($this->smtp_port)); ?>" class="small-text" placeholder="587"></td></tr>
+                                    <tr><th>Username</th><td><input type="text" name="<?php echo $this->smtp_user; ?>" value="<?php echo esc_attr(get_option($this->smtp_user)); ?>" class="regular-text" placeholder="your-email@gmail.com"></td></tr>
+                                    <tr><th>Password</th><td><input type="password" name="<?php echo $this->smtp_pass; ?>" value="" class="regular-text" placeholder="<?php echo get_option($this->smtp_pass) ? '••••••••••••••••' : 'รหัสผ่านแอป 16 หลัก'; ?>"><p class="description" style="margin-top:5px;">🔒 รหัสผ่านถูกเข้ารหัสก่อนบันทึก — เว้นว่างหากไม่ต้องการเปลี่ยน</p></td></tr>
+                                </table>
+
+                                <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                                    <strong style="color: #004085; display:block; margin-bottom:5px;">💡 วิธีขอรหัสผ่านแอป (App Password) สำหรับ Gmail:</strong>
+                                    <ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #333; line-height: 1.6;">
+                                        <li>ไปที่ <a href="https://myaccount.google.com/security" target="_blank" style="text-decoration:none;">Google Account > Security</a> (ความปลอดภัย)</li>
+                                        <li>เปิดใช้งาน <strong>2-Step Verification</strong> (การยืนยันแบบ 2 ขั้นตอน)</li>
+                                        <li>ค้นหาคำว่า <strong>"App passwords"</strong> (รหัสผ่านสำหรับแอป)</li>
+                                        <li>ตั้งชื่อ (เช่น "Website SMTP") แล้วกด Create</li>
+                                        <li>คัดลอกรหัส 16 หลักมาใส่ช่อง <strong>Password</strong> ด้านบน (ไม่ต้องเว้นวรรค)</li>
+                                    </ol>
+                                    <p style="margin:10px 0 0; font-size:12px; color:#664d03; background:#fff8e5; border:1px solid #ffe0b2; padding:8px 10px; border-radius:4px;">⚠️ <strong>Microsoft 365:</strong> Basic Auth ใช้ได้เฉพาะ tenant ที่ยังเปิด SMTP AUTH เท่านั้น — หลาย tenant ปิดไปแล้ว แนะนำให้ใช้ <strong>Microsoft 365 OAuth2</strong> แทน</p>
+                                </div>
+                            </div>
+
+                            <!-- ===== OAuth2 (XOAUTH2) ===== -->
+                            <div id="isxf_auth_oauth" style="<?php echo $is_oauth ? '' : 'display:none;'; ?>">
+                                <?php if ( $is_connected ) : ?>
+                                    <div style="background:#edfaef; border:1px solid #46b450; padding:12px 15px; border-radius:4px; margin:12px 0;">
+                                        ✅ <strong>เชื่อมต่อแล้ว</strong><?php echo $connected_email && is_email($connected_email) ? ' — ' . esc_html($connected_email) : ''; ?>
+                                        <a href="<?php echo esc_url($disconnect_url); ?>" class="button" style="margin-left:10px;">ตัดการเชื่อมต่อ</a>
+                                    </div>
+                                <?php else : ?>
+                                    <div style="background:#fef0f0; border:1px solid #f0b8b8; padding:12px 15px; border-radius:4px; margin:12px 0;">
+                                        ⚠️ <strong>ยังไม่ได้เชื่อมต่อ</strong> — กรอก Client ID / Secret แล้ว <strong>บันทึกการตั้งค่า</strong> ก่อน จากนั้นกดปุ่ม "เชื่อมต่อ" ด้านล่าง
+                                    </div>
+                                <?php endif; ?>
+
+                                <table class="form-table">
+                                    <tr><th>Client ID</th><td><input type="text" name="<?php echo $this->oauth_client_id; ?>" value="<?php echo esc_attr(get_option($this->oauth_client_id)); ?>" class="regular-text"></td></tr>
+                                    <tr><th>Client Secret</th><td><input type="password" name="<?php echo $this->oauth_client_secret; ?>" value="" class="regular-text" placeholder="<?php echo get_option($this->oauth_client_secret) ? '••••••••••••••••' : ''; ?>"><p class="description" style="margin-top:5px;">🔒 เข้ารหัสก่อนบันทึก — เว้นว่างหากไม่ต้องการเปลี่ยน</p></td></tr>
+                                    <tr id="isxf_oauth_tenant_row" style="<?php echo $auth_method === 'oauth_microsoft' ? '' : 'display:none;'; ?>"><th>Tenant ID</th><td><input type="text" name="<?php echo $this->oauth_tenant; ?>" value="<?php echo esc_attr(get_option($this->oauth_tenant)); ?>" class="regular-text" placeholder="common"><p class="description" style="margin-top:5px;">ใส่ Tenant ID (Directory ID) ของ Azure หรือเว้นไว้เป็น <code>common</code></p></td></tr>
+                                    <tr><th>Redirect URI</th><td><input type="text" readonly value="<?php echo esc_attr($redirect_uri); ?>" class="regular-text" onclick="this.select();" style="background:#f0f0f1;"><p class="description" style="margin-top:5px;">คัดลอกค่านี้ไปใส่ใน Google Cloud Console / Azure App registration</p></td></tr>
+                                </table>
+
+                                <p>
+                                    <a href="<?php echo esc_url($connect_url); ?>" class="button button-primary">🔗 <?php echo $is_connected ? 'เชื่อมต่อใหม่' : 'เชื่อมต่อบัญชี'; ?></a>
+                                </p>
+
+                                <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 15px; border-radius: 4px; margin: 15px 0; font-size:13px; line-height:1.6; color:#333;">
+                                    <strong style="color:#004085; display:block; margin-bottom:5px;">💡 ดูวิธีตั้งค่า OAuth2 ได้ที่หน้า "คู่มือการใช้งาน"</strong>
+                                    <span>ต้องลงทะเบียน OAuth App ที่ Google Cloud Console (Gmail) หรือ Azure App registration (Microsoft 365) แล้วนำ Redirect URI ด้านบนไปตั้งค่าให้ตรงกัน</span>
+                                </div>
+                            </div>
+
+                            <!-- ===== Shared: SSL verification ===== -->
                             <div style="margin-top:10px; padding:10px 15px; background:#fff8e5; border:1px solid #ffe0b2; border-radius:4px;">
                                 <label>
                                     <input type="checkbox" name="<?php echo $this->smtp_ssl_verify_off; ?>" value="yes" <?php checked(get_option($this->smtp_ssl_verify_off), 'yes'); ?>>
                                     <strong>⚠️ ปิดการตรวจสอบ SSL Certificate</strong> <span style="color:#996800; font-size:12px;">(สำหรับ Development เท่านั้น)</span>
                                 </label>
                                 <p class="description" style="margin:5px 0 0; font-size:12px; color:#666;">เปิดใช้เฉพาะเมื่อเซิร์ฟเวอร์ไม่มี SSL certificate ที่ถูกต้อง — <strong>ไม่แนะนำสำหรับ Production</strong></p>
-                            </div>
-
-                            <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 15px; border-radius: 4px; margin: 15px 0;">
-                                <strong style="color: #004085; display:block; margin-bottom:5px;">💡 วิธีขอรหัสผ่านแอป (App Password) สำหรับ Gmail:</strong>
-                                <ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #333; line-height: 1.6;">
-                                    <li>ไปที่ <a href="https://myaccount.google.com/security" target="_blank" style="text-decoration:none;">Google Account > Security</a> (ความปลอดภัย)</li>
-                                    <li>เปิดใช้งาน <strong>2-Step Verification</strong> (การยืนยันแบบ 2 ขั้นตอน)</li>
-                                    <li>ค้นหาคำว่า <strong>"App passwords"</strong> (รหัสผ่านสำหรับแอป)</li>
-                                    <li>ตั้งชื่อ (เช่น "Website SMTP") แล้วกด Create</li>
-                                    <li>คัดลอกรหัส 16 หลักมาใส่ช่อง <strong>Password</strong> ด้านล่าง (ไม่ต้องเว้นวรรค)</li>
-                                </ol>
                             </div>
                         </div>
                     </div>
@@ -341,6 +426,15 @@ if ( ! class_exists( 'ISXF_Admin' ) ) {
             if ( empty( $value ) ) {
                 // ถ้าเว้นว่าง ให้ใช้ค่าเดิม (ไม่เปลี่ยน password)
                 return get_option( $this->smtp_pass, '' );
+            }
+            return ISXF_Crypto::encrypt( $value );
+        }
+
+        public function sanitize_oauth_secret( $value ) {
+            $value = wp_strip_all_tags( trim( $value ) );
+            if ( empty( $value ) ) {
+                // เว้นว่าง = ใช้ค่าเดิม (ไม่เปลี่ยน Client Secret)
+                return get_option( $this->oauth_client_secret, '' );
             }
             return ISXF_Crypto::encrypt( $value );
         }
@@ -485,6 +579,31 @@ if ( ! class_exists( 'ISXF_Admin' ) ) {
 
                         <h4>การแจ้งเตือนแอดมิน</h4>
                         <p>ติ๊ก "เปิดใช้งานการส่งอีเมลแจ้งเตือน Admin" แล้วระบุอีเมลผู้รับ — ทุกครั้งที่มีคนส่งฟอร์ม แอดมินจะได้รับ Email แจ้งเตือนทันที</p>
+                    </div>
+                </div>
+
+                <div class="isxf-docs-section">
+                    <div class="isxf-docs-header">🔐 เชื่อมต่อ SMTP ด้วย OAuth2 (Google / Microsoft 365) <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-body">
+                        <p>OAuth2 ปลอดภัยกว่า Basic Auth และ <strong>จำเป็นสำหรับ Microsoft 365</strong> เพราะ Microsoft ปิด Basic Auth (SMTP AUTH) ของ Exchange Online ไปแล้ว ในหน้าตั้งค่าให้เลือก "วิธียืนยันตัวตน" เป็น Google OAuth2 หรือ Microsoft 365 OAuth2</p>
+
+                        <div class="tip-box">💡 ที่หน้าตั้งค่าจะมีช่อง <strong>Redirect URI</strong> ให้คัดลอกไปวางในขั้นตอนด้านล่าง ต้องตรงกัน 100%</div>
+
+                        <h4>🟦 Google (Gmail / Workspace)</h4>
+                        <div class="step"><span class="step-num">1</span><span class="step-text">ไปที่ <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console → Credentials</a> สร้างโปรเจกต์ (ถ้ายังไม่มี)</span></div>
+                        <div class="step"><span class="step-num">2</span><span class="step-text">ตั้งค่า <strong>OAuth consent screen</strong> และเพิ่ม scope <code>https://mail.google.com/</code></span></div>
+                        <div class="step"><span class="step-num">3</span><span class="step-text">สร้าง <strong>OAuth client ID</strong> ประเภท <em>Web application</em> แล้วใส่ <strong>Redirect URI</strong> จากหน้าตั้งค่า</span></div>
+                        <div class="step"><span class="step-num">4</span><span class="step-text">คัดลอก <strong>Client ID</strong> และ <strong>Client Secret</strong> มากรอกในหน้าตั้งค่า → กด <strong>บันทึก</strong> → กด <strong>เชื่อมต่อบัญชี</strong></span></div>
+
+                        <h4>🟧 Microsoft 365 (Outlook / Exchange Online)</h4>
+                        <div class="step"><span class="step-num">1</span><span class="step-text">ไปที่ <a href="https://entra.microsoft.com/" target="_blank">Microsoft Entra (Azure AD) → App registrations</a> → New registration</span></div>
+                        <div class="step"><span class="step-num">2</span><span class="step-text">ตั้ง Redirect URI ประเภท <em>Web</em> เป็นค่าจากหน้าตั้งค่า</span></div>
+                        <div class="step"><span class="step-num">3</span><span class="step-text">ไปที่ <strong>API permissions</strong> → เพิ่ม <code>https://outlook.office.com/SMTP.Send</code> และ <code>offline_access</code></span></div>
+                        <div class="step"><span class="step-num">4</span><span class="step-text">ไปที่ <strong>Certificates &amp; secrets</strong> → สร้าง <strong>Client secret</strong></span></div>
+                        <div class="step"><span class="step-num">5</span><span class="step-text">กรอก <strong>Client ID</strong>, <strong>Client Secret</strong> และ <strong>Tenant ID</strong> (Directory ID) ในหน้าตั้งค่า → กด <strong>บันทึก</strong> → กด <strong>เชื่อมต่อบัญชี</strong></span></div>
+
+                        <div class="warn-box">⚠️ ต้องให้ผู้ดูแล Exchange เปิดสิทธิ์ <code>SMTP.Send</code> ให้ mailbox ที่จะใช้ส่งอีเมลด้วย</div>
+                        <div class="tip-box">🔒 Client Secret และ Refresh Token ถูกเข้ารหัส AES-256-CBC ก่อนเก็บลงฐานข้อมูล</div>
                     </div>
                 </div>
 

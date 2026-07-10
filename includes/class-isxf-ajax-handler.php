@@ -242,7 +242,50 @@ if ( ! class_exists( 'ISXF_AJAX_Handler' ) ) {
 
         public function configure_smtp( $phpmailer ) {
             if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) return;
-            
+
+            // === OAuth2 (XOAUTH2) — Google / Microsoft 365 ===
+            $auth_method = get_option( 'isxf_smtp_auth_method', 'password' );
+            if ( ( $auth_method === 'oauth_google' || $auth_method === 'oauth_microsoft' )
+                && class_exists( 'ISXF_OAuth' ) && class_exists( 'ISXF_OAuth_Token_Provider' )
+                && ISXF_OAuth::is_connected() ) {
+
+                $provider = ( $auth_method === 'oauth_google' ) ? 'google' : 'microsoft';
+                $email    = ISXF_OAuth::connected_email();
+                if ( ! is_email( $email ) ) {
+                    // id_token ไม่ได้คืน email — fallback ไปที่ช่อง Username เดิม
+                    $email = get_option( 'isxf_smtp_user' );
+                }
+                $smtp     = ISXF_OAuth::smtp_config( $provider );
+
+                $phpmailer->isSMTP();
+                $phpmailer->Host       = $smtp['host'];
+                $phpmailer->Port       = $smtp['port'];
+                $phpmailer->SMTPSecure = 'tls';
+                $phpmailer->SMTPAuth   = true;
+                $phpmailer->AuthType   = 'XOAUTH2';
+                $phpmailer->setOAuth( new ISXF_OAuth_Token_Provider( $email, $provider ) );
+
+                if ( get_option( 'isxf_smtp_disable_ssl_verify' ) === 'yes' ) {
+                    $phpmailer->SMTPOptions = [
+                        'ssl' => [
+                            'verify_peer'       => false,
+                            'verify_peer_name'  => false,
+                            'allow_self_signed' => true
+                        ]
+                    ];
+                }
+
+                // For OAuth the From address must be the authenticated mailbox.
+                $from_email = get_option( 'isxf_smtp_from_email' );
+                if ( empty( $from_email ) || ! is_email( $from_email ) ) {
+                    $from_email = $email;
+                }
+                $phpmailer->From     = $from_email;
+                $phpmailer->FromName = get_option( 'isxf_smtp_from_name' ) ?: get_bloginfo('name');
+                return;
+            }
+
+            // === Basic authentication (username + password) ===
             $phpmailer->isSMTP();
             $phpmailer->Host       = get_option( 'isxf_smtp_host' );
             $phpmailer->SMTPAuth   = true;
