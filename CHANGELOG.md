@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Analytics dashboard stuck on "Loading…" forever: `AnalyticsController` used `DateTimeImmutable` unqualified inside the `ISXF\Ajax` namespace, so the endpoint fataled (class not found) and the JS only logged to the console. The endpoint is fixed, `isxf-analytics.js` now checks HTTP status and shows a visible error state instead of hanging, and a new `AnalyticsTest` integration suite covers the endpoint (structure, custom range, nonce rejection).
+
 ## [0.8.0] - 2026-07-27
 
 Phase 0–3 consolidation release: the v0.6.1 security hotfix plus the full

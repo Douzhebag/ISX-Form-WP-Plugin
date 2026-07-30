@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: InsightX Form 0.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ISX-Form-WP-"
 "Plugin\n"
-"POT-Creation-Date: 2026-07-30T02:42:56+00:00\n"
+"POT-Creation-Date: 2026-07-30T04:29:33+00:00\n"
 "PO-Revision-Date: 2026-07-23 00:00+0000\n"
 "Last-Translator: InsightX <dev@insightx.in.th>\n"
 "Language-Team: Thai\n"
@@ -329,8 +329,8 @@ msgstr "ไม่มีสิทธิ์"
 msgid "Invalid data"
 msgstr "ข้อมูลไม่ถูกต้อง"
 
-#: src/Ajax/EntriesController.php:48 src/Entries.php:53 src/Entries.php:123
-#: src/Entries.php:304 src/Entries.php:364
+#: src/Ajax/EntriesController.php:48 src/Entries.php:53 src/Entries.php:124
+#: src/Entries.php:305 src/Entries.php:365
 msgid "New"
 msgstr "ใหม่"
 
@@ -338,13 +338,13 @@ msgstr "ใหม่"
 msgid "In progress"
 msgstr "กำลังดำเนินการ"
 
-#: src/Ajax/EntriesController.php:50 src/Entries.php:55 src/Entries.php:125
-#: src/Entries.php:366
+#: src/Ajax/EntriesController.php:50 src/Entries.php:55 src/Entries.php:126
+#: src/Entries.php:367
 msgid "Done"
 msgstr "เสร็จสิ้น"
 
-#: src/Ajax/EntriesController.php:51 src/Entries.php:56 src/Entries.php:126
-#: src/Entries.php:367
+#: src/Ajax/EntriesController.php:51 src/Entries.php:56 src/Entries.php:127
+#: src/Entries.php:368
 msgid "Junk"
 msgstr "ขยะ"
 
@@ -463,7 +463,7 @@ msgstr "สร้างค่าสุ่มสำหรับเข้ารห
 msgid "Data encryption failed"
 msgstr "เข้ารหัสข้อมูลไม่สำเร็จ"
 
-#: src/Entries.php:54 src/Entries.php:124 src/Entries.php:365
+#: src/Entries.php:54 src/Entries.php:125 src/Entries.php:366
 msgid "In Progress"
 msgstr "กำลังดำเนินการ"
 
@@ -487,61 +487,65 @@ msgstr "รายการ"
 msgid "No entries yet"
 msgstr "ยังไม่มีข้อมูล"
 
-#: src/Entries.php:135
+#: src/Entries.php:123
+msgid "⚠️ Failed to load analytics data. Please refresh and try again."
+msgstr "⚠️ โหลดข้อมูลวิเคราะห์ไม่สำเร็จ กรุณารีเฟรชแล้วลองใหม่อีกครั้ง"
+
+#: src/Entries.php:136
 msgid "📊 InsightX Form — Overview"
 msgstr "📊 InsightX Form — ภาพรวม"
 
-#: src/Entries.php:144 templates/admin/entries-page.php:37
+#: src/Entries.php:145 templates/admin/entries-page.php:37
 msgid "📥 Entries"
 msgstr "📥 รายการข้อมูล"
 
-#: src/Entries.php:198
+#: src/Entries.php:199
 msgid "You do not have permission to export data."
 msgstr "คุณไม่มีสิทธิ์ในการส่งออกข้อมูล"
 
-#: src/Entries.php:198
+#: src/Entries.php:199
 msgid "Permission Error"
 msgstr "ข้อผิดพลาดด้านสิทธิ์"
 
-#: src/Entries.php:201
+#: src/Entries.php:202
 msgid "Security check failed."
 msgstr "การยืนยันความปลอดภัยล้มเหลว"
 
-#: src/Entries.php:201
+#: src/Entries.php:202
 msgid "Security Error"
 msgstr "ข้อผิดพลาดด้านความปลอดภัย"
 
-#: src/Entries.php:269
+#: src/Entries.php:270
 msgid "All Data (JSON)"
 msgstr "ข้อมูลทั้งหมด (JSON)"
 
-#: src/Entries.php:270
+#: src/Entries.php:271
 msgid "Date"
 msgstr "วันที่"
 
-#: src/Entries.php:270 templates/admin/docs-page.php:169
+#: src/Entries.php:271 templates/admin/docs-page.php:169
 msgctxt "table column header"
 msgid "Form"
 msgstr "ฟอร์ม"
 
-#: src/Entries.php:270 templates/admin/docs-page.php:177
+#: src/Entries.php:271 templates/admin/docs-page.php:177
 #: templates/admin/entries-page.php:147
 msgid "Status"
 msgstr "สถานะ"
 
-#: src/Entries.php:270
+#: src/Entries.php:271
 msgid "Admin Note"
 msgstr "โน้ตแอดมิน"
 
-#: src/Entries.php:359
+#: src/Entries.php:360
 msgid "Entry deleted successfully!"
 msgstr "ลบข้อมูลเรียบร้อยแล้ว!"
 
-#: src/Entries.php:359
+#: src/Entries.php:360
 msgid "Selected entries deleted successfully!"
 msgstr "ลบข้อมูลที่เลือกเรียบร้อยแล้ว!"
 
-#: src/Entries.php:359
+#: src/Entries.php:360
 msgid "Status updated successfully!"
 msgstr "อัพเดตสถานะเรียบร้อยแล้ว!"
 
@@ -746,7 +750,9 @@ msgstr "เช่น box-shadow: 0 4px 12px rgba(0,0,0,.25); letter-spacing: 1px
 msgid ""
 "CSS declarations only (no selector needed) — they are applied to this form’s "
 "submit button, scoped and sanitized automatically."
-msgstr "ใส่เฉพาะ CSS declarations (ไม่ต้องมี selector) — ระบบจะนำไปใช้กับปุ่มส่งของฟอร์มนี้โดย scope และกรองความปลอดภัยให้อัตโนมัติ"
+msgstr ""
+"ใส่เฉพาะ CSS declarations (ไม่ต้องมี selector) — ระบบจะนำไปใช้กับปุ่มส่งของฟอร์มนี้โดย "
+"scope และกรองความปลอดภัยให้อัตโนมัติ"
 
 #: templates/admin/builder-meta-box.php:54
 msgid "✉️ Customer Reply Email Template:"

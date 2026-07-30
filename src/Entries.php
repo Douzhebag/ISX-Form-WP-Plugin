@@ -120,6 +120,7 @@ class Entries {
                 'i18n'     => [
                     'entries'           => __( 'entries', 'insightx-form' ),
                     'no_data'           => __( 'No entries yet', 'insightx-form' ),
+                    'error_loading'     => __( '⚠️ Failed to load analytics data. Please refresh and try again.', 'insightx-form' ),
                     'status_new'        => __( 'New', 'insightx-form' ),
                     'status_in_progress' => __( 'In Progress', 'insightx-form' ),
                     'status_done'       => __( 'Done', 'insightx-form' ),

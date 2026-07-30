@@ -67,18 +67,45 @@
         if (statsWrap) statsWrap.style.opacity = '0.5';
 
         fetch(env.ajax_url, { method: 'POST', body: fd })
-            .then(function (r) { return r.json(); })
+            .then(function (r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
             .then(function (response) {
                 if (response.success) {
                     renderDashboard(response.data);
+                } else {
+                    showAnalyticsError();
                 }
             })
             .catch(function (err) {
                 console.error('Analytics fetch error:', err);
+                showAnalyticsError();
             })
             .finally(function () {
                 if (statsWrap) statsWrap.style.opacity = '1';
             });
+    }
+
+    /**
+     * Replace every "Loading…" placeholder with a visible error state —
+     * previously a failed fetch only logged to the console and the page
+     * looked stuck on "Loading…" forever.
+     */
+    function showAnalyticsError() {
+        var msg = env.i18n.error_loading;
+        document.querySelectorAll('.ix-loading').forEach(function (el) {
+            el.textContent = msg;
+            el.style.color = '#d63638';
+        });
+        var statsWrap = document.querySelector('.ix-analytics-stats');
+        if (statsWrap && !statsWrap.dataset.errorShown) {
+            statsWrap.dataset.errorShown = '1';
+            var div = document.createElement('div');
+            div.style.cssText = 'padding:20px;text-align:center;color:#d63638;grid-column:1/-1;';
+            div.textContent = msg;
+            statsWrap.appendChild(div);
+        }
     }
 
     /**

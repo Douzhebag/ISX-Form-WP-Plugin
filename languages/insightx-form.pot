@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-30T02:42:56+00:00\n"
+"POT-Creation-Date: 2026-07-30T04:29:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: insightx-form\n"
@@ -324,9 +324,9 @@ msgstr ""
 
 #: src/Ajax/EntriesController.php:48
 #: src/Entries.php:53
-#: src/Entries.php:123
-#: src/Entries.php:304
-#: src/Entries.php:364
+#: src/Entries.php:124
+#: src/Entries.php:305
+#: src/Entries.php:365
 msgid "New"
 msgstr ""
 
@@ -336,15 +336,15 @@ msgstr ""
 
 #: src/Ajax/EntriesController.php:50
 #: src/Entries.php:55
-#: src/Entries.php:125
-#: src/Entries.php:366
+#: src/Entries.php:126
+#: src/Entries.php:367
 msgid "Done"
 msgstr ""
 
 #: src/Ajax/EntriesController.php:51
 #: src/Entries.php:56
-#: src/Entries.php:126
-#: src/Entries.php:367
+#: src/Entries.php:127
+#: src/Entries.php:368
 msgid "Junk"
 msgstr ""
 
@@ -462,8 +462,8 @@ msgid "Data encryption failed"
 msgstr ""
 
 #: src/Entries.php:54
-#: src/Entries.php:124
-#: src/Entries.php:365
+#: src/Entries.php:125
+#: src/Entries.php:366
 msgid "In Progress"
 msgstr ""
 
@@ -490,64 +490,68 @@ msgstr ""
 msgid "No entries yet"
 msgstr ""
 
-#: src/Entries.php:135
+#: src/Entries.php:123
+msgid "⚠️ Failed to load analytics data. Please refresh and try again."
+msgstr ""
+
+#: src/Entries.php:136
 msgid "📊 InsightX Form — Overview"
 msgstr ""
 
-#: src/Entries.php:144
+#: src/Entries.php:145
 #: templates/admin/entries-page.php:37
 msgid "📥 Entries"
 msgstr ""
 
-#: src/Entries.php:198
+#: src/Entries.php:199
 msgid "You do not have permission to export data."
 msgstr ""
 
-#: src/Entries.php:198
+#: src/Entries.php:199
 msgid "Permission Error"
 msgstr ""
 
-#: src/Entries.php:201
+#: src/Entries.php:202
 msgid "Security check failed."
 msgstr ""
 
-#: src/Entries.php:201
+#: src/Entries.php:202
 msgid "Security Error"
 msgstr ""
 
-#: src/Entries.php:269
+#: src/Entries.php:270
 msgid "All Data (JSON)"
 msgstr ""
 
-#: src/Entries.php:270
+#: src/Entries.php:271
 msgid "Date"
 msgstr ""
 
-#: src/Entries.php:270
+#: src/Entries.php:271
 #: templates/admin/docs-page.php:169
 msgctxt "table column header"
 msgid "Form"
 msgstr ""
 
-#: src/Entries.php:270
+#: src/Entries.php:271
 #: templates/admin/docs-page.php:177
 #: templates/admin/entries-page.php:147
 msgid "Status"
 msgstr ""
 
-#: src/Entries.php:270
+#: src/Entries.php:271
 msgid "Admin Note"
 msgstr ""
 
-#: src/Entries.php:359
+#: src/Entries.php:360
 msgid "Entry deleted successfully!"
 msgstr ""
 
-#: src/Entries.php:359
+#: src/Entries.php:360
 msgid "Selected entries deleted successfully!"
 msgstr ""
 
-#: src/Entries.php:359
+#: src/Entries.php:360
 msgid "Status updated successfully!"
 msgstr ""
 

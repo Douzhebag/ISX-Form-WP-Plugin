@@ -48,18 +48,18 @@ class AnalyticsController extends AbstractAjaxController {
         if ( $range === 'custom' ) {
             $start = sanitize_text_field( $_POST['start_date'] ?? '' );
             $end   = sanitize_text_field( $_POST['end_date'] ?? '' );
-            if ( empty($start) ) $start = ( new DateTimeImmutable( $today, wp_timezone() ) )->modify('-30 days')->format('Y-m-d');
+            if ( empty($start) ) $start = ( new \DateTimeImmutable( $today, wp_timezone() ) )->modify('-30 days')->format('Y-m-d');
             if ( empty($end) )   $end = $today;
         } else {
             $days  = intval($range) ?: 30;
-            $start = ( new DateTimeImmutable( $today, wp_timezone() ) )->modify("-{$days} days")->format('Y-m-d');
+            $start = ( new \DateTimeImmutable( $today, wp_timezone() ) )->modify("-{$days} days")->format('Y-m-d');
             $end   = $today;
         }
 
         // Previous period for delta calculation
         $period_days = max(1, (isxf_local_datetime_to_timestamp($end) - isxf_local_datetime_to_timestamp($start)) / 86400);
-        $prev_start  = ( new DateTimeImmutable( $start, wp_timezone() ) )->modify("-{$period_days} days")->format('Y-m-d');
-        $prev_end    = ( new DateTimeImmutable( $start, wp_timezone() ) )->modify('-1 day')->format('Y-m-d');
+        $prev_start  = ( new \DateTimeImmutable( $start, wp_timezone() ) )->modify("-{$period_days} days")->format('Y-m-d');
+        $prev_end    = ( new \DateTimeImmutable( $start, wp_timezone() ) )->modify('-1 day')->format('Y-m-d');
 
         // Stats
         $total  = $this->repo->count_total();
@@ -85,7 +85,7 @@ class AnalyticsController extends AbstractAjaxController {
                 'date'  => wp_date( 'd/m', isxf_local_datetime_to_timestamp( $current ) ),
                 'count' => isset($date_map[$current]) ? $date_map[$current] : 0
             ];
-            $current = ( new DateTimeImmutable( $current, wp_timezone() ) )->modify('+1 day')->format('Y-m-d');
+            $current = ( new \DateTimeImmutable( $current, wp_timezone() ) )->modify('+1 day')->format('Y-m-d');
         }
 
         // Status counts
