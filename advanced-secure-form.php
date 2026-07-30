@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       InsightX Form
  * Plugin URI:        https://insightx.in.th/
- * Version:           0.8.1
+ * Version:           0.8.2
  * Author:            InsightX
  * Author URI:        https://www.insightx.in.th
  * Text Domain:       insightx-form
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ISXF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ISXF_PLUGIN_VERSION', '0.8.1' );
+define( 'ISXF_PLUGIN_VERSION', '0.8.2' );
 define( 'ISXF_DB_VERSION', '1.1' );
 
 // === GitHub Plugin Update Checker ===

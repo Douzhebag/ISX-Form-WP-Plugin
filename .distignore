@@ -10,16 +10,19 @@
 
 # Dev tooling & test suite (never deployed — production is a raw checkout
 # with the custom autoloader, no composer install)
-vendor/
+# NOTE: patterns MUST be root-anchored (leading /) — a bare `vendor/` also
+# matches libs/plugin-update-checker/vendor/ and would strip PUC's own
+# dependencies (Parsedown etc.) from the zip.
+/vendor/
 composer.json
 composer.lock
-tests/
+/tests/
 phpunit.xml.dist
 phpcs.xml.dist
-bin/
+/bin/
 
 # Internal team docs
-docs/
+/docs/
 
 # Build artifacts / OS noise
 *.zip

@@ -30,6 +30,22 @@ jobs:
           mv "insightx-form-${VERSION}.zip" "$GITHUB_WORKSPACE/"
           unzip -l "$GITHUB_WORKSPACE/insightx-form-${VERSION}.zip"
 
+      # Fail the release if packaging dropped files the plugin needs at
+      # runtime (guards against .distignore patterns matching nested dirs,
+      # e.g. the bare `vendor/` that once stripped PUC's Parsedown).
+      - name: Verify packaged zip integrity
+        run: |
+          set -euo pipefail
+          ZIP=$(ls insightx-form-*.zip)
+          for required in \
+            "insightx-form/libs/plugin-update-checker/vendor/ParsedownModern.php" \
+            "insightx-form/advanced-secure-form.php" \
+            "insightx-form/src/Crypto.php" \
+            "insightx-form/languages/insightx-form-th.mo"; do
+            unzip -l "$ZIP" | grep -q "$required" || { echo "::error::Missing from zip: $required"; exit 1; }
+          done
+          echo "Zip integrity check passed."
+
       - name: Attach zip to GitHub Release
         uses: softprops/action-gh-release@v2
         with:

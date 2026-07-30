@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fatal error `Class "Parsedown" not found` when opening the plugin's "View details" modal: the bare `vendor/` pattern in `.distignore` matched at every level, stripping `libs/plugin-update-checker/vendor/` (Parsedown, readme parser) from the v0.8.0/v0.8.1 release zips. Patterns are now root-anchored, and the release workflow has a zip-integrity step that fails the build if required runtime files are missing.
+
+## [0.8.1] - 2026-07-30
+
+### Fixed
+
 - Analytics dashboard stuck on "Loading…" forever: `AnalyticsController` used `DateTimeImmutable` unqualified inside the `ISXF\Ajax` namespace, so the endpoint fataled (class not found) and the JS only logged to the console. The endpoint is fixed, `isxf-analytics.js` now checks HTTP status and shows a visible error state instead of hanging, and a new `AnalyticsTest` integration suite covers the endpoint (structure, custom range, nonce rejection).
 
 ## [0.8.0] - 2026-07-27
