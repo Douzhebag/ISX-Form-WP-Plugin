@@ -93,3 +93,69 @@
     background: #2271b1;
     color: #fff;
 }
+
+/* === Email template tools: preview modal === */
+.isxf-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.isxf-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.isxf-modal-dialog {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(720px, 92vw);
+    height: min(85vh, 900px);
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.isxf-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border-bottom: 1px solid #dcdcde;
+    background: #f6f7f7;
+}
+
+.isxf-modal-subject {
+    flex: 1;
+    color: #50575e;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.isxf-modal-close {
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: #787c82;
+}
+
+.isxf-modal-close:hover {
+    color: #1d2327;
+}
+
+#isxf-email-preview-frame {
+    flex: 1;
+    width: 100%;
+    border: none;
+    background: #f3f4f6;
+}

@@ -48,7 +48,7 @@
                     }
                 })
                 .catch(function() {
-                    showToast('เกิดข้อผิดพลาด', 'error');
+                    showToast(isxf_entries_env.i18n.error_generic, 'error');
                     selectEl.value = selectEl.dataset.original;
                 })
                 .finally(function() { selectEl.disabled = false; });
@@ -82,7 +82,7 @@
             var note = textarea.value;
             var saveBtn = this;
             saveBtn.disabled = true;
-            saveBtn.textContent = '⏳ กำลังบันทึก...';
+            saveBtn.textContent = isxf_entries_env.i18n.saving;
 
             var fd = new FormData();
             fd.append('action', 'isxf_update_entry_note');
@@ -98,17 +98,26 @@
                         editor.classList.remove('active');
                         var display = document.querySelector('.ix-note-display[data-entry-id="' + id + '"]');
                         display.style.display = 'flex';
+                        display.textContent = '';
+                        var textSpan = document.createElement('span');
                         if (note.trim()) {
-                            display.innerHTML = '<span class="ix-note-text">' + note.replace(/</g,'&lt;') + '</span><span class="ix-note-edit-icon">✏️</span>';
+                            textSpan.className = 'ix-note-text';
+                            textSpan.textContent = note;
                         } else {
-                            display.innerHTML = '<span class="ix-note-placeholder">+ เพิ่มโน้ต</span><span class="ix-note-edit-icon">✏️</span>';
+                            textSpan.className = 'ix-note-placeholder';
+                            textSpan.textContent = isxf_entries_env.i18n.add_note;
                         }
+                        var editIcon = document.createElement('span');
+                        editIcon.className = 'ix-note-edit-icon';
+                        editIcon.textContent = '✏️';
+                        display.appendChild(textSpan);
+                        display.appendChild(editIcon);
                     } else {
                         showToast(data.data.message, 'error');
                     }
                 })
-                .catch(function() { showToast('เกิดข้อผิดพลาด', 'error'); })
-                .finally(function() { saveBtn.disabled = false; saveBtn.textContent = '💾 บันทึก'; });
+                .catch(function() { showToast(isxf_entries_env.i18n.error_generic, 'error'); })
+                .finally(function() { saveBtn.disabled = false; saveBtn.textContent = isxf_entries_env.i18n.save; });
         });
     });
 })();
