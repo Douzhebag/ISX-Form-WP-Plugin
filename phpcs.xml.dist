@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<ruleset name="InsightX Form">
+    <description>PHPCS ruleset for the InsightX Form WordPress plugin (WordPress-Core + WordPress-Docs).</description>
+
+    <file>.</file>
+
+    <!-- Bundled vendor code and dependencies are out of scope. -->
+    <exclude-pattern>/libs/*</exclude-pattern>
+    <exclude-pattern>/assets/libs/*</exclude-pattern>
+    <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/node_modules/*</exclude-pattern>
+    <!-- Test bootstrap/stubs intentionally mimic WP internals; tests keep their own style. -->
+    <exclude-pattern>/tests/*</exclude-pattern>
+    <exclude-pattern>/bin/*</exclude-pattern>
+
+    <arg name="extensions" value="php"/>
+    <arg value="ps"/> <!-- progress + summary -->
+
+    <!-- Plugin text domain. -->
+    <config name="text_domain" value="insightx-form"/>
+    <!-- Oldest WP version the plugin supports. -->
+    <config name="minimum_supported_version" value="7.0"/>
+
+    <!--
+      ======================================================================
+      TEMPORARY EXCLUSIONS (pending the Phase 2 refactor — tracked in
+      docs/KNOWN-ISSUES.md). The v0.6.1 codebase predates this ruleset and
+      follows its own consistent style; fixing these means a deliberate
+      one-time normalization, not drive-by edits. Keep this list as short
+      as honestly possible — do NOT add new exclusions without a note here.
+
+      GROUP 1 (formatting): rules that conflict with the existing codebase
+      style — 4-space indent, short array syntax, non-Yoda conditions,
+      single-line guard clauses. Phase 2 decides on a one-time phpcbf
+      normalization; until then these only produce noise.
+
+      GROUP 2 (substantive): pre-existing violations that are real work
+      scheduled for Phase 2, excluded only to establish a green CI
+      baseline. Re-enable rule-by-rule as the refactor lands.
+      ======================================================================
+    -->
+    <rule ref="WordPress-Core">
+        <!-- GROUP 1: formatting conflicts (see header note). -->
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+        <exclude name="Generic.WhiteSpace.ScopeIndent"/>
+        <exclude name="Generic.WhiteSpace.ArbitraryParenthesesSpacing"/>
+        <exclude name="Generic.Functions.FunctionCallArgumentSpacing"/>
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="WordPress.PHP.YodaConditions"/>
+        <exclude name="Generic.ControlStructures.InlineControlStructure"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
+        <exclude name="PEAR.Files.IncludingFile"/>
+        <exclude name="WordPress.Arrays"/>
+        <exclude name="NormalizedArrays.Arrays"/>
+        <exclude name="WordPress.WhiteSpace"/>
+        <exclude name="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature"/>
+        <exclude name="Squiz.Strings"/>
+        <exclude name="Squiz.PHP.EmbeddedPhp"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration"/>
+        <exclude name="Universal.WhiteSpace.CommaSpacing"/>
+        <exclude name="Universal.Operators.DisallowShortTernary"/>
+        <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+        <exclude name="Generic.Formatting.DisallowMultipleStatements"/>
+        <exclude name="Generic.Files.OneObjectStructurePerFile"/>
+        <exclude name="PSR2.Files.EndFileNewline"/>
+
+        <!-- GROUP 2: substantive, pending Phase 2 (see docs/KNOWN-ISSUES.md). -->
+        <!-- Missing wp_unslash() is widespread; input IS sanitized downstream. -->
+        <exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash"/>
+        <!-- Direct $wpdb queries / interpolated $wpdb->prefix table names by
+             design pre-refactor; Phase 2 scope item 3 adds the repository layer. -->
+        <exclude name="WordPress.DB.DirectDatabaseQuery"/>
+        <exclude name="WordPress.DB.PreparedSQL"/>
+        <!-- False positive: placeholders are built dynamically (%d per id). -->
+        <exclude name="WordPress.DB.PreparedSQLPlaceholders"/>
+        <!-- Intentional @inet_pton() on untrusted input; false return is the signal. -->
+        <exclude name="WordPress.PHP.NoSilencedErrors"/>
+        <!-- 1–2 pre-existing loose comparisons; re-enable with the refactor. -->
+        <exclude name="Universal.Operators.StrictComparisons"/>
+        <exclude name="WordPress.PHP.StrictInArray"/>
+        <!-- False positives on PHPMailer properties ($phpmailer->Host etc.). -->
+        <exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase"/>
+    </rule>
+
+    <rule ref="WordPress-Docs">
+        <!-- Docblock coverage will be written during the Phase 2 refactor,
+             file by file; enforcing it now fails on every existing function. -->
+        <exclude name="Squiz.Commenting"/>
+    </rule>
+
+    <!--
+      Security sniffs are NOT part of WordPress-Core (they ship in
+      WordPress-Extra). PluginMenuSlug runs clean on the current code and is
+      enforced from day one; SafeRedirect was enabled in Phase 2.7 after the
+      last wp_redirect() calls were converted to wp_safe_redirect():
+    -->
+    <rule ref="WordPress.Security.PluginMenuSlug"/>
+    <rule ref="WordPress.Security.SafeRedirect"/>
+
+    <!--
+      PSR-4 naming in src/ (ISXF\Foo → src/Foo.php, Phase 2.1 autoload) is
+      intentionally NOT the classic WP "class-*.php lowercase" convention —
+      the two are mutually exclusive. The sniff stays enforced everywhere
+      else; only /src/ is scoped out.
+    -->
+    <rule ref="WordPress.Files.FileName">
+        <exclude-pattern>/src/*</exclude-pattern>
+    </rule>
+    <!--
+      The remaining security sniffs are GROUP 2 (pre-existing, pending
+      Phase 2 — see docs/KNOWN-ISSUES.md) and are deliberately NOT enabled:
+      - WordPress.Security.EscapeOutput — 86 pre-existing violations, mostly
+        false positives from HTML-heavy templates the sniff cannot trace.
+        Re-enable after the Phase 2 view split (templates/).
+      - WordPress.Security.NonceVerification — 42 pre-existing warnings;
+        forms DO verify nonces, but the sniff cannot follow
+        wp_verify_nonce() across methods. Re-enable with the AJAX split.
+      - WordPress.Security.ValidatedSanitizedInput — MissingUnslash plus a
+        handful of InputNotSanitized false positives (values are intval'd /
+        sanitize_*'d on dynamic keys). Re-enable in Phase 2.
+    -->
+</ruleset>

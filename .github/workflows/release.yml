@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    name: Build zip & attach to GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Package per .distignore — see docs/RELEASING.md for the full spec.
+      # The zip root must be the plugin folder (insightx-form/) because the
+      # plugin is deployed as a raw checkout via plugin-update-checker.
+      - name: Build plugin zip
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME#v}"
+          BUILD_DIR="$(mktemp -d)"
+          mkdir -p "$BUILD_DIR/insightx-form"
+          rsync -a --exclude-from=.distignore ./ "$BUILD_DIR/insightx-form/"
+          cd "$BUILD_DIR"
+          zip -qr "insightx-form-${VERSION}.zip" insightx-form
+          mv "insightx-form-${VERSION}.zip" "$GITHUB_WORKSPACE/"
+          unzip -l "$GITHUB_WORKSPACE/insightx-form-${VERSION}.zip"
+
+      - name: Attach zip to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: insightx-form-*.zip
