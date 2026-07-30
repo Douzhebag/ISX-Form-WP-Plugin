@@ -14,6 +14,10 @@ Thumbs.db
 # Build artifacts / packaging
 *.zip
 
+# Composer (dev-only dependencies: PHPUnit, WPCS, etc.)
+/vendor/
+composer.phar
+
 # Local env / secrets
 .env
 .env.*
@@ -21,3 +25,6 @@ Thumbs.db
 # หมายเหตุ: libs/plugin-update-checker และ assets/libs/flatpickr เป็น
 # bundled vendor code ที่ deploy จริง (ไม่มี composer/npm build step)
 # ต้อง commit เข้า repo — ห้าม ignore
+
+# gettext backups
+*.po~

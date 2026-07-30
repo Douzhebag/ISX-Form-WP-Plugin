@@ -1,0 +1,26 @@
+# Packaging manifest for the distributable plugin zip (GitHub Release asset).
+# Used by .github/workflows/release.yml via `rsync --exclude-from=.distignore`.
+# Everything NOT listed here ships in the zip — see docs/RELEASING.md §3.
+
+# VCS / CI
+.git/
+.github/
+.gitignore
+.distignore
+
+# Dev tooling & test suite (never deployed — production is a raw checkout
+# with the custom autoloader, no composer install)
+vendor/
+composer.json
+composer.lock
+tests/
+phpunit.xml.dist
+phpcs.xml.dist
+bin/
+
+# Internal team docs
+docs/
+
+# Build artifacts / OS noise
+*.zip
+.DS_Store

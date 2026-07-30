@@ -54,6 +54,60 @@
   margin-left: 2px;
 }
 
+/* Radio/checkbox groups use fieldset/legend semantics (Phase 2.6); reset
+   the UA fieldset chrome so the layout matches the old plain div. */
+.isxf-choice-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.isxf-form-container legend.isxf-field-label {
+  display: block;
+  margin-bottom: 6px;
+  padding: 0;
+  font-weight: 600;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+/* Inline per-field error message (filled by JS, linked via
+   aria-describedby). */
+.isxf-field-error {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ef4444;
+}
+
+.isxf-field-error[hidden],
+.isxf-submit-hint[hidden] {
+  display: none;
+}
+
+.isxf-form-container .isxf-field-has-error input:not([type="radio"]):not([type="checkbox"]),
+.isxf-form-container .isxf-field-has-error select,
+.isxf-form-container .isxf-field-has-error textarea {
+  border-color: #ef4444;
+}
+
+.isxf-form-container .isxf-field-has-error input:focus,
+.isxf-form-container .isxf-field-has-error select:focus,
+.isxf-form-container .isxf-field-has-error textarea:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+/* Visible explanation for the disabled submit button; JS hides it once
+   all required fields are filled. */
+.isxf-submit-hint {
+  margin: 16px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+}
+
 .isxf-checkbox-group,
 .isxf-radio-group {
   display: flex;
@@ -117,28 +171,34 @@
   cursor: pointer;
 }
 
-.isxf-submit-btn {
-  background: #0f172a;
-  color: #fff;
+/* .isxf-form-container prefix: beat theme/page-builder button rules
+   (e.g. Elementor's .elementor-kit-N button at 0-1-1). */
+.isxf-form-container .isxf-submit-btn {
+  background: var(--isxf-btn-bg, #0f172a);
+  color: var(--isxf-btn-color, #fff);
   padding: 14px 24px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--isxf-btn-radius, 6px);
   cursor: pointer;
-  font-size: 16px;
+  font-size: var(--isxf-btn-font-size, 16px);
   font-weight: 600;
   width: 100%;
   transition: background 0.3s;
   margin-top: 30px;
 }
 
-.isxf-submit-btn:hover {
-  background: #1e293b;
+/* 'form' in the selector lifts specificity past page-builder hover rules
+   (e.g. Elementor's .elementor-kit-N button:hover at 0-2-1). */
+.isxf-form-container form .isxf-submit-btn:hover {
+  background: var(--isxf-btn-bg-hover, #1e293b);
+  border: none;
+  border-radius: var(--isxf-btn-radius, 6px);
 }
 
-.isxf-submit-btn:disabled {
-  background: #9ca3af !important;
+.isxf-form-container .isxf-submit-btn:disabled {
+  background: var(--isxf-btn-bg, #9ca3af) !important;
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.55;
 }
 
 .isxf-toast-container {

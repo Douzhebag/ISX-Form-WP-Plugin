@@ -2,8 +2,21 @@
 
 ระบบฟอร์มและจัดการข้อมูลลูกค้าสำหรับธุรกิจ — สร้างฟอร์มง่าย ส่งอีเมลอัตโนมัติ (รองรับ OAuth2) จัดการข้อมูลครบจบในที่เดียว
 
-**Version:** 0.6.0
+**Version:** 0.8.0
 **Author:** [InsightX](https://www.insightx.in.th)
+
+---
+
+## ⚠️ ประกาศเลิกใช้งาน (Deprecation notice — v1.0)
+
+ฟีเจอร์ด้านล่างนี้ **deprecated** ตั้งแต่ v0.8.0 และจะถูก **ลบออกใน v1.0**:
+
+- shortcode alias `[advanced_form]` — เปลี่ยนไปใช้ `[isxf_form id="..."]` แทน
+- migration อัตโนมัติ `acf_*` → `isxf_*` (ตาราง, CPT, meta, options)
+- รูปแบบการเข้ารหัส legacy `ENC:` (ค่าเก่าจะถูกย้ายไปเป็น format ใหม่ใน v0.8.x ก่อน)
+
+> **สำคัญ:** การอัปเกรดไป v1.0 **ต้องผ่าน v0.8.x ก่อนเสมอ** — ห้ามข้ามจากเวอร์ชัน ≤ 0.7 ไป v1.0 โดยตรง
+> รายละเอียดเพิ่มเติมดูใน [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
@@ -401,18 +414,19 @@ InsightX Form มีมาตรการความปลอดภัยหล
 ### โครงสร้างไฟล์
 
 ```
-advanced-secure-form.php        entry point — constants, activation/uninstall hook, DB migration, class bootstrap
-includes/
-  class-isxf-crypto.php         เข้ารหัส/ถอดรหัส (AES-256-CBC, ENC/ENC2 format)
-  class-isxf-oauth.php          OAuth2 flow (Google/Microsoft) + PHPMailer XOAUTH2 token provider
-  class-isxf-admin.php          form builder CPT, meta box, global settings page (ไฟล์ใหญ่สุด)
-  class-isxf-frontend.php       shortcode [isxf_form]/[advanced_form] + render ฟอร์มหน้าเว็บ
-  class-isxf-ajax-handler.php   submit ฟอร์ม, ทดสอบอีเมล, อัปเดตสถานะ/โน้ต, SMTP config ผ่าน phpmailer_init
-  class-isxf-entries.php        หน้ารายการข้อมูล, dashboard widget, analytics, CSV export
+advanced-secure-form.php        entry point — constants, activation/uninstall hook, DB migration, autoloader + bootstrap
+src/                            PSR-4 classes ใน namespace `ISXF\` (autoload ผ่าน spl_autoload_register ใน main file)
+  Crypto.php                    เข้ารหัส/ถอดรหัส (AES-256-CBC, ENC/ENC2 format)
+  OAuth.php                     OAuth2 flow (Google/Microsoft)
+  OAuthTokenProvider.php        PHPMailer XOAUTH2 token provider
+  Admin.php                     form builder CPT, meta box, global settings page (ไฟล์ใหญ่สุด)
+  Frontend.php                  shortcode [isxf_form]/[advanced_form] + render ฟอร์มหน้าเว็บ
+  AjaxHandler.php               submit ฟอร์ม, ทดสอบอีเมล, อัปเดตสถานะ/โน้ต, SMTP config ผ่าน phpmailer_init
+  Entries.php                   หน้ารายการข้อมูล, dashboard widget, analytics, CSV export
 libs/plugin-update-checker/     bundled library สำหรับ auto-update ผ่าน GitHub Release
 ```
 
-โหลดคลาสตามลำดับ `crypto → oauth → admin → frontend → ajax-handler → entries` ผ่าน `run_advanced_contact_form()`
+คลาสทั้งหมดถูก instantiate บน hook `plugins_loaded` ผ่าน `isxf_bootstrap()` และยังมี `class_alias` ชื่อเก่า (`ISXF_Crypto` → `ISXF\Crypto` ฯลฯ) ไว้เพื่อ backward compatibility
 
 ### ตาราง `wp_isxf_form_entries`
 

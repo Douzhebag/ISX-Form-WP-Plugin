@@ -1,6 +1,6 @@
 <?php
 /**
- * ISXF_OAuth — OAuth2 (XOAUTH2) support for SMTP sending.
+ * ISXF\OAuth — OAuth2 (XOAUTH2) support for SMTP sending.
  *
  * Handles the OAuth2 authorization-code flow and access-token refresh for
  * Google (Gmail) and Microsoft 365 (Outlook/Exchange Online), so the plugin
@@ -11,10 +11,12 @@
  *
  * @since 0.6.0
  */
+
+namespace ISXF;
+
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'ISXF_OAuth' ) ) {
-    class ISXF_OAuth {
+class OAuth {
 
         const OPT_AUTH_METHOD   = 'isxf_smtp_auth_method';   // password | oauth_google | oauth_microsoft
         const OPT_CLIENT_ID     = 'isxf_smtp_oauth_client_id';
@@ -118,16 +120,16 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
          * Step 1 — redirect the admin to the provider's consent screen.
          */
         public function handle_connect() {
-            if ( ! current_user_can( 'manage_options' ) ) wp_die( 'ไม่มีสิทธิ์ดำเนินการ' );
+            if ( ! current_user_can( 'manage_options' ) ) wp_die( esc_html__( 'You do not have permission to perform this action.', 'insightx-form' ) );
             check_admin_referer( 'isxf_oauth_connect' );
 
             $provider  = isset( $_GET['provider'] ) ? sanitize_key( $_GET['provider'] ) : '';
             $providers = self::providers();
-            if ( ! isset( $providers[ $provider ] ) ) wp_die( 'ผู้ให้บริการไม่ถูกต้อง' );
+            if ( ! isset( $providers[ $provider ] ) ) wp_die( esc_html__( 'Invalid provider.', 'insightx-form' ) );
 
             $client_id = get_option( self::OPT_CLIENT_ID, '' );
             if ( empty( $client_id ) ) {
-                wp_safe_redirect( $this->settings_url( [ 'isxf_oauth' => 'error', 'msg' => rawurlencode( 'กรุณากรอกและบันทึก Client ID / Client Secret ก่อนเชื่อมต่อ' ) ] ) );
+                wp_safe_redirect( $this->settings_url( [ 'isxf_oauth' => 'error', 'msg' => rawurlencode( __( 'Please enter and save your Client ID / Client Secret before connecting.', 'insightx-form' ) ) ] ) );
                 exit;
             }
 
@@ -142,7 +144,16 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
                 'state'         => $state,
             ], $providers[ $provider ]['extra'] );
 
-            wp_redirect( self::endpoint( $provider, 'authorize' ) . '?' . http_build_query( $args ) );
+            $authorize_url = self::endpoint( $provider, 'authorize' ) . '?' . http_build_query( $args );
+            // The consent screen is an external URL (accounts.google.com /
+            // login.microsoftonline.com) — whitelist its host so
+            // wp_safe_redirect() accepts it for this redirect.
+            add_filter( 'allowed_redirect_hosts', function ( $hosts ) use ( $authorize_url ) {
+                $host = wp_parse_url( $authorize_url, PHP_URL_HOST );
+                if ( $host ) $hosts[] = $host;
+                return $hosts;
+            } );
+            wp_safe_redirect( $authorize_url );
             exit;
         }
 
@@ -150,31 +161,32 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
          * Step 2 — handle the provider callback, exchange code for tokens.
          */
         public function handle_callback() {
-            if ( ! current_user_can( 'manage_options' ) ) wp_die( 'ไม่มีสิทธิ์ดำเนินการ' );
+            if ( ! current_user_can( 'manage_options' ) ) wp_die( esc_html__( 'You do not have permission to perform this action.', 'insightx-form' ) );
 
             $saved = get_transient( self::STATE_TRANSIENT . get_current_user_id() );
             delete_transient( self::STATE_TRANSIENT . get_current_user_id() );
 
             $state = isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '';
             if ( empty( $saved ) || ! is_array( $saved ) || ! hash_equals( (string) $saved['state'], $state ) ) {
-                $this->redirect_error( 'การยืนยัน state ไม่ถูกต้อง กรุณาลองเชื่อมต่อใหม่' );
+                $this->redirect_error( __( 'State verification failed. Please try connecting again.', 'insightx-form' ) );
             }
 
             if ( isset( $_GET['error'] ) ) {
                 $desc = isset( $_GET['error_description'] ) ? sanitize_text_field( wp_unslash( $_GET['error_description'] ) ) : sanitize_text_field( wp_unslash( $_GET['error'] ) );
-                $this->redirect_error( 'ผู้ให้บริการปฏิเสธ: ' . $desc );
+                /* translators: %s: error description returned by the OAuth provider. */
+                $this->redirect_error( sprintf( __( 'The provider denied the request: %s', 'insightx-form' ), $desc ) );
             }
 
             $provider = $saved['provider'];
             $code     = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
-            if ( empty( $code ) ) $this->redirect_error( 'ไม่ได้รับ authorization code' );
+            if ( empty( $code ) ) $this->redirect_error( __( 'Authorization code not received.', 'insightx-form' ) );
 
             $providers = self::providers();
             $response  = wp_remote_post( self::endpoint( $provider, 'token' ), [
                 'timeout' => 20,
                 'body'    => [
                     'client_id'     => get_option( self::OPT_CLIENT_ID, '' ),
-                    'client_secret' => ISXF_Crypto::decrypt( get_option( self::OPT_CLIENT_SECRET, '' ) ),
+                    'client_secret' => Crypto::decrypt( get_option( self::OPT_CLIENT_SECRET, '' ) ),
                     'code'          => $code,
                     'redirect_uri'  => self::redirect_uri(),
                     'grant_type'    => 'authorization_code',
@@ -183,19 +195,28 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
             ] );
 
             if ( is_wp_error( $response ) ) {
-                $this->redirect_error( 'เชื่อมต่อ token endpoint ไม่ได้: ' . $response->get_error_message() );
+                /* translators: %s: connection error message. */
+                $this->redirect_error( sprintf( __( 'Could not connect to the token endpoint: %s', 'insightx-form' ), $response->get_error_message() ) );
             }
 
             $body = json_decode( wp_remote_retrieve_body( $response ), true );
             if ( empty( $body['access_token'] ) || empty( $body['refresh_token'] ) ) {
-                $err = isset( $body['error_description'] ) ? $body['error_description'] : ( isset( $body['error'] ) ? $body['error'] : 'ไม่ได้รับ refresh token' );
+                $err = isset( $body['error_description'] ) ? $body['error_description'] : ( isset( $body['error'] ) ? $body['error'] : __( 'Refresh token not received.', 'insightx-form' ) );
                 isxf_log_error( 'OAuth token exchange failed: ' . wp_remote_retrieve_body( $response ) );
-                $this->redirect_error( 'แลก token ไม่สำเร็จ: ' . $err );
+                /* translators: %s: error message returned by the OAuth provider. */
+                $this->redirect_error( sprintf( __( 'Token exchange failed: %s', 'insightx-form' ), $err ) );
             }
 
             $email = $this->extract_email( isset( $body['id_token'] ) ? $body['id_token'] : '' );
 
-            update_option( self::OPT_REFRESH_TOKEN, ISXF_Crypto::encrypt( $body['refresh_token'] ) );
+            $encrypted_token = Crypto::encrypt( $body['refresh_token'] );
+            if ( is_wp_error( $encrypted_token ) || empty( $encrypted_token ) ) {
+                // เข้ารหัสไม่สำเร็จ — ห้ามเก็บ refresh token เป็น plaintext
+                isxf_log_error( 'OAuth connect aborted: refresh token encryption failed' );
+                $this->redirect_error( __( 'Encryption failed; the connection was not saved. Please check the server\'s OpenSSL.', 'insightx-form' ) );
+            }
+
+            update_option( self::OPT_REFRESH_TOKEN, $encrypted_token );
             update_option( self::OPT_CONNECTED, $email !== '' ? sanitize_email( $email ) : 'connected' );
 
             // Cache the access token we just received.
@@ -210,7 +231,7 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
          * Disconnect — clear stored tokens.
          */
         public function handle_disconnect() {
-            if ( ! current_user_can( 'manage_options' ) ) wp_die( 'ไม่มีสิทธิ์ดำเนินการ' );
+            if ( ! current_user_can( 'manage_options' ) ) wp_die( esc_html__( 'You do not have permission to perform this action.', 'insightx-form' ) );
             check_admin_referer( 'isxf_oauth_disconnect' );
 
             delete_option( self::OPT_REFRESH_TOKEN );
@@ -253,7 +274,7 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
             $cached = get_transient( self::TOKEN_TRANSIENT );
             if ( ! empty( $cached ) ) return $cached;
 
-            $refresh = ISXF_Crypto::decrypt( get_option( self::OPT_REFRESH_TOKEN, '' ) );
+            $refresh = Crypto::decrypt( get_option( self::OPT_REFRESH_TOKEN, '' ) );
             if ( empty( $refresh ) ) return '';
 
             $providers = self::providers();
@@ -263,7 +284,7 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
                 'timeout' => 20,
                 'body'    => [
                     'client_id'     => get_option( self::OPT_CLIENT_ID, '' ),
-                    'client_secret' => ISXF_Crypto::decrypt( get_option( self::OPT_CLIENT_SECRET, '' ) ),
+                    'client_secret' => Crypto::decrypt( get_option( self::OPT_CLIENT_SECRET, '' ) ),
                     'refresh_token' => $refresh,
                     'grant_type'    => 'refresh_token',
                     'scope'         => $providers[ $provider ]['scope'],
@@ -283,7 +304,13 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
 
             // Some providers rotate the refresh token — store the new one if present.
             if ( ! empty( $body['refresh_token'] ) ) {
-                update_option( self::OPT_REFRESH_TOKEN, ISXF_Crypto::encrypt( $body['refresh_token'] ) );
+                $encrypted_token = Crypto::encrypt( $body['refresh_token'] );
+                if ( is_wp_error( $encrypted_token ) || empty( $encrypted_token ) ) {
+                    // เข้ารหัสไม่สำเร็จ — คง token เดิมไว้ ห้ามเขียน plaintext ทับ
+                    isxf_log_error( 'OAuth refresh token rotation skipped: encryption failed' );
+                } else {
+                    update_option( self::OPT_REFRESH_TOKEN, $encrypted_token );
+                }
             }
 
             $expires = isset( $body['expires_in'] ) ? intval( $body['expires_in'] ) : 3600;
@@ -291,36 +318,4 @@ if ( ! class_exists( 'ISXF_OAuth' ) ) {
 
             return $body['access_token'];
         }
-    }
-}
-
-/**
- * ISXF_OAuth_Token_Provider — PHPMailer token provider for XOAUTH2.
- *
- * The interface lives in WordPress core's bundled PHPMailer but is only loaded
- * lazily when mail is first sent, so make sure it is available before declaring
- * our implementation.
- */
-if ( ! interface_exists( '\\PHPMailer\\PHPMailer\\OAuthTokenProvider' ) ) {
-    $isxf_oauth_iface = ABSPATH . WPINC . '/PHPMailer/OAuthTokenProvider.php';
-    if ( file_exists( $isxf_oauth_iface ) ) require_once $isxf_oauth_iface;
-}
-
-if ( interface_exists( '\\PHPMailer\\PHPMailer\\OAuthTokenProvider' ) && ! class_exists( 'ISXF_OAuth_Token_Provider' ) ) {
-    class ISXF_OAuth_Token_Provider implements \PHPMailer\PHPMailer\OAuthTokenProvider {
-
-        private $email;
-        private $provider;
-
-        public function __construct( $email, $provider ) {
-            $this->email    = $email;
-            $this->provider = $provider;
-        }
-
-        public function getOauth64() {
-            $token = ISXF_OAuth::get_access_token( $this->provider );
-            if ( empty( $token ) ) return '';
-            return base64_encode( 'user=' . $this->email . "\x01auth=Bearer " . $token . "\x01\x01" );
-        }
-    }
 }

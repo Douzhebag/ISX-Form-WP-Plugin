@@ -179,7 +179,7 @@
                         padding: 10,
                         cornerRadius: 8,
                         callbacks: {
-                            label: function (ctx) { return ctx.parsed.y + ' รายการ'; }
+                            label: function (ctx) { return ctx.parsed.y + ' ' + isxf_analytics_env.i18n.entries; }
                         }
                     }
                 },
@@ -215,10 +215,10 @@
         if (!ctx) return;
 
         var statusMap = {
-            'new': { label: 'ใหม่', color: colors.new },
-            'in_progress': { label: 'กำลังดำเนินการ', color: colors.in_progress },
-            'done': { label: 'เสร็จสิ้น', color: colors.done },
-            'junk': { label: 'ขยะ', color: colors.junk }
+            'new': { label: isxf_analytics_env.i18n.status_new, color: colors.new },
+            'in_progress': { label: isxf_analytics_env.i18n.status_in_progress, color: colors.in_progress },
+            'done': { label: isxf_analytics_env.i18n.status_done, color: colors.done },
+            'junk': { label: isxf_analytics_env.i18n.status_junk, color: colors.junk }
         };
 
         var labels = [];
@@ -289,7 +289,8 @@
         if (!container || !topForms) return;
 
         if (topForms.length === 0) {
-            container.innerHTML = '<div class="ix-loading">ยังไม่มีข้อมูล</div>';
+            container.innerHTML = '<div class="ix-loading"></div>';
+            container.querySelector('.ix-loading').textContent = isxf_analytics_env.i18n.no_data;
             return;
         }
 
@@ -318,12 +319,13 @@
         if (!container || !recent) return;
 
         if (recent.length === 0) {
-            container.innerHTML = '<div class="ix-loading">ยังไม่มีข้อมูล</div>';
+            container.innerHTML = '<div class="ix-loading"></div>';
+            container.querySelector('.ix-loading').textContent = isxf_analytics_env.i18n.no_data;
             return;
         }
 
         var statusIcons = { 'new': '🔵', 'in_progress': '🟡', 'done': '✅', 'junk': '🔴' };
-        var statusLabels = { 'new': 'ใหม่', 'in_progress': 'กำลังดำเนินการ', 'done': 'เสร็จสิ้น', 'junk': 'ขยะ' };
+        var statusLabels = { 'new': isxf_analytics_env.i18n.status_new, 'in_progress': isxf_analytics_env.i18n.status_in_progress, 'done': isxf_analytics_env.i18n.status_done, 'junk': isxf_analytics_env.i18n.status_junk };
         var statusColors = { 'new': '#2271b1', 'in_progress': '#996800', 'done': '#2e7d32', 'junk': '#aa0000' };
         var statusBgs = { 'new': '#e8f0fe', 'in_progress': '#fff8e5', 'done': '#edf7ed', 'junk': '#fef0f0' };
 
@@ -334,7 +336,7 @@
                 '<div class="ix-recent-icon" style="background:' + (statusBgs[st] || '#f3f4f6') + '">' + (statusIcons[st] || '🔵') + '</div>' +
                 '<div class="ix-recent-info">' +
                 '<div class="ix-recent-title">' + escapeHtml(entry.form_title) + '</div>' +
-                '<div class="ix-recent-meta">' + entry.time_ago + ' · ' + escapeHtml(entry.ip) + '</div>' +
+                '<div class="ix-recent-meta">' + escapeHtml(entry.time_ago) + ' · ' + escapeHtml(entry.ip) + '</div>' +
                 '</div>' +
                 '<span class="ix-recent-badge" style="color:' + (statusColors[st] || '#6B7280') + '; background:' + (statusBgs[st] || '#f3f4f6') + '">' +
                 (statusIcons[st] || '') + ' ' + (statusLabels[st] || st) +

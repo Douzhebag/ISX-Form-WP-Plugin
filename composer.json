@@ -1,0 +1,39 @@
+{
+    "name": "insightx/isxf-form",
+    "description": "InsightX Form — WordPress form builder, entry management and notification plugin (GitHub-distributed).",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "wp-phpunit/wp-phpunit": "^6",
+        "yoast/phpunit-polyfills": "^1.0 || ^2.0 || ^3.0",
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpcompatibility/phpcompatibility-wp": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ISXF\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ISXF\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:unit": "ISXF_UNIT_ONLY=1 phpunit --testsuite Unit",
+        "lint": "phpcs",
+        "lint:fix": "phpcbf"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "sort-packages": true
+    }
+}

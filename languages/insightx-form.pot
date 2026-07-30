@@ -1,0 +1,1815 @@
+# Copyright (C) 2026 InsightX
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: InsightX Form 0.8.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ISX-Form-WP-Plugin\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-07-30T02:42:56+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: insightx-form\n"
+
+#. Plugin Name of the plugin
+#: advanced-secure-form.php
+msgid "InsightX Form"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: advanced-secure-form.php
+msgid "https://insightx.in.th/"
+msgstr ""
+
+#. Description of the plugin
+#: advanced-secure-form.php
+msgid "ระบบฟอร์มและจัดการข้อมูลลูกค้าสำหรับธุรกิจ — สร้างฟอร์มง่าย ส่งอีเมลอัตโนมัติ จัดการข้อมูลครบจบในที่เดียว โดย InsightX"
+msgstr ""
+
+#. Author of the plugin
+#: advanced-secure-form.php
+msgid "InsightX"
+msgstr ""
+
+#. Author URI of the plugin
+#: advanced-secure-form.php
+msgid "https://www.insightx.in.th"
+msgstr ""
+
+#: src/Admin.php:91
+msgid "⏳ Sending..."
+msgstr ""
+
+#: src/Admin.php:92
+msgid "❌ Connection error"
+msgstr ""
+
+#: src/Admin.php:93
+#: templates/admin/settings-page.php:213
+msgid "📨 Send Test Email"
+msgstr ""
+
+#: src/Admin.php:94
+msgid "⏳ Loading preview..."
+msgstr ""
+
+#: src/Admin.php:95
+msgid "❌ Failed to load the preview"
+msgstr ""
+
+#: src/Admin.php:96
+msgid "The current custom email body is not empty. Overwrite it with the content of this template?"
+msgstr ""
+
+#: src/Admin.php:97
+msgid "✅ Template content copied into the custom editor — remember to save the form."
+msgstr ""
+
+#: src/Admin.php:98
+#: templates/admin/builder-meta-box.php:134
+msgid "e.g. Red,Green,Blue"
+msgstr ""
+
+#: src/Admin.php:99
+msgid "No options used"
+msgstr ""
+
+#: src/Admin.php:100
+#: templates/admin/builder-meta-box.php:133
+msgid "Type sample text"
+msgstr ""
+
+#: src/Admin.php:101
+msgid "No placeholder used"
+msgstr ""
+
+#: src/Admin.php:102
+#: templates/admin/builder-meta-box.php:114
+msgid "Click and hold to drag to reorder"
+msgstr ""
+
+#: src/Admin.php:103
+#: templates/admin/builder-meta-box.php:137
+msgid "Delete this field"
+msgstr ""
+
+#: src/Admin.php:104
+#: templates/admin/builder-meta-box.php:119
+msgid "Text (short text)"
+msgstr ""
+
+#: src/Admin.php:105
+#: templates/admin/builder-meta-box.php:120
+msgid "Textarea (long text)"
+msgstr ""
+
+#: src/Admin.php:106
+#: templates/admin/builder-meta-box.php:123
+msgid "Number"
+msgstr ""
+
+#: src/Admin.php:107
+#: templates/admin/builder-meta-box.php:124
+msgid "Date (standard calendar)"
+msgstr ""
+
+#: src/Admin.php:108
+#: templates/admin/builder-meta-box.php:125
+msgid "Check-in Date"
+msgstr ""
+
+#: src/Admin.php:109
+#: templates/admin/builder-meta-box.php:126
+msgid "Check-out Date"
+msgstr ""
+
+#: src/Admin.php:110
+#: templates/admin/builder-meta-box.php:128
+msgid "Radio (choose 1 option)"
+msgstr ""
+
+#: src/Admin.php:111
+#: templates/admin/builder-meta-box.php:129
+msgid "Checkbox (choose multiple)"
+msgstr ""
+
+#: src/Admin.php:112
+#: templates/admin/builder-meta-box.php:130
+msgid "Heading (form heading)"
+msgstr ""
+
+#: src/Admin.php:120
+msgid "Forms"
+msgstr ""
+
+#: src/Admin.php:121
+msgid "Form"
+msgstr ""
+
+#: src/Admin.php:122
+msgid "Create New Form"
+msgstr ""
+
+#: src/Admin.php:123
+msgid "Edit Form"
+msgstr ""
+
+#: src/Admin.php:124
+msgid "All Forms"
+msgstr ""
+
+#: src/Admin.php:136
+msgid "Shortcode (copy and paste)"
+msgstr ""
+
+#: src/Admin.php:147
+msgid "Settings"
+msgstr ""
+
+#: src/Admin.php:147
+msgid "⚙️ Settings"
+msgstr ""
+
+#: src/Admin.php:148
+msgid "Documentation"
+msgstr ""
+
+#: src/Admin.php:148
+msgid "📖 Documentation"
+msgstr ""
+
+#: src/Admin.php:203
+#: src/Entries.php:100
+msgid "An error occurred"
+msgstr ""
+
+#. translators: %s: URL of the plugin settings page.
+#: src/Admin.php:286
+#, php-format
+msgid "CAPTCHA is not configured yet — form submissions may be blocked or have no bot protection. <a href=\"%s\">Go to the settings page</a>"
+msgstr ""
+
+#. translators: %s: URL of the plugin changelog.
+#: src/Admin.php:325
+#, php-format
+msgid "This site still relies on legacy compatibility layers (the [advanced_form] shortcode alias, the acf→isxf auto-migration, and the legacy ENC: encryption format). These will be removed in v1.0 — upgrading to v1.0 requires passing through v0.8.x first. <a href=\"%s\">See the changelog</a>"
+msgstr ""
+
+#: src/Admin.php:327
+msgid "Dismiss"
+msgstr ""
+
+#: src/Admin.php:345
+msgid "📝 Form Builder"
+msgstr ""
+
+#: src/Admin.php:364
+msgid "Your Name"
+msgstr ""
+
+#: src/Admin.php:367
+#: src/Ajax/EmailToolsController.php:217
+#: src/Ajax/SubmissionController.php:132
+msgid "Thank you for contacting us - {site_name}"
+msgstr ""
+
+#: src/Admin.php:368
+msgid ""
+"Hello,\n"
+"\n"
+"We have received your submission. Details:\n"
+"\n"
+"{all_fields}\n"
+"\n"
+"Thank you,\n"
+"{site_name}"
+msgstr ""
+
+#: src/Admin.php:392
+msgid "❌ Failed to encrypt the SMTP password — the new value was not saved (the previous value is kept). Please check your server's OpenSSL."
+msgstr ""
+
+#: src/Admin.php:407
+msgid "❌ Failed to encrypt the Client Secret — the new value was not saved (the previous value is kept). Please check your server's OpenSSL."
+msgstr ""
+
+#. translators: %s: human-readable time difference, e.g. "5 mins".
+#. translators: %s: human-readable time difference (e.g. "2 hours").
+#: src/Ajax/AnalyticsController.php:110
+#: templates/admin/dashboard-widget.php:73
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: src/Ajax/EmailToolsController.php:48
+msgid "Your user account has no valid email address to send the test to."
+msgstr ""
+
+#. translators: %s: original email subject.
+#: src/Ajax/EmailToolsController.php:59
+#, php-format
+msgid "🧪 %s"
+msgstr ""
+
+#. translators: %s: destination email address.
+#: src/Ajax/EmailToolsController.php:68
+#: src/Ajax/SettingsController.php:58
+#, php-format
+msgid "Test email sent to %s successfully!"
+msgstr ""
+
+#: src/Ajax/EmailToolsController.php:70
+#: src/Ajax/SettingsController.php:60
+msgid "Unknown reason"
+msgstr ""
+
+#. translators: %s: error details.
+#: src/Ajax/EmailToolsController.php:72
+#: src/Ajax/SettingsController.php:62
+#, php-format
+msgid "Sending failed: %s"
+msgstr ""
+
+#: src/Ajax/EmailToolsController.php:82
+#: src/Ajax/SettingsController.php:23
+msgid "You do not have permission to perform this action"
+msgstr ""
+
+#: src/Ajax/EmailToolsController.php:180
+msgid "This is a sample message so you can preview the email content."
+msgstr ""
+
+#: src/Ajax/EmailToolsController.php:182
+msgid "Somchai Jaidee"
+msgstr ""
+
+#: src/Ajax/EmailToolsController.php:194
+msgid "Option 1"
+msgstr ""
+
+#. translators: %s: site name.
+#: src/Ajax/EmailToolsController.php:223
+#: src/Ajax/SubmissionController.php:127
+#, php-format
+msgid "We have received your message - %s"
+msgstr ""
+
+#: src/Ajax/EmailToolsController.php:226
+msgid "We have received your message - {site_name}"
+msgstr ""
+
+#. translators: %s: site name.
+#: src/Ajax/EmailToolsController.php:230
+#: src/Ajax/SubmissionController.php:137
+#, php-format
+msgid "Room booking confirmation - %s"
+msgstr ""
+
+#: src/Ajax/EmailToolsController.php:232
+msgid "Room booking confirmation - {site_name}"
+msgstr ""
+
+#: src/Ajax/EntriesController.php:34
+#: src/Ajax/EntriesController.php:60
+msgid "Permission denied"
+msgstr ""
+
+#: src/Ajax/EntriesController.php:42
+#: src/Ajax/EntriesController.php:67
+msgid "Invalid data"
+msgstr ""
+
+#: src/Ajax/EntriesController.php:48
+#: src/Entries.php:53
+#: src/Entries.php:123
+#: src/Entries.php:304
+#: src/Entries.php:364
+msgid "New"
+msgstr ""
+
+#: src/Ajax/EntriesController.php:49
+msgid "In progress"
+msgstr ""
+
+#: src/Ajax/EntriesController.php:50
+#: src/Entries.php:55
+#: src/Entries.php:125
+#: src/Entries.php:366
+msgid "Done"
+msgstr ""
+
+#: src/Ajax/EntriesController.php:51
+#: src/Entries.php:56
+#: src/Entries.php:126
+#: src/Entries.php:367
+msgid "Junk"
+msgstr ""
+
+#. translators: %s: status label.
+#: src/Ajax/EntriesController.php:54
+#, php-format
+msgid "Status updated to \"%s\""
+msgstr ""
+
+#: src/Ajax/EntriesController.php:72
+msgid "Note saved"
+msgstr ""
+
+#: src/Ajax/SettingsController.php:28
+msgid "Please enter a valid destination email address"
+msgstr ""
+
+#. translators: %s: site name.
+#: src/Ajax/SettingsController.php:37
+#, php-format
+msgid "🧪 SMTP Test - %s"
+msgstr ""
+
+#: src/Ajax/SettingsController.php:42
+msgid "SMTP is working!"
+msgstr ""
+
+#. translators: %s: site name.
+#: src/Ajax/SettingsController.php:44
+#, php-format
+msgid "This email was sent from <strong>%s</strong><br>to test the SMTP settings"
+msgstr ""
+
+#. translators: %s: date and time the test email was sent.
+#: src/Ajax/SettingsController.php:47
+#, php-format
+msgid "Sent at: %s"
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:36
+#: src/Ajax/SubmissionController.php:56
+msgid "The CAPTCHA verification system is not ready. Please contact the site administrator."
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:41
+msgid "Please verify your identity with reCAPTCHA"
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:48
+msgid "reCAPTCHA verification failed. Please try again."
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:61
+msgid "Please verify your identity with Turnstile"
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:68
+msgid "Turnstile verification failed. Please try again."
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:76
+msgid "You are submitting too quickly. Please wait a moment."
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:85
+msgid "Form data not found."
+msgstr ""
+
+#. translators: %s: field label.
+#: src/Ajax/SubmissionController.php:105
+#, php-format
+msgid "Please fill in: %s"
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:144
+msgid "Customer email not found."
+msgstr ""
+
+#. translators: 1: form title, 2: site name.
+#: src/Ajax/SubmissionController.php:155
+#, php-format
+msgid "[Submission] %1$s - from %2$s"
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:171
+msgid "Submission successful!"
+msgstr ""
+
+#. translators: %s: customer email address.
+#: src/Ajax/SubmissionController.php:173
+#, php-format
+msgid "Submission successful! A confirmation email has been sent to %s"
+msgstr ""
+
+#. translators: %s: email error details.
+#: src/Ajax/SubmissionController.php:180
+#, php-format
+msgid "Your data has been saved, but the email could not be sent: %s"
+msgstr ""
+
+#: src/Ajax/SubmissionController.php:182
+msgid "Your data has been saved successfully."
+msgstr ""
+
+#: src/Crypto.php:66
+msgid "OpenSSL is not available on this server"
+msgstr ""
+
+#: src/Crypto.php:73
+msgid "Could not generate random bytes for encryption"
+msgstr ""
+
+#: src/Crypto.php:79
+msgid "Data encryption failed"
+msgstr ""
+
+#: src/Entries.php:54
+#: src/Entries.php:124
+#: src/Entries.php:365
+msgid "In Progress"
+msgstr ""
+
+#: src/Entries.php:101
+msgid "⏳ Saving..."
+msgstr ""
+
+#: src/Entries.php:102
+#: templates/admin/entries-page.php:192
+msgid "+ Add note"
+msgstr ""
+
+#: src/Entries.php:103
+#: templates/admin/entries-page.php:199
+msgid "💾 Save"
+msgstr ""
+
+#: src/Entries.php:121
+msgid "entries"
+msgstr ""
+
+#: src/Entries.php:122
+#: templates/admin/dashboard-widget.php:82
+msgid "No entries yet"
+msgstr ""
+
+#: src/Entries.php:135
+msgid "📊 InsightX Form — Overview"
+msgstr ""
+
+#: src/Entries.php:144
+#: templates/admin/entries-page.php:37
+msgid "📥 Entries"
+msgstr ""
+
+#: src/Entries.php:198
+msgid "You do not have permission to export data."
+msgstr ""
+
+#: src/Entries.php:198
+msgid "Permission Error"
+msgstr ""
+
+#: src/Entries.php:201
+msgid "Security check failed."
+msgstr ""
+
+#: src/Entries.php:201
+msgid "Security Error"
+msgstr ""
+
+#: src/Entries.php:269
+msgid "All Data (JSON)"
+msgstr ""
+
+#: src/Entries.php:270
+msgid "Date"
+msgstr ""
+
+#: src/Entries.php:270
+#: templates/admin/docs-page.php:169
+msgctxt "table column header"
+msgid "Form"
+msgstr ""
+
+#: src/Entries.php:270
+#: templates/admin/docs-page.php:177
+#: templates/admin/entries-page.php:147
+msgid "Status"
+msgstr ""
+
+#: src/Entries.php:270
+msgid "Admin Note"
+msgstr ""
+
+#: src/Entries.php:359
+msgid "Entry deleted successfully!"
+msgstr ""
+
+#: src/Entries.php:359
+msgid "Selected entries deleted successfully!"
+msgstr ""
+
+#: src/Entries.php:359
+msgid "Status updated successfully!"
+msgstr ""
+
+#: src/Frontend.php:45
+msgid "Checking security..."
+msgstr ""
+
+#: src/Frontend.php:46
+msgid "Security check failed (reCAPTCHA)"
+msgstr ""
+
+#: src/Frontend.php:47
+msgid "Please wait, verifying your security..."
+msgstr ""
+
+#: src/Frontend.php:48
+msgid "Processing..."
+msgstr ""
+
+#: src/Frontend.php:49
+msgid "Connection error"
+msgstr ""
+
+#: src/Frontend.php:50
+#: templates/frontend/form.php:97
+msgid "Submit Form"
+msgstr ""
+
+#: src/Frontend.php:51
+msgid "This field is required"
+msgstr ""
+
+#: src/Frontend.php:52
+msgid "Please enter a valid email address"
+msgstr ""
+
+#: src/Frontend.php:53
+msgid "Please correct the highlighted fields and try again"
+msgstr ""
+
+#: src/Frontend.php:65
+msgid "No fields found in this form"
+msgstr ""
+
+#: src/OAuth.php:123
+#: src/OAuth.php:164
+#: src/OAuth.php:234
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: src/OAuth.php:128
+msgid "Invalid provider."
+msgstr ""
+
+#: src/OAuth.php:132
+msgid "Please enter and save your Client ID / Client Secret before connecting."
+msgstr ""
+
+#: src/OAuth.php:171
+msgid "State verification failed. Please try connecting again."
+msgstr ""
+
+#. translators: %s: error description returned by the OAuth provider.
+#: src/OAuth.php:177
+#, php-format
+msgid "The provider denied the request: %s"
+msgstr ""
+
+#: src/OAuth.php:182
+msgid "Authorization code not received."
+msgstr ""
+
+#. translators: %s: connection error message.
+#: src/OAuth.php:199
+#, php-format
+msgid "Could not connect to the token endpoint: %s"
+msgstr ""
+
+#: src/OAuth.php:204
+msgid "Refresh token not received."
+msgstr ""
+
+#. translators: %s: error message returned by the OAuth provider.
+#: src/OAuth.php:207
+#, php-format
+msgid "Token exchange failed: %s"
+msgstr ""
+
+#: src/OAuth.php:216
+msgid "Encryption failed; the connection was not saved. Please check the server's OpenSSL."
+msgstr ""
+
+#: templates/admin/analytics-page.php:12
+msgid "📊 Analytics Dashboard"
+msgstr ""
+
+#: templates/admin/analytics-page.php:14
+msgid "📅 Date range:"
+msgstr ""
+
+#: templates/admin/analytics-page.php:16
+#: templates/admin/dashboard-widget.php:26
+msgid "Last 7 days"
+msgstr ""
+
+#: templates/admin/analytics-page.php:17
+#: templates/admin/dashboard-widget.php:30
+msgid "Last 30 days"
+msgstr ""
+
+#: templates/admin/analytics-page.php:18
+msgid "Last 90 days"
+msgstr ""
+
+#: templates/admin/analytics-page.php:19
+msgid "1 year"
+msgstr ""
+
+#: templates/admin/analytics-page.php:20
+msgid "Custom..."
+msgstr ""
+
+#: templates/admin/analytics-page.php:26
+msgid "OK"
+msgstr ""
+
+#: templates/admin/analytics-page.php:36
+#: templates/admin/dashboard-widget.php:34
+msgid "Total"
+msgstr ""
+
+#: templates/admin/analytics-page.php:41
+msgid "Selected period"
+msgstr ""
+
+#: templates/admin/analytics-page.php:47
+#: templates/admin/dashboard-widget.php:22
+msgid "Today"
+msgstr ""
+
+#: templates/admin/analytics-page.php:52
+msgid "Avg/day"
+msgstr ""
+
+#: templates/admin/analytics-page.php:59
+msgid "📈 Submissions per day"
+msgstr ""
+
+#: templates/admin/analytics-page.php:65
+msgid "📊 Status"
+msgstr ""
+
+#: templates/admin/analytics-page.php:70
+#: templates/admin/analytics-page.php:80
+#: templates/admin/analytics-page.php:86
+msgid "Loading..."
+msgstr ""
+
+#: templates/admin/analytics-page.php:78
+msgid "🏆 Top forms"
+msgstr ""
+
+#: templates/admin/analytics-page.php:84
+msgid "🕐 Recent entries"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:22
+msgid "🎨 Submit Button Style"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:25
+msgid "Background"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:29
+msgid "Text"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:33
+msgid "Hover"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:37
+msgid "Radius (px)"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:41
+msgid "Font size (px)"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:45
+msgid "Leave any field empty to use the default. Applies to this form only."
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:47
+msgid "⚙️ Advanced CSS (for the submit button)"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:48
+msgid "e.g. box-shadow: 0 4px 12px rgba(0,0,0,.25); letter-spacing: 1px;"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:49
+msgid "CSS declarations only (no selector needed) — they are applied to this form’s submit button, scoped and sanitized automatically."
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:54
+msgid "✉️ Customer Reply Email Template:"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:56
+msgid "🏨 Booking Confirmation"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:57
+msgid "📩 General Inquiry"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:58
+msgid "✏️ Custom Template"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:60
+msgid "Select the email content format to send back to the customer when this form is submitted"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:63
+msgid "👁️ Preview"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:64
+msgid "✏️ Edit from this template"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:65
+msgid "🧪 Send a test email to me"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:71
+msgid "📌 Email Subject:"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:72
+msgid "e.g. Thank you for contacting us - {site_name}"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:76
+msgid "📝 Email Body:"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:77
+msgid "Type email content, HTML supported..."
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:78
+msgid "Supports both plain text and HTML — the system will automatically wrap it in a beautiful layout"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:82
+msgid "🏷️ Available Merge Tags (click to insert):"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:91
+msgid "Click a tag to insert it into the email body field"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:91
+msgid "table of all data"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:91
+msgid "name"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:91
+msgid "value of that field"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:100
+msgid "Move"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:101
+msgid "Label (text)"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:104
+msgid "Placeholder (text only)"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:105
+msgid "Options (separated by commas \",\")"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:107
+msgid "Required?"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:108
+#: templates/admin/entries-page.php:149
+msgid "Actions"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:142
+msgid "+ Add New Field"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:149
+#: templates/admin/builder-meta-box.php:153
+msgid "Email Preview"
+msgstr ""
+
+#: templates/admin/builder-meta-box.php:151
+msgid "Close preview"
+msgstr ""
+
+#: templates/admin/dashboard-widget.php:60
+msgid "📥 Recent entries"
+msgstr ""
+
+#: templates/admin/dashboard-widget.php:61
+msgid "View all →"
+msgstr ""
+
+#: templates/admin/docs-page.php:33
+msgid "📖 User Guide"
+msgstr ""
+
+#: templates/admin/docs-page.php:34
+msgid "InsightX Form — A form and customer data management system for businesses"
+msgstr ""
+
+#: templates/admin/docs-page.php:37
+msgid "📝 Creating a Form"
+msgstr ""
+
+#: templates/admin/docs-page.php:39
+msgid "Go to <strong>Forms → Create New Form</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:40
+msgid "Set a <strong>form name</strong> (e.g. \"Room Booking Form\")"
+msgstr ""
+
+#: templates/admin/docs-page.php:41
+msgid "Add the fields you need from the table below"
+msgstr ""
+
+#: templates/admin/docs-page.php:42
+msgid "Choose an <strong>auto-reply email template</strong> (Booking / Inquiry / Custom)"
+msgstr ""
+
+#: templates/admin/docs-page.php:43
+msgid "Click <strong>Publish</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:45
+msgid "Supported Field Types"
+msgstr ""
+
+#: templates/admin/docs-page.php:47
+msgid "Type"
+msgstr ""
+
+#: templates/admin/docs-page.php:47
+#: templates/admin/docs-page.php:168
+msgid "Description"
+msgstr ""
+
+#: templates/admin/docs-page.php:48
+msgid "Short text (name, address)"
+msgstr ""
+
+#: templates/admin/docs-page.php:49
+msgid "Long text"
+msgstr ""
+
+#: templates/admin/docs-page.php:50
+msgid "Email — the system automatically sends a confirmation email to the customer"
+msgstr ""
+
+#: templates/admin/docs-page.php:51
+msgid "Phone number (digits only)"
+msgstr ""
+
+#: templates/admin/docs-page.php:52
+msgid "Numbers"
+msgstr ""
+
+#: templates/admin/docs-page.php:53
+msgid "Date picker (Check-in/out are linked automatically)"
+msgstr ""
+
+#: templates/admin/docs-page.php:54
+msgid "Options — enter them separated by commas, e.g."
+msgstr ""
+
+#: templates/admin/docs-page.php:55
+msgid "Group heading (not submitted)"
+msgstr ""
+
+#: templates/admin/docs-page.php:57
+msgid "💡 Drag the ☰ icon to reorder fields. Set Width to 50% to place two fields side by side"
+msgstr ""
+
+#: templates/admin/docs-page.php:62
+msgid "🖥️ Displaying a Form on Your Site"
+msgstr ""
+
+#: templates/admin/docs-page.php:64
+msgid "Go to <strong>Forms → All Forms</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:65
+msgid "Copy the shortcode, e.g. <code>[advanced_form id=\"123\"]</code>"
+msgstr ""
+
+#: templates/admin/docs-page.php:66
+msgid "Paste it into the page or post where you want it to appear"
+msgstr ""
+
+#: templates/admin/docs-page.php:67
+msgid "💡 The same shortcode can be placed on multiple pages"
+msgstr ""
+
+#: templates/admin/docs-page.php:72
+msgid "📧 SMTP Settings & Email Testing"
+msgstr ""
+
+#: templates/admin/docs-page.php:74
+msgid "Go to <strong>Forms → ⚙️ System Settings</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:75
+msgid "Check <strong>Enable SMTP</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:76
+msgid "Enter the Host, Port, Username, and Password"
+msgstr ""
+
+#: templates/admin/docs-page.php:77
+msgid "Click <strong>Save</strong>, then scroll down and click <strong>\"📨 Send Test Email\"</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:79
+msgid "Example Values for Gmail"
+msgstr ""
+
+#: templates/admin/docs-page.php:81
+msgid "Field"
+msgstr ""
+
+#: templates/admin/docs-page.php:81
+msgid "Value"
+msgstr ""
+
+#: templates/admin/docs-page.php:84
+msgid "Your Gmail address"
+msgstr ""
+
+#: templates/admin/docs-page.php:85
+msgid "16-character App Password"
+msgstr ""
+
+#: templates/admin/docs-page.php:87
+msgid "⚠️ You must enable 2-Step Verification in your Google Account and create an App Password before it will work"
+msgstr ""
+
+#: templates/admin/docs-page.php:89
+msgid "🔐 SMTP Security"
+msgstr ""
+
+#: templates/admin/docs-page.php:91
+msgid "🔒 <strong>Password is encrypted with AES-256-CBC</strong> automatically before saving — leave it blank if you do not want to change it"
+msgstr ""
+
+#: templates/admin/docs-page.php:92
+msgid "🔒 <strong>SSL Verification</strong> is enabled by default — only check the \"Disable SSL\" checkbox for development"
+msgstr ""
+
+#: templates/admin/docs-page.php:95
+msgid "Admin Notifications"
+msgstr ""
+
+#: templates/admin/docs-page.php:96
+msgid "Check \"Enable admin notification email\" and specify the recipient email — the admin will receive a notification email immediately every time someone submits the form"
+msgstr ""
+
+#: templates/admin/docs-page.php:101
+msgid "🔐 Connect SMTP via OAuth2 (Google / Microsoft 365)"
+msgstr ""
+
+#: templates/admin/docs-page.php:103
+msgid "OAuth2 is more secure than Basic Auth and <strong>required for Microsoft 365</strong> because Microsoft has disabled Basic Auth (SMTP AUTH) for Exchange Online. In the settings page, set \"Authentication Method\" to Google OAuth2 or Microsoft 365 OAuth2"
+msgstr ""
+
+#: templates/admin/docs-page.php:105
+msgid "💡 The settings page has a <strong>Redirect URI</strong> field — copy it into the steps below. It must match 100%"
+msgstr ""
+
+#: templates/admin/docs-page.php:107
+msgid "🟦 Google (Gmail / Workspace)"
+msgstr ""
+
+#: templates/admin/docs-page.php:108
+msgid "Go to <a href=\"https://console.cloud.google.com/apis/credentials\" target=\"_blank\">Google Cloud Console → Credentials</a> and create a project (if you do not have one yet)"
+msgstr ""
+
+#: templates/admin/docs-page.php:109
+msgid "Configure the <strong>OAuth consent screen</strong> and add the scope <code>https://mail.google.com/</code>"
+msgstr ""
+
+#: templates/admin/docs-page.php:110
+msgid "Create an <strong>OAuth client ID</strong> of type <em>Web application</em>, then enter the <strong>Redirect URI</strong> from the settings page"
+msgstr ""
+
+#: templates/admin/docs-page.php:111
+msgid "Copy the <strong>Client ID</strong> and <strong>Client Secret</strong> into the settings page → click <strong>Save</strong> → click <strong>Connect Account</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:113
+msgid "🟧 Microsoft 365 (Outlook / Exchange Online)"
+msgstr ""
+
+#: templates/admin/docs-page.php:114
+msgid "Go to <a href=\"https://entra.microsoft.com/\" target=\"_blank\">Microsoft Entra (Azure AD) → App registrations</a> → New registration"
+msgstr ""
+
+#: templates/admin/docs-page.php:115
+msgid "Set a <em>Web</em> Redirect URI to the value from the settings page"
+msgstr ""
+
+#: templates/admin/docs-page.php:116
+msgid "Go to <strong>API permissions</strong> → add <code>https://outlook.office.com/SMTP.Send</code> and <code>offline_access</code>"
+msgstr ""
+
+#: templates/admin/docs-page.php:117
+msgid "Go to <strong>Certificates &amp; secrets</strong> → create a <strong>Client secret</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:118
+msgid "Enter the <strong>Client ID</strong>, <strong>Client Secret</strong>, and <strong>Tenant ID</strong> (Directory ID) on the settings page → click <strong>Save</strong> → click <strong>Connect Account</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:120
+msgid "⚠️ An Exchange administrator must also grant the <code>SMTP.Send</code> permission to the mailbox used to send email"
+msgstr ""
+
+#: templates/admin/docs-page.php:121
+msgid "🔒 The Client Secret and Refresh Token are encrypted with AES-256-CBC before being stored in the database"
+msgstr ""
+
+#: templates/admin/docs-page.php:126
+msgid "🛡️ Captcha Settings"
+msgstr ""
+
+#: templates/admin/docs-page.php:128
+msgid "Two services are supported:"
+msgstr ""
+
+#: templates/admin/docs-page.php:130
+msgid "Service"
+msgstr ""
+
+#: templates/admin/docs-page.php:130
+msgid "How to Get a Key"
+msgstr ""
+
+#: templates/admin/docs-page.php:131
+msgid "Create one at <a href=\"https://www.google.com/recaptcha/admin\" target=\"_blank\">Google reCAPTCHA Admin</a>"
+msgstr ""
+
+#: templates/admin/docs-page.php:132
+msgid "Create one at <a href=\"https://dash.cloudflare.com/?to=/:account/turnstile\" target=\"_blank\">Cloudflare Dashboard</a>"
+msgstr ""
+
+#: templates/admin/docs-page.php:134
+msgid "Select a service from the dropdown → enter the Site Key + Secret Key → save"
+msgstr ""
+
+#: templates/admin/docs-page.php:135
+msgid "💡 The system automatically verifies the token on both the frontend and the server side"
+msgstr ""
+
+#: templates/admin/docs-page.php:140
+msgid "✉️ Custom Email Template (New)"
+msgstr ""
+
+#: templates/admin/docs-page.php:142
+msgid "Since v0.3.0 you can customize the customer auto-reply email content from the form editor"
+msgstr ""
+
+#: templates/admin/docs-page.php:144
+msgid "How to Use"
+msgstr ""
+
+#: templates/admin/docs-page.php:145
+msgid "Edit a form → choose <strong>\"✏️ Custom (Custom Template)\"</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:146
+msgid "Fill in the <strong>email subject</strong> and <strong>body</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:147
+msgid "Use <strong>Merge Tags</strong> to insert data automatically (click a tag to insert it)"
+msgstr ""
+
+#: templates/admin/docs-page.php:149
+msgid "Supported Merge Tags"
+msgstr ""
+
+#: templates/admin/docs-page.php:151
+msgid "Output"
+msgstr ""
+
+#: templates/admin/docs-page.php:152
+msgid "Site name"
+msgstr ""
+
+#: templates/admin/docs-page.php:153
+msgid "Form title"
+msgstr ""
+
+#: templates/admin/docs-page.php:154
+msgid "HTML table of all submitted data"
+msgstr ""
+
+#: templates/admin/docs-page.php:155
+msgid "Value of the specified field, e.g."
+msgstr ""
+
+#: templates/admin/docs-page.php:157
+msgid "💡 The system automatically wraps your content in a nice layout (header + footer)"
+msgstr ""
+
+#: templates/admin/docs-page.php:162
+msgid "📥 Managing Entries"
+msgstr ""
+
+#: templates/admin/docs-page.php:164
+msgid "Go to <strong>Forms → 📥 Entries</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php:166
+msgid "Filters"
+msgstr ""
+
+#: templates/admin/docs-page.php:168
+msgid "Filter"
+msgstr ""
+
+#: templates/admin/docs-page.php:169
+msgid "View only the selected form (data shown in separate columns)"
+msgstr ""
+
+#: templates/admin/docs-page.php:170
+msgid "Date range"
+msgstr ""
+
+#: templates/admin/docs-page.php:170
+msgid "Filter by submission date (from - to)"
+msgstr ""
+
+#: templates/admin/docs-page.php:171
+#: templates/admin/entries-page.php:97
+msgid "Search"
+msgstr ""
+
+#: templates/admin/docs-page.php:171
+msgid "Type a name / phone / email / IP"
+msgstr ""
+
+#: templates/admin/docs-page.php:172
+msgid "Status bar"
+msgstr ""
+
+#: templates/admin/docs-page.php:172
+msgid "Click the bar at the top to filter by status"
+msgstr ""
+
+#: templates/admin/docs-page.php:175
+msgid "Status System"
+msgstr ""
+
+#: templates/admin/docs-page.php:177
+msgid "Meaning"
+msgstr ""
+
+#: templates/admin/docs-page.php:178
+msgid "🔵 New"
+msgstr ""
+
+#: templates/admin/docs-page.php:178
+msgid "New submission, not yet handled"
+msgstr ""
+
+#: templates/admin/docs-page.php:179
+msgid "🟡 In Progress"
+msgstr ""
+
+#: templates/admin/docs-page.php:179
+msgid "Being contacted / handled"
+msgstr ""
+
+#: templates/admin/docs-page.php:180
+msgid "✅ Completed"
+msgstr ""
+
+#: templates/admin/docs-page.php:180
+msgid "Handled completely"
+msgstr ""
+
+#: templates/admin/docs-page.php:181
+msgid "🔴 Trash"
+msgstr ""
+
+#: templates/admin/docs-page.php:181
+msgid "Spam or irrelevant data"
+msgstr ""
+
+#: templates/admin/docs-page.php:183
+msgid "Change the status from the dropdown in each row, or select multiple entries and use Bulk Actions"
+msgstr ""
+
+#: templates/admin/docs-page.php:185
+msgid "Admin Notes"
+msgstr ""
+
+#: templates/admin/docs-page.php:186
+msgid "Click <strong>\"✏️ + Add Note\"</strong> to save a message, e.g. \"Called the customer\" — saved instantly without reloading"
+msgstr ""
+
+#: templates/admin/docs-page.php:191
+msgid "📊 CSV Export & Dashboard"
+msgstr ""
+
+#: templates/admin/docs-page.php:193
+msgid "CSV Export"
+msgstr ""
+
+#: templates/admin/docs-page.php:194
+msgid "Set the filters you want (form / date / status)"
+msgstr ""
+
+#: templates/admin/docs-page.php:195
+msgid "Click the <strong>\"📊 Export CSV\"</strong> button at the top right"
+msgstr ""
+
+#: templates/admin/docs-page.php:196
+msgid "The CSV file downloads automatically (Thai language supported)"
+msgstr ""
+
+#: templates/admin/docs-page.php:199
+msgid "When you open <strong>WP-Admin → Dashboard</strong> you will see the \"📊 InsightX Form\" widget showing:"
+msgstr ""
+
+#: templates/admin/docs-page.php:201
+msgid "Statistics: Today / 7 days / 30 days / All time"
+msgstr ""
+
+#: templates/admin/docs-page.php:202
+msgid "Bar chart of status proportions"
+msgstr ""
+
+#: templates/admin/docs-page.php:203
+msgid "The 5 latest entries with a \"View all\" link"
+msgstr ""
+
+#: templates/admin/docs-page.php:209
+msgid "❓ Frequently Asked Questions (FAQ)"
+msgstr ""
+
+#: templates/admin/docs-page.php:211
+msgid "The form is not sending email — what should I do?"
+msgstr ""
+
+#: templates/admin/docs-page.php:212
+msgid "Check your SMTP settings → use the \"Send Test Email\" button to see the error message"
+msgstr ""
+
+#: templates/admin/docs-page.php:214
+msgid "Customer entered an email but did not receive the confirmation email?"
+msgstr ""
+
+#: templates/admin/docs-page.php:215
+msgid "Make sure the form has an <code>Email</code> field — the system automatically sends the confirmation email to that address"
+msgstr ""
+
+#: templates/admin/docs-page.php:217
+msgid "Can I use the same form on multiple pages?"
+msgstr ""
+
+#: templates/admin/docs-page.php:218
+msgid "Yes — copy the same shortcode and paste it on as many pages as you like"
+msgstr ""
+
+#: templates/admin/docs-page.php:220
+msgid "Will my data be lost after updating the plugin?"
+msgstr ""
+
+#: templates/admin/docs-page.php:221
+msgid "No — data is stored in the WordPress database, separate from the plugin files"
+msgstr ""
+
+#: templates/admin/docs-page.php:223
+msgid "Is the SMTP password secure?"
+msgstr ""
+
+#: templates/admin/docs-page.php:224
+msgid "Yes — the password is encrypted with AES-256-CBC using WordPress authentication salts as the key before being saved to the database"
+msgstr ""
+
+#: templates/admin/docs-page.php:226
+msgid "Will data be deleted when the plugin is uninstalled?"
+msgstr ""
+
+#: templates/admin/docs-page.php:227
+msgid "Yes — uninstalling the plugin deletes all data tables and settings. If you want to keep your data, export a CSV first"
+msgstr ""
+
+#. translators: %d: total number of entries.
+#: templates/admin/entries-page.php:39
+#, php-format
+msgid "(%d entries)"
+msgstr ""
+
+#: templates/admin/entries-page.php:41
+msgid "📊 Export CSV"
+msgstr ""
+
+#: templates/admin/entries-page.php:57
+msgid "📋 All"
+msgstr ""
+
+#: templates/admin/entries-page.php:73
+msgid "📑 Form"
+msgstr ""
+
+#: templates/admin/entries-page.php:75
+msgid "-- All forms --"
+msgstr ""
+
+#: templates/admin/entries-page.php:83
+msgid "📅 Date range"
+msgstr ""
+
+#: templates/admin/entries-page.php:92
+msgid "🔍 Search"
+msgstr ""
+
+#: templates/admin/entries-page.php:93
+msgid "Name, phone, email, IP..."
+msgstr ""
+
+#: templates/admin/entries-page.php:99
+msgid "Clear"
+msgstr ""
+
+#: templates/admin/entries-page.php:114
+msgid "Bulk Actions"
+msgstr ""
+
+#: templates/admin/entries-page.php:115
+msgid "✅ Mark as \"Done\""
+msgstr ""
+
+#: templates/admin/entries-page.php:116
+msgid "🟡 Mark as \"In progress\""
+msgstr ""
+
+#: templates/admin/entries-page.php:117
+msgid "🔴 Mark as \"Junk\""
+msgstr ""
+
+#: templates/admin/entries-page.php:118
+msgid "🗑️ Delete selected"
+msgstr ""
+
+#: templates/admin/entries-page.php:120
+msgid "Apply"
+msgstr ""
+
+#: templates/admin/entries-page.php:120
+msgid "Confirm action on the selected entries?"
+msgstr ""
+
+#. translators: 1: total number of entries, 2: current page number, 3: total number of pages.
+#: templates/admin/entries-page.php:126
+#, php-format
+msgid "%1$d entries · Page %2$d/%3$d"
+msgstr ""
+
+#: templates/admin/entries-page.php:138
+msgid "Submitted"
+msgstr ""
+
+#: templates/admin/entries-page.php:139
+msgid "From form"
+msgstr ""
+
+#: templates/admin/entries-page.php:145
+msgid "Data"
+msgstr ""
+
+#: templates/admin/entries-page.php:148
+msgid "Note"
+msgstr ""
+
+#: templates/admin/entries-page.php:188
+msgid "Click to edit note"
+msgstr ""
+
+#: templates/admin/entries-page.php:197
+msgid "Add a note for this entry..."
+msgstr ""
+
+#: templates/admin/entries-page.php:200
+msgid "Cancel"
+msgstr ""
+
+#: templates/admin/entries-page.php:207
+msgid "Confirm deletion?"
+msgstr ""
+
+#: templates/admin/entries-page.php:207
+msgid "🗑️ Delete"
+msgstr ""
+
+#: templates/admin/entries-page.php:215
+msgid "No matching entries found, or no form submissions yet."
+msgstr ""
+
+#: templates/admin/settings-page.php:25
+msgid "⚙️ Global System Settings"
+msgstr ""
+
+#: templates/admin/settings-page.php:28
+msgid "✅ OAuth account connected successfully"
+msgstr ""
+
+#: templates/admin/settings-page.php:30
+msgid "ℹ️ OAuth account disconnected"
+msgstr ""
+
+#: templates/admin/settings-page.php:32
+msgid "OAuth connection failed:"
+msgstr ""
+
+#: templates/admin/settings-page.php:36
+msgid "CAPTCHA is not configured"
+msgstr ""
+
+#: templates/admin/settings-page.php:36
+msgid "All forms will have no bot protection. Please configure the Site Key and Secret Key below to enable it."
+msgstr ""
+
+#: templates/admin/settings-page.php:45
+msgid "🔔 Admin Notification"
+msgstr ""
+
+#: templates/admin/settings-page.php:48
+msgid "Enable admin email notifications"
+msgstr ""
+
+#. translators: %s: fallback admin email address wrapped in <code> tags.
+#: templates/admin/settings-page.php:52
+#, php-format
+msgid "Recipient email (if left empty, emails will be sent to: %s)"
+msgstr ""
+
+#: templates/admin/settings-page.php:54
+msgid "e.g. admin@example.com"
+msgstr ""
+
+#: templates/admin/settings-page.php:58
+msgid "🛡️ Security Settings (Captcha)"
+msgstr ""
+
+#: templates/admin/settings-page.php:77
+msgid "Block form submissions when CAPTCHA is not configured (recommended)"
+msgstr ""
+
+#: templates/admin/settings-page.php:79
+msgid "When enabled, if the selected CAPTCHA service has no Secret Key, all form submissions will be rejected instead of allowed through — disable this only if you intentionally use forms without CAPTCHA."
+msgstr ""
+
+#: templates/admin/settings-page.php:83
+msgid "🌐 Trusted Proxies (for sites behind a Reverse Proxy / CDN)"
+msgstr ""
+
+#. translators: %1$s: CF-Connecting-IP header name wrapped in <code> tags, %2$s: X-Forwarded-For header name wrapped in <code> tags.
+#: templates/admin/settings-page.php:86
+#, php-format
+msgid "Enter the IPs or CIDRs of trusted proxies (e.g. Cloudflare, Nginx reverse proxy), one per line — the real user IP is only read from the %1$s / %2$s header when the request comes from these proxies."
+msgstr ""
+
+#: templates/admin/settings-page.php:87
+msgid "Leave empty = trust REMOTE_ADDR only (default, safest)"
+msgstr ""
+
+#: templates/admin/settings-page.php:94
+msgid "📧 Email Settings (SMTP)"
+msgstr ""
+
+#: templates/admin/settings-page.php:95
+msgid "Enable SMTP"
+msgstr ""
+
+#: templates/admin/settings-page.php:98
+msgid "Authentication Method"
+msgstr ""
+
+#: templates/admin/settings-page.php:100
+msgid "App Password / Password (Basic Auth)"
+msgstr ""
+
+#: templates/admin/settings-page.php:110
+msgid "Provider (Preset)"
+msgstr ""
+
+#: templates/admin/settings-page.php:112
+msgid "— Select to auto-fill Host/Port —"
+msgstr ""
+
+#: templates/admin/settings-page.php:115
+msgid "Custom"
+msgstr ""
+
+#: templates/admin/settings-page.php:121
+msgid "16-character app password"
+msgstr ""
+
+#: templates/admin/settings-page.php:121
+msgid "🔒 Password is encrypted before saving — leave empty to keep it unchanged."
+msgstr ""
+
+#: templates/admin/settings-page.php:125
+msgid "💡 How to get an App Password for Gmail:"
+msgstr ""
+
+#. translators: %s: link to the Google Account security settings page.
+#: templates/admin/settings-page.php:129
+#, php-format
+msgid "Go to %s (Security)"
+msgstr ""
+
+#. translators: %s: "2-Step Verification" label wrapped in <strong> tags.
+#: templates/admin/settings-page.php:133
+#, php-format
+msgid "Enable %s (2-step verification)"
+msgstr ""
+
+#. translators: %s: "App passwords" menu label wrapped in <strong> tags.
+#: templates/admin/settings-page.php:137
+#, php-format
+msgid "Search for %s (app passwords)"
+msgstr ""
+
+#: templates/admin/settings-page.php:139
+msgid "Name it (e.g. \"Website SMTP\") and click Create"
+msgstr ""
+
+#. translators: %s: "Password" field label wrapped in <strong> tags.
+#: templates/admin/settings-page.php:142
+#, php-format
+msgid "Copy the 16-character code into the %s field above (no spaces needed)"
+msgstr ""
+
+#. translators: %s: "Microsoft 365 OAuth2" label wrapped in <strong> tags.
+#: templates/admin/settings-page.php:147
+#, php-format
+msgid "Basic Auth only works for tenants that still have SMTP AUTH enabled — many tenants have disabled it. We recommend using %s instead."
+msgstr ""
+
+#: templates/admin/settings-page.php:156
+msgid "Connected"
+msgstr ""
+
+#: templates/admin/settings-page.php:157
+msgid "Disconnect"
+msgstr ""
+
+#: templates/admin/settings-page.php:161
+msgid "Not connected"
+msgstr ""
+
+#. translators: %s: "save the settings" label wrapped in <strong> tags.
+#: templates/admin/settings-page.php:163
+#, php-format
+msgid "Enter your Client ID / Secret and %s first, then click the \"Connect\" button below"
+msgstr ""
+
+#. translators: %s: "save the settings" label wrapped in <strong> tags.
+#: templates/admin/settings-page.php:163
+msgid "save the settings"
+msgstr ""
+
+#: templates/admin/settings-page.php:170
+msgid "🔒 Encrypted before saving — leave empty to keep it unchanged."
+msgstr ""
+
+#. translators: %s: the literal value "common" wrapped in <code> tags.
+#: templates/admin/settings-page.php:173
+#, php-format
+msgid "Enter your Azure Tenant ID (Directory ID) or leave it as %s"
+msgstr ""
+
+#: templates/admin/settings-page.php:175
+msgid "Copy this value into Google Cloud Console / Azure App registration"
+msgstr ""
+
+#: templates/admin/settings-page.php:179
+msgid "Reconnect"
+msgstr ""
+
+#: templates/admin/settings-page.php:179
+msgid "Connect Account"
+msgstr ""
+
+#: templates/admin/settings-page.php:183
+msgid "💡 See the \"User Guide\" page for OAuth2 setup instructions"
+msgstr ""
+
+#: templates/admin/settings-page.php:184
+msgid "You need to register an OAuth app in Google Cloud Console (Gmail) or Azure App registration (Microsoft 365), then configure the Redirect URI above to match."
+msgstr ""
+
+#: templates/admin/settings-page.php:192
+msgid "⚠️ Disable SSL Certificate Verification"
+msgstr ""
+
+#: templates/admin/settings-page.php:192
+msgid "(Development only)"
+msgstr ""
+
+#. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
+#: templates/admin/settings-page.php:196
+#, php-format
+msgid "Enable only when the server does not have a valid SSL certificate — %s"
+msgstr ""
+
+#. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
+#: templates/admin/settings-page.php:196
+msgid "Not recommended for Production"
+msgstr ""
+
+#: templates/admin/settings-page.php:201
+msgid "Save All Settings"
+msgstr ""
+
+#: templates/admin/settings-page.php:205
+msgid "📨 Test Email Sending (SMTP Test)"
+msgstr ""
+
+#: templates/admin/settings-page.php:206
+msgid "Send a test email to the specified address to verify that your SMTP settings are correct."
+msgstr ""
+
+#: templates/admin/settings-page.php:209
+msgid "Recipient email:"
+msgstr ""
+
+#. translators: %s: form title.
+#: templates/emails/admin-notification.php:21
+#, php-format
+msgid "New Submission: %s"
+msgstr ""
+
+#. translators: %s: site name wrapped in <strong> tags.
+#: templates/emails/admin-notification.php:25
+#, php-format
+msgid "A new submission has arrived from the website %s"
+msgstr ""
+
+#: templates/emails/admin-notification.php:38
+msgid "System Info:"
+msgstr ""
+
+#: templates/emails/admin-notification.php:40
+msgid "Date:"
+msgstr ""
+
+#: templates/emails/admin-notification.php:41
+msgid "IP Address:"
+msgstr ""
+
+#: templates/emails/admin-notification.php:44
+msgid "Log in to manage submissions"
+msgstr ""
+
+#: templates/emails/booking.php:21
+#: templates/emails/booking.php:40
+msgid "Room Booking Confirmed"
+msgstr ""
+
+#: templates/emails/booking.php:22
+#: templates/emails/booking.php:41
+msgid "Thank you for choosing to book with us."
+msgstr ""
+
+#: templates/emails/booking.php:22
+#: templates/emails/booking.php:41
+msgid "We have received your room booking request. Details are as follows:"
+msgstr ""
+
+#: templates/emails/booking.php:25
+#: templates/emails/booking.php:48
+msgid "Note:"
+msgstr ""
+
+#: templates/emails/booking.php:25
+#: templates/emails/booking.php:48
+msgid "This booking is only a preliminary request. Our staff will check room availability and contact you again to confirm."
+msgstr ""
+
+#: templates/emails/booking.php:37
+msgid "Booking Confirmation"
+msgstr ""
+
+#: templates/emails/booking.php:51
+msgid "If you have any questions, please contact our staff."
+msgstr ""
+
+#: templates/emails/booking.php:51
+#: templates/emails/custom-layout.php:28
+#: templates/emails/inquiry.php:45
+msgid "All rights reserved."
+msgstr ""
+
+#: templates/emails/inquiry.php:21
+#: templates/emails/inquiry.php:37
+msgid "We Have Received Your Message"
+msgstr ""
+
+#: templates/emails/inquiry.php:22
+#: templates/emails/inquiry.php:38
+msgid "Thank you for contacting us. Our team will review your information and get back to you as soon as possible."
+msgstr ""
+
+#: templates/emails/inquiry.php:22
+#: templates/emails/inquiry.php:38
+msgid "The details you submitted are as follows:"
+msgstr ""
+
+#: templates/emails/inquiry.php:34
+msgid "General Inquiry"
+msgstr ""
+
+#: templates/emails/inquiry.php:45
+msgid "This is an automated message from the website."
+msgstr ""
+
+#: templates/frontend/fields/choice-group.php:22
+msgid "No options have been configured by the admin yet"
+msgstr ""
+
+#: templates/frontend/fields/select.php:13
+msgid "Please select"
+msgstr ""
+
+#: templates/frontend/form.php:96
+msgid "Please fill in all required fields to submit the form."
+msgstr ""
