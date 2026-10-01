@@ -1,6 +1,6 @@
 <?php
 /**
- * Template: entries list page (wp-admin → แบบฟอร์ม → 📥 รายการข้อมูล).
+ * Template: entries list page (wp-admin → InsightX Form → 📥 รายการข้อมูล).
  *
  * Extracted from ISXF\Entries::render_page() (Phase 2.2 view split).
  * Data gathering (filters, queries, counts, URLs) stays in the render
@@ -40,13 +40,15 @@
                 ?></span><?php endif; ?></h1>
                 <a href="<?php echo esc_url( $export_url ); ?>" class="ix-btn-export"><?php esc_html_e( '📊 Export CSV', 'insightx-form' ); ?></a>
             </div>
+            <?php /* WP moves admin notices to right after this marker, instead of between the title and the Export button. */ ?>
+            <hr class="wp-header-end">
 
             <!-- Stats Cards -->
             <div class="ix-stats">
                 <?php foreach ( $stat_cards as $sc ) : ?>
                     <div class="ix-stat-card">
                         <div class="ix-stat-num" style="color:<?php echo $sc['color']; ?>"><?php echo $status_counts[$sc['key']]; ?></div>
-                        <div class="ix-stat-label"><?php echo $sc['icon'] . ' ' . $sc['label']; ?></div>
+                        <div class="ix-stat-label"><span class="ix-dot" style="--ix-dot:<?php echo esc_attr( $sc['color'] ); ?>" aria-hidden="true"></span><?php echo esc_html( $sc['label'] ); ?></div>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -57,7 +59,7 @@
                 <a href="<?php echo esc_url( $base_url ); ?>" class="<?php echo empty($filter_status) ? 'active' : ''; ?>"><?php esc_html_e( '📋 All', 'insightx-form' ); ?> <span class="ix-badge"><?php echo $status_counts['all']; ?></span></a>
                 <?php foreach ( $status_map as $skey => $sinfo ) : ?>
                     <a href="<?php echo esc_url( add_query_arg('filter_status', $skey, $base_url) ); ?>" class="<?php echo $filter_status === $skey ? 'active' : ''; ?>">
-                        <?php echo $sinfo['icon'] . ' ' . $sinfo['label']; ?> <span class="ix-badge"><?php echo $status_counts[$skey]; ?></span>
+                        <span class="ix-dot" style="--ix-dot:<?php echo esc_attr( $sinfo['color'] ); ?>" aria-hidden="true"></span><?php echo esc_html( $sinfo['label'] ); ?> <span class="ix-badge"><?php echo $status_counts[$skey]; ?></span>
                     </a>
                 <?php endforeach; ?>
             </div>

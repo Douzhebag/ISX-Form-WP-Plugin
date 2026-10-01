@@ -35,22 +35,52 @@
     }
 
     // === Settings Page: SMTP basic-auth preset autofill ===
-    var presetSelect = document.getElementById('isxf_smtp_preset');
-    if (presetSelect) {
-        presetSelect.onchange = function () {
-            var host = document.querySelector('input[name="isxf_smtp_host"]');
-            var port = document.querySelector('input[name="isxf_smtp_port"]');
-            var user = document.querySelector('input[name="isxf_smtp_user"]');
-            if (this.value === 'gmail') {
-                if (host) host.value = 'smtp.gmail.com';
-                if (port) port.value = '587';
-            } else if (this.value === 'resend') {
-                if (host) host.value = 'smtp.resend.com';
-                if (port) port.value = '587';
-                if (user) user.value = 'resend';
+    var applyPreset = function (preset) {
+        var host = document.querySelector('input[name="isxf_smtp_host"]');
+        var port = document.querySelector('input[name="isxf_smtp_port"]');
+        var user = document.querySelector('input[name="isxf_smtp_user"]');
+        if (preset === 'resend') {
+            if (host) host.value = 'smtp.resend.com';
+            if (port) port.value = '587';
+            if (user) user.value = 'resend';
+        } else if (preset === 'cloudflare') {
+            // Cloudflare Email Service: implicit TLS on 465 only (no STARTTLS/587).
+            if (host) host.value = 'smtp.mx.cloudflare.net';
+            if (port) port.value = '465';
+            if (user) user.value = 'api_token';
+        }
+    };
+
+    // === Settings Page: provider cards ===
+    // Each card sets the (hidden) auth-method select and fills its preset,
+    // so what gets saved is exactly what the old dropdowns saved.
+    var providerCards = document.querySelectorAll('.isxf-provider-card');
+    providerCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+            providerCards.forEach(function (c) {
+                var on = (c === card);
+                c.classList.toggle('is-selected', on);
+                c.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+            if (authSelect) {
+                authSelect.value = card.dataset.auth;
+                toggleAuth();
             }
-        };
-    }
+            applyPreset(card.dataset.preset);
+
+            // Show only the setup note of the chosen provider (none for Google / Custom).
+            var notes = document.getElementById('isxf-provider-notes');
+            if (notes) {
+                var any = false;
+                notes.querySelectorAll('[data-provider-note]').forEach(function (n) {
+                    var show = (n.dataset.providerNote === card.dataset.preset);
+                    n.hidden = !show;
+                    if (show) any = true;
+                });
+                notes.hidden = !any;
+            }
+        });
+    });
 
     // === Settings Page: SMTP test email ===
     var testBtn = document.getElementById('isxf-test-email-btn');

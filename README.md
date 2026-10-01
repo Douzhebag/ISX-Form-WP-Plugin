@@ -28,7 +28,7 @@
 2. [การสร้างฟอร์ม](#-การสร้างฟอร์ม)
 3. [การแสดงฟอร์มบนหน้าเว็บ](#️-การแสดงฟอร์มบนหน้าเว็บ)
 4. [ตั้งค่าระบบอีเมล (SMTP)](#-ตั้งค่าระบบอีเมล-smtp)
-5. [เชื่อมต่ออีเมลผ่าน OAuth2 (Google)](#-เชื่อมต่ออีเมลผ่าน-oauth2-google)
+5. [วิธีเชื่อมต่อผู้ให้บริการอีเมลแต่ละเจ้า](#-วิธีเชื่อมต่อผู้ให้บริการอีเมลแต่ละเจ้า)
 6. [ตั้งค่า Captcha](#️-ตั้งค่า-captcha)
 7. [ทดสอบส่งอีเมล](#-ทดสอบส่งอีเมล)
 8. [Custom Email Template](#-custom-email-template)
@@ -56,7 +56,7 @@
 1. ดาวน์โหลดไฟล์ `insightx-form-<version>.zip` ในส่วน **Assets** ของ [GitHub Releases](https://github.com/Douzhebag/ISX-Form-WP-Plugin/releases) (ไฟล์ติดตั้งที่ workflow สร้างให้)
 2. ไปที่ **Plugins → Add New → Upload Plugin** แล้วเลือกไฟล์ ZIP และกด **Install Now**
 3. กด **Activate** ที่ปลั๊กอิน **InsightX Form**
-4. เปิดเมนู **แบบฟอร์ม (Forms)** เพื่อสร้างฟอร์ม จากนั้นนำ shortcode เช่น `[isxf_form id="123"]` ไปวางในหน้าเว็บ โดยเปลี่ยน `123` เป็น ID ของฟอร์ม
+4. เปิดเมนู **InsightX Form** เพื่อสร้างฟอร์ม จากนั้นนำ shortcode เช่น `[isxf_form id="123"]` ไปวางในหน้าเว็บ โดยเปลี่ยน `123` เป็น ID ของฟอร์ม
 5. ตั้งค่าการส่งอีเมลและ CAPTCHA ในหน้าตั้งค่าของปลั๊กอิน แล้วทดลองส่งฟอร์มหนึ่งครั้ง
 
 ### ติดตั้งด้วยการอัปโหลดโฟลเดอร์
@@ -83,7 +83,7 @@ wp-content/plugins/insightx-form/advanced-secure-form.php
 
 ## 📝 การสร้างฟอร์ม
 
-1. ไปที่ **แบบฟอร์ม → สร้างฟอร์มใหม่**
+1. ไปที่ **InsightX Form → สร้างฟอร์มใหม่**
 2. ตั้ง **ชื่อฟอร์ม** (เช่น "แบบฟอร์มจองห้องพัก")
 3. เพิ่มฟิลด์ที่ต้องการ — รองรับ 12 ประเภท:
 
@@ -120,7 +120,7 @@ wp-content/plugins/insightx-form/advanced-secure-form.php
 
 ## 🖥️ การแสดงฟอร์มบนหน้าเว็บ
 
-1. ไปที่ **แบบฟอร์ม → ฟอร์มทั้งหมด**
+1. ไปที่ **InsightX Form → ฟอร์มทั้งหมด**
 2. คัดลอก **Shortcode** จากคอลัมน์ขวา เช่น:
    ```
    [isxf_form id="123"]
@@ -141,20 +141,100 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 
 ## 📧 ตั้งค่าระบบอีเมล (SMTP)
 
-ไปที่ **แบบฟอร์ม → ⚙️ ตั้งค่าระบบ**
-
-ระบบรองรับการยืนยันตัวตน SMTP 2 แบบ เลือกได้จาก Dropdown **"วิธียืนยันตัวตน"**:
-
-| แบบ                                  | เหมาะกับ                                                                                                                                               |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Username / Password (Basic Auth)** | Resend, Gmail (ผ่าน App Password), SMTP ทั่วไป                                                                       |
-| **OAuth2 — Google**                  | Gmail/Google Workspace แบบไม่เก็บรหัสผ่าน (ดู [หัวข้อ OAuth2](#-เชื่อมต่ออีเมลผ่าน-oauth2-google))                 |
-
-### การเปิดใช้งาน SMTP แบบ Username / Password
+ไปที่ **InsightX Form → ⚙️ ตั้งค่าระบบ** → ส่วน **📧 ตั้งค่าระบบส่งอีเมล (SMTP)**
 
 1. ✅ ติ๊ก **"เปิดใช้งาน SMTP"**
-2. เลือกวิธียืนยันตัวตนเป็น **Username / Password**
-3. กรอกข้อมูล (มี preset dropdown ช่วยเติม host/port อัตโนมัติสำหรับ Gmail / Resend):
+2. ที่หัวข้อ **วิธียืนยันตัวตน** กดการ์ดของผู้ให้บริการที่ใช้:
+
+| การ์ด          | ยืนยันตัวตนแบบ               | กดแล้วระบบเติมให้                                     | เหมาะกับ                                          |
+| -------------- | ---------------------------- | ----------------------------------------------------- | ------------------------------------------------- |
+| **Google**     | OAuth2 (XOAUTH2)             | — (กรอก Client ID / Secret แล้วกดเชื่อมต่อบัญชี)     | Gmail / Google Workspace แบบไม่เก็บรหัสผ่าน      |
+| **Resend**     | Username / Password          | `smtp.resend.com` · `587` · user `resend`             | มีโดเมนแต่ไม่มีเมลเซิร์ฟเวอร์                    |
+| **Cloudflare** | Username / Password          | `smtp.mx.cloudflare.net` · `465` · user `api_token`   | โดเมนที่อยู่บน Cloudflare อยู่แล้ว                 |
+| **กำหนดเอง**   | Username / Password          | — (กรอก Host / Port / Username / Password เอง)       | Gmail App Password, Microsoft 365, เมลของโฮสติ้ง |
+
+3. กรอกช่องที่เหลือตามหัวข้อของแต่ละเจ้าด้านล่าง → **บันทึก** → เลื่อนลงไปกด **"📨 ส่งอีเมลทดสอบ"**
+
+> 💡 เปิดหน้ามา การ์ดที่ถูกเลือกจะดูจากค่าที่บันทึกไว้ (OAuth → Google, host ของ Resend / Cloudflare → การ์ดนั้น, นอกนั้น → กำหนดเอง) และกล่องคำแนะนำจะโชว์เฉพาะของการ์ดที่เลือก
+
+> 🔐 **Password ถูกเข้ารหัส (AES-256-CBC)** ก่อนบันทึกลงฐานข้อมูลอัตโนมัติ — เว้นว่างหากไม่ต้องการเปลี่ยนรหัสเดิม (ดูรายละเอียดใน [ความปลอดภัย](#-ความปลอดภัย))
+
+> Port `465` ใช้ SSL ให้อัตโนมัติ ส่วน port อื่นใช้ TLS
+
+### การแจ้งเตือนผู้ดูแลระบบ
+
+- ✅ ติ๊ก **"เปิดใช้งานการส่งอีเมลแจ้งเตือน Admin"**
+- ระบุอีเมลผู้รับ (หากเว้นว่าง จะส่งไปที่อีเมลแอดมินของ WordPress)
+- เมื่อมีผู้ส่งฟอร์ม แอดมินจะได้รับ Email แจ้งเตือนทันที (ตั้ง `Reply-To` เป็นอีเมลลูกค้าอัตโนมัติ ตอบกลับได้ทันทีจากอีเมล)
+
+### SSL Verification
+
+- ค่า default: **เปิด SSL verification** (ปลอดภัยสำหรับ Production)
+- สำหรับ Development: ติ๊ก **"⚠️ ปิดการตรวจสอบ SSL Certificate"** ในส่วน SMTP
+
+---
+
+## 🔌 วิธีเชื่อมต่อผู้ให้บริการอีเมลแต่ละเจ้า
+
+### 🟦 Google (OAuth2)
+
+ยืนยันตัวตนผ่าน OAuth2 (XOAUTH2) แทน username/password — ไม่ต้องเก็บรหัสผ่านอีเมลไว้ในเว็บ
+
+**ตั้งค่าฝั่ง Google Cloud Console**
+
+1. สร้างโปรเจกต์ใน [Google Cloud Console](https://console.cloud.google.com/) → เปิดใช้งาน Gmail API
+2. ตั้งค่า **OAuth consent screen** และเพิ่ม scope `https://mail.google.com/`
+3. สร้าง **OAuth Client ID** (ประเภท Web application) แล้วเพิ่ม **Authorized redirect URI** เป็นค่าในช่อง Redirect URI ของหน้าตั้งค่า (ต้องตรงกัน 100%):
+   ```
+   https://เว็บของคุณ/wp-admin/admin-post.php?action=isxf_oauth_callback
+   ```
+4. คัดลอก **Client ID** และ **Client Secret** มาใส่ในหน้าตั้งค่าระบบ
+
+**เชื่อมต่อในปลั๊กอิน**
+
+1. กดการ์ด **Google** → กรอก Client ID / Client Secret แล้ว **บันทึก** ก่อน
+2. กดปุ่ม **"เชื่อมต่อบัญชี"** → ไปหน้ายืนยันตัวตนของ Google → อนุญาตสิทธิ์ → เด้งกลับมาที่ปลั๊กอินอัตโนมัติ
+3. เชื่อมต่อสำเร็จจะเห็นอีเมลบัญชีที่เชื่อมอยู่ พร้อมปุ่ม **"ตัดการเชื่อมต่อ"**
+
+หลังเชื่อมต่อแล้ว ระบบใช้ **Access Token** (ต่ออายุอัตโนมัติผ่าน **Refresh Token** ที่เก็บแบบเข้ารหัส) ทุกครั้งที่ส่งอีเมล
+
+> **หมายเหตุความปลอดภัย:** ขั้นตอนเชื่อมต่อตรวจ `state` parameter (ป้องกัน CSRF) ทุกครั้งก่อนแลก authorization code เป็น token
+
+### ⬛ Resend
+
+1. สมัครที่ [resend.com](https://resend.com) → เพิ่มโดเมนในเมนู **Domains** → ใส่ DNS record ตามที่บอกจนขึ้น **Verified**
+2. สร้าง API key ที่ [resend.com/api-keys](https://resend.com/api-keys) (สิทธิ์ Sending access ก็พอ)
+3. กดการ์ด **Resend** แล้ววาง API key ในช่อง **Password**
+
+| ช่อง     | ค่า                                                            |
+| -------- | -------------------------------------------------------------- |
+| Host     | `smtp.resend.com`                                              |
+| Port     | `587` (หรือ `465` สำหรับ SSL)                                  |
+| Username | `resend`                                                       |
+| Password | API key จาก [resend.com/api-keys](https://resend.com/api-keys) |
+
+> ⚠️ โดเมนของ **From Email** ต้อง verify แล้วใน Resend ไม่งั้นส่งไม่ออก
+
+### 🟧 Cloudflare
+
+ใช้ SMTP ของ [Cloudflare Email Service](https://developers.cloudflare.com/email-service/api/send-emails/smtp/)
+
+1. ใน [Cloudflare Dashboard](https://dash.cloudflare.com) ไปที่ **Email Service → Email Sending** แล้วเพิ่มโดเมน
+2. สร้าง API token (**My Profile → API Tokens**) ที่มีสิทธิ์ `Email Sending: Edit`
+3. กดการ์ด **Cloudflare** แล้ววาง API token ในช่อง **Password**
+
+| ช่อง     | ค่า                                              |
+| -------- | ------------------------------------------------ |
+| Host     | `smtp.mx.cloudflare.net`                         |
+| Port     | `465` (รับแค่ SSL — ไม่รองรับ 587 / STARTTLS)    |
+| Username | `api_token` (คำนี้ตรงตัว)                        |
+| Password | API token ที่มีสิทธิ์ `Email Sending: Edit`      |
+
+> ⚠️ โดเมนของ **From Email** ต้องเพิ่มไว้ใน Email Sending แล้ว · ส่งได้สูงสุด 50 ผู้รับต่อฉบับ · ขนาดไม่เกิน 5 MiB · มีโควตาต่อวันของบัญชี
+
+### ⚙️ กำหนดเอง (SMTP เจ้าอื่น)
+
+กดการ์ด **กำหนดเอง** แล้วกรอก Host / Port / Username / Password ตามที่ผู้ให้บริการกำหนด เช่น Gmail แบบ App Password:
 
 | ช่อง     | ค่าตัวอย่าง (Gmail)    |
 | -------- | ---------------------- |
@@ -163,20 +243,7 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 | Username | `your-email@gmail.com` |
 | Password | รหัสผ่านแอป 16 หลัก    |
 
-> 🔐 **Password ถูกเข้ารหัส (AES-256-CBC)** ก่อนบันทึกลงฐานข้อมูลอัตโนมัติ — เว้นว่างหากไม่ต้องการเปลี่ยนรหัสเดิม (ดูรายละเอียด format การเข้ารหัสใน [ความปลอดภัย](#-ความปลอดภัย))
-
-### ใช้กับ Resend
-
-| ช่อง     | ค่า                                                        |
-| -------- | ---------------------------------------------------------- |
-| Host     | `smtp.resend.com`                                          |
-| Port     | `587` (หรือ `465` สำหรับ SSL)                              |
-| Username | `resend`                                                   |
-| Password | API key จาก [resend.com/api-keys](https://resend.com/api-keys) |
-
-> ⚠️ **From Email** ต้องเป็นโดเมนที่ verify แล้วใน Resend (เมนู Domains) ไม่งั้นส่งไม่ออก
-
-### วิธีขอ App Password (Gmail)
+**วิธีขอ App Password (Gmail)**
 
 1. ไปที่ [Google Account → Security](https://myaccount.google.com/security)
 2. เปิดใช้งาน **2-Step Verification**
@@ -184,53 +251,15 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 4. สร้างรหัสผ่านใหม่ (เช่นชื่อ "Website SMTP")
 5. คัดลอกรหัส 16 หลักมาใส่ช่อง Password
 
-### SSL Verification
-
-- ค่า default: **เปิด SSL verification** (ปลอดภัยสำหรับ Production)
-- สำหรับ Development: ติ๊ก **"⚠️ ปิดการตรวจสอบ SSL Certificate"** ในส่วน SMTP Settings
-
-### การแจ้งเตือนผู้ดูแลระบบ
-
-- ✅ ติ๊ก **"เปิดใช้งานการส่งอีเมลแจ้งเตือน Admin"**
-- ระบุอีเมลผู้รับ (หากเว้นว่าง จะส่งไปที่อีเมลแอดมินของ WordPress)
-- เมื่อมีผู้ส่งฟอร์ม แอดมินจะได้รับ Email แจ้งเตือนทันที (ตั้ง `Reply-To` เป็นอีเมลลูกค้าอัตโนมัติ ตอบกลับได้ทันทีจากอีเมล)
-
----
-
-## 🔑 เชื่อมต่ออีเมลผ่าน OAuth2 (Google)
-
-ฟีเจอร์ใหม่ตั้งแต่ v0.6.0 — ยืนยันตัวตนส่งอีเมลผ่าน OAuth2 (XOAUTH2) แทน username/password ตรงๆ ปลอดภัยกว่า
-
-### ตั้งค่าฝั่ง Google Cloud Console
-
-1. สร้างโปรเจกต์ใน [Google Cloud Console](https://console.cloud.google.com/) → เปิดใช้งาน Gmail API
-2. สร้าง **OAuth Client ID** (ประเภท Web application)
-3. เพิ่ม **Authorized redirect URI** เป็น:
-   ```
-   https://เว็บของคุณ/wp-admin/admin-post.php?action=isxf_oauth_callback
-   ```
-4. คัดลอก **Client ID** และ **Client Secret** มาใส่ในหน้าตั้งค่าระบบของปลั๊กอิน
-
-### เชื่อมต่อในปลั๊กอิน
-
-1. ไปที่ **แบบฟอร์ม → ⚙️ ตั้งค่าระบบ** → เลือกวิธียืนยันตัวตนเป็น **OAuth2 (Google)**
-2. กรอก Client ID / Client Secret แล้ว **บันทึกการตั้งค่า** ก่อน
-3. กดปุ่ม **"เชื่อมต่อบัญชี"** → ระบบพาไปหน้ายืนยันตัวตนของ Google → อนุญาตสิทธิ์ → เด้งกลับมาที่ปลั๊กอินอัตโนมัติ
-4. เมื่อเชื่อมต่อสำเร็จจะเห็นอีเมลบัญชีที่เชื่อมต่ออยู่ในหน้าตั้งค่า พร้อมปุ่ม **"ตัดการเชื่อมต่อ"**
-
-หลังเชื่อมต่อแล้ว ระบบจะใช้ **Access Token** (ต่ออายุอัตโนมัติผ่าน **Refresh Token** ที่เก็บแบบเข้ารหัสไว้) ยืนยันตัวตนกับ SMTP server ทุกครั้งที่ส่งอีเมล ไม่ต้องเก็บรหัสผ่านอีเมลไว้ในระบบเลย
-
-> **หมายเหตุความปลอดภัย:** ขั้นตอนเชื่อมต่อมีการตรวจสอบ `state` parameter (ป้องกัน CSRF) ทุกครั้งก่อนแลก authorization code เป็น token
-
 ---
 
 ## 🛡️ ตั้งค่า Captcha
 
-ไปที่ **แบบฟอร์ม → ⚙️ ตั้งค่าระบบ → ส่วน Captcha**
+ไปที่ **InsightX Form → ⚙️ ตั้งค่าระบบ → ส่วน Captcha**
 
 ### Google reCAPTCHA v3
 
-1. เลือก **Google reCAPTCHA v3** จาก Dropdown
+1. เลือก **Google reCAPTCHA v3** จาก dropdown
 2. ไปสร้าง key ที่ [Google reCAPTCHA](https://www.google.com/recaptcha/admin)
 3. กรอก **Site Key** และ **Secret Key**
 4. ระบบยิง `grecaptcha.execute()` แบบ invisible ก่อน submit ทุกครั้ง แล้วตรวจ score ฝั่ง server (ผ่านเกณฑ์ที่ score ≥ 0.5)
@@ -242,13 +271,21 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 3. กรอก **Site Key** และ **Secret Key**
 4. ฟอร์มจะไม่ยอมให้ submit จนกว่า widget จะออก token ก่อน (ตรวจซ้ำฝั่ง server เสมอ)
 
-> ระบบจะตรวจสอบ Token ทั้งฝั่ง Frontend และ Server-side อัตโนมัติ — ปิด CAPTCHA ได้โดยไม่กรอก Site/Secret Key ไว้เลย (ฟอร์มจะยังใช้งานได้ปกติ แค่ไม่มีชั้นป้องกันนี้)
+> ระบบจะตรวจสอบ Token ทั้งฝั่ง Frontend และ Server-side อัตโนมัติ
+
+> ⚠️ ตัวเลือก **"บล็อกการส่งฟอร์มเมื่อยังไม่ได้ตั้งค่า CAPTCHA"** เปิดไว้เป็นค่าเริ่มต้น — ถ้ายังไม่ได้ใส่ Secret Key ระบบจะ**ปฏิเสธการส่งฟอร์มทั้งหมด**แทนการปล่อยผ่าน ปิดตัวเลือกนี้เฉพาะเมื่อตั้งใจใช้ฟอร์มโดยไม่มี CAPTCHA
+
+### 🌐 Trusted Proxies (เว็บที่อยู่หลัง Cloudflare / CDN)
+
+ถ้าเว็บอยู่หลัง Cloudflare, CDN หรือ reverse proxy ผู้เข้าชมทุกคนจะดูเหมือนมาจาก IP ของ proxy — ตัวจำกัดการส่งต่อ IP (Rate Limiting) จะบล็อกทุกคนพร้อมกัน
+
+ใส่ช่วง IP ของ proxy (บรรทัดละหนึ่ง CIDR) ในหัวข้อ **Trusted Proxies** ของหน้าตั้งค่าระบบ ระบบจะอ่าน IP จริงจาก header `CF-Connecting-IP` / `X-Forwarded-For` เฉพาะ request ที่มาจากช่วง IP เหล่านั้น — ช่วง IP ของ Cloudflare ดูได้ที่ [cloudflare.com/ips](https://www.cloudflare.com/ips/) · เว้นว่าง = เชื่อแค่ `REMOTE_ADDR` (ค่าเริ่มต้น ปลอดภัยที่สุด)
 
 ---
 
 ## 📨 ทดสอบส่งอีเมล
 
-ไปที่ **แบบฟอร์ม → ⚙️ ตั้งค่าระบบ → ส่วนล่างสุด**
+ไปที่ **InsightX Form → ⚙️ ตั้งค่าระบบ → ส่วนล่างสุด**
 
 1. กรอก **อีเมลปลายทาง** ที่ต้องการทดสอบ (pre-fill จากอีเมลแอดมิน)
 2. กด **"📨 ส่งอีเมลทดสอบ"**
@@ -307,13 +344,13 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 
 ## 📖 คู่มือการใช้งานในระบบ
 
-นอกจาก README นี้ ปลั๊กอินยังมีหน้า **"📖 คู่มือการใช้งาน"** ในตัวเอง (เมนู **แบบฟอร์ม → คู่มือการใช้งาน**) เป็น in-admin documentation แบบ accordion ครอบคลุมทุกหัวข้อรวมถึงขั้นตอนตั้งค่า OAuth2 แบบ step-by-step — เปิดดูได้ทันทีโดยไม่ต้องออกจาก wp-admin เหมาะเป็นจุดอ้างอิงเวลาส่งต่อให้ทีมอื่นดูแลเว็บต่อ
+นอกจาก README นี้ ปลั๊กอินยังมีหน้า **"📖 คู่มือการใช้งาน"** ในตัวเอง (เมนู **InsightX Form → คู่มือการใช้งาน**) เป็น in-admin documentation แบบ accordion ครอบคลุมทุกหัวข้อรวมถึงขั้นตอนตั้งค่า OAuth2 แบบ step-by-step — เปิดดูได้ทันทีโดยไม่ต้องออกจาก wp-admin เหมาะเป็นจุดอ้างอิงเวลาส่งต่อให้ทีมอื่นดูแลเว็บต่อ
 
 ---
 
 ## 📥 จัดการรายการข้อมูล
 
-ไปที่ **แบบฟอร์ม → 📥 รายการข้อมูล**
+ไปที่ **InsightX Form → 📥 รายการข้อมูล**
 
 ### ตัวกรอง (Filters)
 
@@ -381,7 +418,7 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 
 ## 📊 Analytics Dashboard
 
-ไปที่ **แบบฟอร์ม → 📊 Analytics** เพื่อดูสถิติแบบเจาะลึก
+ไปที่ **InsightX Form → 📊 Analytics** เพื่อดูสถิติแบบเจาะลึก
 
 ### Stat Cards
 

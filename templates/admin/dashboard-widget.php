@@ -22,7 +22,7 @@
                 <div class="lbl"><?php esc_html_e( 'Today', 'insightx-form' ); ?></div>
             </div>
             <div class="isxf-dash-card">
-                <div class="num" style="color:#996800;"><?php echo $week_c; ?></div>
+                <div class="num" style="color:#D97706;"><?php echo $week_c; ?></div>
                 <div class="lbl"><?php esc_html_e( 'Last 7 days', 'insightx-form' ); ?></div>
             </div>
             <div class="isxf-dash-card">

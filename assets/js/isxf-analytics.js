@@ -14,7 +14,7 @@
         primary: '#0079ff',
         primaryLight: 'rgba(0, 121, 255,0.1)',
         new: '#0079ff',
-        in_progress: '#996800',
+        in_progress: '#D97706',
         done: '#16a34a',
         junk: '#db0000'
     };
@@ -264,7 +264,7 @@
             var html = '';
             for (var k in statusMap) {
                 html += '<li>' +
-                    '<span class="ix-status-label"><span class="ix-status-dot" style="background:' + statusMap[k].color + '"></span>' + statusMap[k].label + '</span>' +
+                    '<span class="ix-status-label"><span class="ix-dot" style="--ix-dot:' + statusMap[k].color + '"></span>' + statusMap[k].label + '</span>' +
                     '<span class="ix-status-count">' + (statusCounts[k] || 0) + '</span>' +
                     '</li>';
             }
@@ -351,22 +351,25 @@
             return;
         }
 
-        var statusIcons = { 'new': '🔵', 'in_progress': '🟡', 'done': '✅', 'junk': '🔴' };
         var statusLabels = { 'new': isxf_analytics_env.i18n.status_new, 'in_progress': isxf_analytics_env.i18n.status_in_progress, 'done': isxf_analytics_env.i18n.status_done, 'junk': isxf_analytics_env.i18n.status_junk };
-        var statusColors = { 'new': '#0079ff', 'in_progress': '#996800', 'done': '#16a34a', 'junk': '#db0000' };
+        var statusColors = { 'new': '#0079ff', 'in_progress': '#D97706', 'done': '#16a34a', 'junk': '#db0000' };
         var statusBgs = { 'new': '#e6f2ff', 'in_progress': '#fff8e5', 'done': '#e6f7ec', 'junk': '#ffe8e8' };
+        // Same pulsing status dot as the Entries page (.ix-dot in isxf-entries.css).
+        function dot(st) {
+            return '<span class="ix-dot" style="--ix-dot:' + (statusColors[st] || statusColors['new']) + '"></span>';
+        }
 
         var html = '';
         recent.forEach(function (entry) {
             var st = entry.status || 'new';
             html += '<div class="ix-recent-item">' +
-                '<div class="ix-recent-icon" style="background:' + (statusBgs[st] || '#f1f5f9') + '">' + (statusIcons[st] || '🔵') + '</div>' +
+                '<div class="ix-recent-icon" style="background:' + (statusBgs[st] || '#f1f5f9') + '">' + dot(st) + '</div>' +
                 '<div class="ix-recent-info">' +
                 '<div class="ix-recent-title">' + escapeHtml(entry.form_title) + '</div>' +
                 '<div class="ix-recent-meta">' + escapeHtml(entry.time_ago) + ' · ' + escapeHtml(entry.ip) + '</div>' +
                 '</div>' +
                 '<span class="ix-recent-badge" style="color:' + (statusColors[st] || '#5a6881') + '; background:' + (statusBgs[st] || '#f1f5f9') + '">' +
-                (statusIcons[st] || '') + ' ' + (statusLabels[st] || st) +
+                dot(st) + (statusLabels[st] || st) +
                 '</span>' +
                 '</div>';
         });

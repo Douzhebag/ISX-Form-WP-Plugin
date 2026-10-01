@@ -2,160 +2,934 @@
 
 /* Form Builder Meta Box */
 .drag-handle {
-    cursor: grab;
-    font-size: 20px;
-    color: #94a3b8;
-    text-align: center;
-    vertical-align: middle !important;
-    width: 3%;
+  cursor: grab;
+  font-size: 20px;
+  color: #94a3b8;
+  text-align: center;
+  vertical-align: middle !important;
+  width: 3%;
 }
 
 .drag-handle:active {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 .ui-sortable-helper {
-    display: table-row;
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  display: table-row;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .ui-sortable-placeholder {
-    visibility: visible !important;
-    background: #f1f5f9;
-    border: 1px dashed #cbd5e1;
+  visibility: visible !important;
+  background: #f1f5f9;
+  border: 1px dashed #cbd5e1;
 }
 
 .isxf-settings-panel {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
 }
 
 .isxf-custom-email-panel {
-    display: none;
-    margin-top: 15px;
-    padding: 15px;
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 4px;
+  display: none;
+  margin-top: 15px;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
 }
 
 .isxf-custom-email-panel.active {
-    display: block;
+  display: block;
 }
 
 .isxf-custom-email-panel label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 5px;
-    color: #0f172a;
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #0f172a;
 }
 
 .isxf-custom-email-panel input[type="text"],
 .isxf-custom-email-panel textarea {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #94a3b8;
-    border-radius: 4px;
-    font-size: 13px;
-    font-family: inherit;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #94a3b8;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
 }
 
 .isxf-custom-email-panel textarea {
-    min-height: 180px;
-    line-height: 1.6;
+  min-height: 180px;
+  line-height: 1.6;
 }
 
 .isxf-merge-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 .isxf-merge-tag {
-    display: inline-block;
-    padding: 3px 10px;
-    background: #e6f2ff;
-    color: #0079ff;
-    border-radius: 12px;
-    font-size: 12px;
-    font-family: monospace;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 1px solid transparent;
+  display: inline-block;
+  padding: 3px 10px;
+  background: #e6f2ff;
+  color: #0079ff;
+  border-radius: 12px;
+  font-size: 12px;
+  font-family: monospace;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
 .isxf-merge-tag:hover {
-    background: #0079ff;
-    color: #fff;
+  background: #0079ff;
+  color: #fff;
 }
 
 /* === Email template tools: preview modal === */
 .isxf-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 100000;
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.isxf-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.isxf-modal-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 92vw);
+  height: min(85vh, 900px);
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.isxf-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.isxf-modal-subject {
+  flex: 1;
+  color: #5a6881;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.isxf-modal-close {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #5a6881;
+}
+
+.isxf-modal-close:hover {
+  color: #0f172a;
+}
+
+#isxf-email-preview-frame {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #f1f5f9;
+}
+/* ==========================================================================
+   Global settings page — same card/field styling as InsightX Backup's
+   Connections screen. Scoped to .isxf-settings because this stylesheet also
+   loads on the form builder screens.
+   ========================================================================== */
+.isxf-settings {
+  --isxf-accent: #0079ff;
+  --isxf-accent-hover: #0062d1;
+  --isxf-accent-soft: #e6f2ff;
+  --isxf-accent-line: #bfe0ff;
+  --isxf-ok: #16a34a;
+  --isxf-ok-soft: #e6f7ec;
+  --isxf-danger: #db0000;
+  --isxf-danger-soft: #ffe8e8;
+  --isxf-warn-soft: #fff8e5;
+  --isxf-warn-line: #ffe0b2;
+  --isxf-ink: #0f172a;
+  --isxf-muted: #5a6881;
+  --isxf-line: #e2e8f0;
+  --isxf-bg: #f8fafc;
+  --isxf-radius: 14px;
+  --isxf-radius-sm: 10px;
+  --isxf-shadow-sm:
+    0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.05);
+  --isxf-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 16px rgba(15, 23, 42, 0.06);
+  margin: 0 auto;
+  max-width: 1280px;
+}
+
+.isxf-settings .isxf-card {
+  background: #fff;
+  border: 1px solid var(--isxf-line);
+  border-radius: var(--isxf-radius);
+  box-shadow: var(--isxf-shadow);
+  padding: 26px 28px;
+  margin-top: 18px;
+}
+
+.isxf-settings .isxf-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--isxf-ink);
+  padding: 0;
+  margin: 0 0 6px;
+}
+
+.isxf-settings .isxf-section {
+  border: 1px solid var(--isxf-line);
+  border-radius: var(--isxf-radius);
+  background: #fff;
+  box-shadow: var(--isxf-shadow-sm);
+  padding: 18px 22px 20px;
+  margin: 18px 0 0;
+}
+
+.isxf-settings .isxf-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--isxf-ink);
+  margin: 0 0 14px;
+  padding: 0;
+}
+
+.isxf-settings .isxf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 22px;
+}
+
+.isxf-settings .isxf-grid-gap {
+  margin-top: 16px;
+}
+
+.isxf-settings .isxf-field {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-width: 0;
+}
+
+.isxf-settings .isxf-field-wide {
+  grid-column: 1 / -1;
+}
+
+.isxf-settings .isxf-field label {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--isxf-ink);
+}
+
+.isxf-settings .isxf-field input[type="text"],
+.isxf-settings .isxf-field input[type="email"],
+.isxf-settings .isxf-field input[type="number"],
+.isxf-settings .isxf-field input[type="password"],
+.isxf-settings .isxf-field select,
+.isxf-settings .isxf-field textarea {
+  width: 100%;
+  max-width: none;
+  min-height: 40px;
+  border: 1px solid var(--isxf-line);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--isxf-ink);
+  background-color: var(--isxf-bg);
+  box-shadow: none;
+}
+
+.isxf-settings .isxf-field select {
+  padding-right: 32px;
+}
+
+.isxf-settings .isxf-field input:focus,
+.isxf-settings .isxf-field select:focus,
+.isxf-settings .isxf-field textarea:focus {
+  border-color: var(--isxf-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 121, 255, 0.15);
+  background-color: #fff;
+}
+
+.isxf-settings .isxf-field input[readonly] {
+  color: var(--isxf-muted);
+  cursor: text;
+}
+
+.isxf-settings .isxf-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--isxf-muted);
+  line-height: 1.5;
+}
+
+.isxf-settings .isxf-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 4px 0 14px;
+  font-size: 13px;
+  color: var(--isxf-ink);
+  width: fit-content;
+}
+
+.isxf-settings .isxf-section > .isxf-check:last-of-type {
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+.isxf-settings .isxf-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 1px 0 0;
+}
+
+.isxf-settings .isxf-check em {
+  font-style: normal;
+  font-size: 12px;
+  color: #996800;
+}
+
+.isxf-settings .isxf-callout {
+  background: var(--isxf-accent-soft);
+  border: 1px solid var(--isxf-accent-line);
+  border-radius: var(--isxf-radius-sm);
+  padding: 14px 16px;
+  margin: 16px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--isxf-ink);
+}
+
+.isxf-settings .isxf-callout > strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--isxf-accent-hover);
+}
+
+.isxf-settings .isxf-callout ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.isxf-settings .isxf-callout-note {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid var(--isxf-accent-line);
+  border-radius: 8px;
+}
+
+.isxf-settings .isxf-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 12px 15px;
+  margin: 16px 0 0;
+  border-radius: var(--isxf-radius-sm);
+  font-size: 13px;
+}
+
+.isxf-settings .isxf-status.is-ok {
+  background: var(--isxf-ok-soft);
+  border: 1px solid var(--isxf-ok);
+}
+
+.isxf-settings .isxf-status.is-error {
+  background: var(--isxf-danger-soft);
+  border: 1px solid #f0b8b8;
+}
+
+.isxf-settings .isxf-warn {
+  margin-top: 18px;
+  padding: 12px 15px;
+  background: var(--isxf-warn-soft);
+  border: 1px solid var(--isxf-warn-line);
+  border-radius: var(--isxf-radius-sm);
+}
+
+.isxf-settings .isxf-warn .isxf-check {
+  margin: 0 0 4px;
+}
+
+.isxf-settings .isxf-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.isxf-settings .isxf-actions .submit {
+  margin: 0;
+  padding: 0;
+}
+
+.isxf-settings .button.isxf-btn,
+.isxf-settings .isxf-btn.button-primary {
+  background: var(--isxf-accent);
+  border-color: var(--isxf-accent);
+  border-radius: var(--isxf-radius-sm);
+  padding: 4px 20px;
+  height: auto;
+  min-height: 40px;
+  line-height: 2.2;
+  box-shadow: none;
+  font-weight: 600;
+  color: #fff;
+}
+
+.isxf-settings .button.isxf-btn:hover,
+.isxf-settings .isxf-btn.button-primary:hover,
+.isxf-settings .button.isxf-btn:focus {
+  background: var(--isxf-accent-hover);
+  border-color: var(--isxf-accent-hover);
+  color: #fff;
+}
+
+.isxf-settings .button.isxf-btn-secondary {
+  background: #fff;
+  border: 1px solid var(--isxf-line);
+  color: var(--isxf-ink);
+  border-radius: var(--isxf-radius-sm);
+  box-shadow: none;
+  font-weight: 600;
+}
+
+.isxf-settings .button.isxf-btn-secondary:hover {
+  border-color: var(--isxf-accent);
+  background: var(--isxf-accent-soft);
+  color: var(--isxf-accent-hover);
+}
+
+.isxf-settings .isxf-test-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.isxf-settings .isxf-test-row .isxf-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+@media (max-width: 782px) {
+  .isxf-settings .isxf-card {
+    padding: 18px 16px;
+  }
+
+  .isxf-settings .isxf-section {
+    padding: 16px;
+  }
+
+  .isxf-settings .isxf-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Form editor (Add / Edit form) — same card, field and button look as the
+   Settings / Entries / Analytics / User Guide pages. Scoped to #poststuff on
+   the isxf_form post type, so the forms list table and other post types are
+   untouched.
+   ========================================================================== */
+.post-type-isxf_form #poststuff {
+  --isxf-accent: #0079ff;
+  --isxf-accent-hover: #0062d1;
+  --isxf-accent-soft: #e6f2ff;
+  --isxf-danger: #db0000;
+  --isxf-danger-soft: #ffe8e8;
+  --isxf-ink: #0f172a;
+  --isxf-muted: #5a6881;
+  --isxf-line: #e2e8f0;
+  --isxf-bg: #f8fafc;
+  --isxf-shadow-sm:
+    0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.05);
+}
+
+/* Title */
+.post-type-isxf_form #titlediv #title {
+  height: 48px;
+  min-height: 48px;
+  margin: 0;
+  padding: 0 14px;
+  font-size: 18px;
+  line-height: 46px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background-color: #f8fafc;
+  box-shadow: none;
+}
+
+.post-type-isxf_form #titlediv #title:focus {
+  border-color: #0079ff;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 121, 255, 0.15);
+  outline: none;
+}
+
+/* Meta boxes (Form Builder, Publish) as cards */
+.post-type-isxf_form #poststuff .postbox {
+  border: 1px solid var(--isxf-line);
+  border-radius: 14px;
+  box-shadow: var(--isxf-shadow-sm);
+  overflow: hidden;
+}
+
+.post-type-isxf_form #poststuff .postbox-header {
+  border-bottom: 1px solid var(--isxf-line);
+}
+
+.post-type-isxf_form #poststuff .postbox-header .hndle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--isxf-ink);
+  padding: 12px 18px;
+}
+
+.post-type-isxf_form #isxf_builder_meta .inside {
+  padding: 6px 18px 20px;
+}
+
+/* Builder panels (button style, email template) */
+.post-type-isxf_form #isxf_builder_meta .isxf-settings-panel,
+.post-type-isxf_form #isxf_builder_meta .isxf-custom-email-panel {
+  border: 1px solid var(--isxf-line);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+/* Inputs and selects inside the builder */
+.post-type-isxf_form #isxf_builder_meta input[type="text"],
+.post-type-isxf_form #isxf_builder_meta input[type="number"],
+.post-type-isxf_form #isxf_builder_meta select,
+.post-type-isxf_form #isxf_builder_meta textarea {
+  min-height: 38px;
+  border: 1px solid var(--isxf-line);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--isxf-ink);
+  background-color: #fff;
+  box-shadow: none;
+}
+
+.post-type-isxf_form #isxf_builder_meta select {
+  padding-right: 30px;
+}
+
+.post-type-isxf_form #isxf_builder_meta textarea {
+  min-height: 180px;
+}
+
+.post-type-isxf_form #isxf_builder_meta input:focus,
+.post-type-isxf_form #isxf_builder_meta select:focus,
+.post-type-isxf_form #isxf_builder_meta textarea:focus {
+  border-color: var(--isxf-accent);
+  box-shadow: 0 0 0 3px rgba(0, 121, 255, 0.15);
+  outline: none;
+}
+
+.post-type-isxf_form #isxf_builder_meta input:disabled {
+  background-color: var(--isxf-bg);
+}
+
+/* Field table */
+.post-type-isxf_form #isxf_builder_meta .wp-list-table {
+  border: 1px solid var(--isxf-line);
+  border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.post-type-isxf_form #isxf_builder_meta .wp-list-table thead th {
+  background: var(--isxf-bg);
+  color: var(--isxf-ink);
+  font-weight: 600;
+  border-bottom: 1px solid var(--isxf-line);
+}
+
+.post-type-isxf_form #isxf_builder_meta .wp-list-table td {
+  vertical-align: middle;
+}
+
+/* Buttons */
+.post-type-isxf_form #isxf_builder_meta .button:not(.wp-color-result),
+.post-type-isxf_form #submitdiv .button {
+  min-height: 36px;
+  padding: 0 16px;
+  line-height: 34px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.post-type-isxf_form
+  #isxf_builder_meta
+  .button:not(.wp-color-result):not(.button-primary),
+.post-type-isxf_form #submitdiv .button:not(.button-primary) {
+  background: #fff;
+  border: 1px solid var(--isxf-line);
+  color: var(--isxf-ink);
+}
+
+.post-type-isxf_form
+  #isxf_builder_meta
+  .button:not(.wp-color-result):not(.button-primary):hover,
+.post-type-isxf_form #submitdiv .button:not(.button-primary):hover {
+  border-color: var(--isxf-accent);
+  background: var(--isxf-accent-soft);
+  color: var(--isxf-accent-hover);
+}
+
+.post-type-isxf_form #isxf_builder_meta .button-primary,
+.post-type-isxf_form #submitdiv .button-primary {
+  min-height: 40px;
+  padding: 0 20px;
+  line-height: 38px;
+  background: var(--isxf-accent);
+  border-color: var(--isxf-accent);
+  color: #fff;
+}
+
+.post-type-isxf_form #isxf_builder_meta .button-primary:hover,
+.post-type-isxf_form #submitdiv .button-primary:hover {
+  background: var(--isxf-accent-hover);
+  border-color: var(--isxf-accent-hover);
+}
+
+/* Delete-row button: red outline instead of the inline red text */
+.post-type-isxf_form #isxf_builder_meta .button.remove-row {
+  min-width: 40px;
+  padding: 0 10px;
+  border-color: #f0b8b8;
+  background: #fff;
+}
+
+.post-type-isxf_form #isxf_builder_meta .button.remove-row:hover {
+  border-color: var(--isxf-danger);
+  background: var(--isxf-danger-soft);
+  color: var(--isxf-danger);
+}
+
+/* Keep the colour picker's own hex input compact. */
+.post-type-isxf_form
+  #isxf_builder_meta
+  .wp-picker-container
+  input[type="text"] {
+  min-height: 30px;
+  padding: 0 8px;
+}
+
+/* WP draws the "Add title" prompt as a label laid over the input; match the
+   input's height, padding and font size so it sits inside the field. */
+.post-type-isxf_form #titlediv #title-prompt-text {
+  top: 0;
+  left: 0;
+  padding: 0 15px;
+  font-size: 18px;
+  line-height: 48px;
+  color: #94a3b8;
+}
+
+/* Field table cells are narrow — tighter padding so select values stay
+   readable (Type, Width, Required). */
+.post-type-isxf_form #isxf_builder_meta #field-list input[type="text"],
+.post-type-isxf_form #isxf_builder_meta #field-list select {
+  padding-left: 8px;
+}
+
+.post-type-isxf_form #isxf_builder_meta #field-list select {
+  padding-right: 22px;
+  background-position: right 4px top 55%;
+}
+
+/* ==========================================================================
+   Forms list (All Forms) — same card, field and button look as the other
+   plugin pages. Scoped to the isxf_form list screen only.
+   ========================================================================== */
+.edit-php.post-type-isxf_form .wrap {
+  max-width: 1280px;
+  margin: 18px auto 0;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.05),
+    0 4px 16px rgba(15, 23, 42, 0.06);
+  padding: 26px 28px;
+}
+
+.edit-php.post-type-isxf_form .wrap .wp-heading-inline {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+  margin-right: 10px;
+}
+
+/* "Create New Form" next to the title */
+.edit-php.post-type-isxf_form .wrap .page-title-action {
+  top: -3px;
+  min-height: 36px;
+  padding: 0 16px;
+  line-height: 34px;
+  border: 1px solid #0079ff;
+  border-radius: 10px;
+  background: #0079ff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.edit-php.post-type-isxf_form .wrap .page-title-action:hover,
+.edit-php.post-type-isxf_form .wrap .page-title-action:focus {
+  background: #0062d1;
+  border-color: #0062d1;
+  color: #fff;
+}
+
+/* Filters, search box, bulk actions */
+.edit-php.post-type-isxf_form .wrap select,
+.edit-php.post-type-isxf_form .wrap input[type="search"] {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  color: #0f172a;
+  box-shadow: none;
+}
+
+.edit-php.post-type-isxf_form .wrap select {
+  padding-right: 30px;
+}
+
+.edit-php.post-type-isxf_form .wrap select:focus,
+.edit-php.post-type-isxf_form .wrap input[type="search"]:focus {
+  border-color: #0079ff;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 121, 255, 0.15);
+  outline: none;
+}
+
+.edit-php.post-type-isxf_form .wrap .button:not(.page-title-action) {
+  min-height: 38px;
+  padding: 0 16px;
+  line-height: 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.edit-php.post-type-isxf_form .wrap .button:not(.page-title-action):hover {
+  border-color: #0079ff;
+  background: #e6f2ff;
+  color: #0062d1;
+}
+
+.edit-php.post-type-isxf_form .wrap .tablenav {
+  height: auto;
+  margin: 12px 0;
+}
+
+.edit-php.post-type-isxf_form .wrap .subsubsub a.current {
+  color: #0079ff;
+}
+
+/* Table as a rounded card */
+.edit-php.post-type-isxf_form .wrap .wp-list-table {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.edit-php.post-type-isxf_form .wrap .wp-list-table thead th,
+.edit-php.post-type-isxf_form .wrap .wp-list-table thead td,
+.edit-php.post-type-isxf_form .wrap .wp-list-table tfoot th,
+.edit-php.post-type-isxf_form .wrap .wp-list-table tfoot td {
+  background: #f8fafc;
+  color: #0f172a;
+  font-weight: 600;
+  border-color: #e2e8f0;
+}
+
+.edit-php.post-type-isxf_form .wrap .wp-list-table tbody tr td,
+.edit-php.post-type-isxf_form .wrap .wp-list-table tbody tr th {
+  vertical-align: middle;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.edit-php.post-type-isxf_form .wrap .wp-list-table .row-title {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.edit-php.post-type-isxf_form .wrap .wp-list-table .row-title:hover {
+  color: #0079ff;
+}
+
+/* Shortcode column: click-to-select field */
+.isxf-shortcode-input {
+  width: 100%;
+  max-width: 260px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 12px;
+  cursor: text;
+  box-shadow: none;
+}
+
+.isxf-shortcode-input:focus {
+  border-color: #0079ff;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 121, 255, 0.15);
+  outline: none;
+}
+
+@media (max-width: 782px) {
+  .edit-php.post-type-isxf_form .wrap {
+    padding: 18px 16px;
+  }
+}
+
+/* SMTP provider picker — same card as InsightX Backup's destination cards
+   (.isx-dest-card). */
+.isxf-settings .isxf-field-title {
+    margin: 4px 0 8px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--isxf-ink);
+}
+
+.isxf-settings .isxf-provider-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.isxf-settings .isxf-provider-card {
     display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 58px;
+    padding: 4px 16px;
+    border: 1.5px solid var(--isxf-line);
+    border-radius: var(--isxf-radius-sm);
+    background: #fff;
+    box-shadow: var(--isxf-shadow-sm);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.isxf-settings .isxf-provider-card:hover {
+    border-color: var(--isxf-accent-line);
+    background: var(--isxf-accent-soft);
+}
+
+.isxf-settings .isxf-provider-card:focus-visible {
+    outline: 2px solid var(--isxf-accent);
+    outline-offset: 2px;
+}
+
+.isxf-settings .isxf-provider-card.is-selected {
+    border-color: var(--isxf-accent);
+    background: var(--isxf-accent-soft);
+    box-shadow: 0 0 0 3px rgba(0, 121, 255, 0.15);
+}
+
+.isxf-settings .isxf-provider-card-icon {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
-.isxf-modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-}
-
-.isxf-modal-dialog {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: min(720px, 92vw);
-    height: min(85vh, 900px);
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-}
-
-.isxf-modal-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 15px;
-    border-bottom: 1px solid #e2e8f0;
-    background: #f8fafc;
-}
-
-.isxf-modal-subject {
-    flex: 1;
-    color: #5a6881;
-    font-size: 13px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.isxf-modal-close {
-    border: none;
-    background: transparent;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    color: #5a6881;
-}
-
-.isxf-modal-close:hover {
-    color: #0f172a;
-}
-
-#isxf-email-preview-frame {
-    flex: 1;
+.isxf-settings .isxf-provider-card-icon svg {
     width: 100%;
-    border: none;
-    background: #f1f5f9;
+    height: 100%;
+    display: block;
+}
+
+.isxf-settings .isxf-provider-card-icon .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: var(--isxf-muted);
+}
+
+.isxf-settings .isxf-provider-card-label {
+    flex: 1 1 auto;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--isxf-ink);
+}
+
+.isxf-settings .isxf-provider-card-check {
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    border: 2px solid var(--isxf-line);
+    background: transparent;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.isxf-settings .isxf-provider-card.is-selected .isxf-provider-card-check {
+    border-color: var(--isxf-accent);
+    background: var(--isxf-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") no-repeat center;
+}
+
+.isxf-settings .isxf-callout p {
+    margin: 0;
 }
