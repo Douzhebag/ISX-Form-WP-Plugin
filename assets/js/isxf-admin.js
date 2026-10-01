@@ -76,22 +76,22 @@
                 .then(function (data) {
                     testResult.style.display = 'block';
                     if (data.success) {
-                        testResult.style.background = '#edfaef';
-                        testResult.style.border = '1px solid #46b450';
-                        testResult.style.color = '#2e7d32';
+                        testResult.style.background = '#e6f7ec';
+                        testResult.style.border = '1px solid #16a34a';
+                        testResult.style.color = '#16a34a';
                         testResult.textContent = '✅ ' + data.data.message;
                     } else {
-                        testResult.style.background = '#fef0f0';
-                        testResult.style.border = '1px solid #dc3232';
-                        testResult.style.color = '#a00';
+                        testResult.style.background = '#ffe8e8';
+                        testResult.style.border = '1px solid #db0000';
+                        testResult.style.color = '#db0000';
                         testResult.textContent = '❌ ' + data.data.message;
                     }
                 })
                 .catch(function () {
                     testResult.style.display = 'block';
-                    testResult.style.background = '#fef0f0';
-                    testResult.style.border = '1px solid #dc3232';
-                    testResult.style.color = '#a00';
+                    testResult.style.background = '#ffe8e8';
+                    testResult.style.border = '1px solid #db0000';
+                    testResult.style.color = '#db0000';
                     testResult.textContent = isxf_admin_env.i18n.conn_error;
                 })
                 .finally(function () {
@@ -235,9 +235,9 @@
 
                 var showToolsResult = function (message, ok) {
                     toolsResult.style.display = 'inline-block';
-                    toolsResult.style.background = ok ? '#edfaef' : '#fef0f0';
-                    toolsResult.style.border = ok ? '1px solid #46b450' : '1px solid #dc3232';
-                    toolsResult.style.color = ok ? '#2e7d32' : '#a00';
+                    toolsResult.style.background = ok ? '#e6f7ec' : '#ffe8e8';
+                    toolsResult.style.border = ok ? '1px solid #16a34a' : '1px solid #db0000';
+                    toolsResult.style.color = ok ? '#16a34a' : '#db0000';
                     toolsResult.textContent = message;
                 };
 

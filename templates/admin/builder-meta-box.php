@@ -78,7 +78,7 @@
                         <p class="description" style="margin-top:5px;"><?php esc_html_e( 'Supports both plain text and HTML — the system will automatically wrap it in a beautiful layout', 'insightx-form' ); ?></p>
                     </div>
 
-                    <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 12px 15px; border-radius: 4px;">
+                    <div style="background: #e6f2ff; border: 1px solid #bfe0ff; padding: 12px 15px; border-radius: 4px;">
                         <strong style="color: #004085; font-size: 13px;"><?php esc_html_e( '🏷️ Available Merge Tags (click to insert):', 'insightx-form' ); ?></strong>
                         <div class="isxf-merge-tags" style="margin-top: 8px;">
                             <span class="isxf-merge-tag" data-tag="{site_name}">{site_name}</span>

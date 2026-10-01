@@ -50,10 +50,10 @@ class Entries {
     private function get_status_map() {
         if ( null === $this->status_map ) {
             $this->status_map = [
-                'new'         => [ 'label' => __( 'New', 'insightx-form' ),         'color' => '#2271b1', 'bg' => '#e8f0fe', 'icon' => '🔵' ],
+                'new'         => [ 'label' => __( 'New', 'insightx-form' ),         'color' => '#0079ff', 'bg' => '#e6f2ff', 'icon' => '🔵' ],
                 'in_progress' => [ 'label' => __( 'In Progress', 'insightx-form' ), 'color' => '#996800', 'bg' => '#fff8e5', 'icon' => '🟡' ],
-                'done'        => [ 'label' => __( 'Done', 'insightx-form' ),        'color' => '#2e7d32', 'bg' => '#edf7ed', 'icon' => '✅' ],
-                'junk'        => [ 'label' => __( 'Junk', 'insightx-form' ),        'color' => '#a00',    'bg' => '#fef0f0', 'icon' => '🔴' ],
+                'done'        => [ 'label' => __( 'Done', 'insightx-form' ),        'color' => '#16a34a', 'bg' => '#e6f7ec', 'icon' => '✅' ],
+                'junk'        => [ 'label' => __( 'Junk', 'insightx-form' ),        'color' => '#db0000',    'bg' => '#ffe8e8', 'icon' => '🔴' ],
             ];
         }
         return $this->status_map;
@@ -91,8 +91,8 @@ class Entries {
     public function enqueue_entries_assets( $hook ) {
         // Load on entries page
         if ( isset($_GET['page']) && $_GET['page'] === 'isxf-entries' ) {
-            wp_enqueue_style( 'isxf-entries-css', ISXF_PLUGIN_URL . 'assets/css/isxf-entries.css', [], ISXF_PLUGIN_VERSION );
-            wp_enqueue_script( 'isxf-entries-js', ISXF_PLUGIN_URL . 'assets/js/isxf-entries.js', [], ISXF_PLUGIN_VERSION, true );
+            wp_enqueue_style( 'isxf-entries-css', ISXF_PLUGIN_URL . 'assets/css/isxf-entries.css', [], \isxf_asset_ver( 'assets/css/isxf-entries.css' ) );
+            wp_enqueue_script( 'isxf-entries-js', ISXF_PLUGIN_URL . 'assets/js/isxf-entries.js', [], \isxf_asset_ver( 'assets/js/isxf-entries.js' ), true );
             wp_localize_script( 'isxf-entries-js', 'isxf_entries_env', [
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce'    => wp_create_nonce('isxf_entry_action_nonce'),
@@ -106,14 +106,14 @@ class Entries {
         }
         // Load CSS on dashboard (for widget)
         if ( $hook === 'index.php' ) {
-            wp_enqueue_style( 'isxf-entries-css', ISXF_PLUGIN_URL . 'assets/css/isxf-entries.css', [], ISXF_PLUGIN_VERSION );
+            wp_enqueue_style( 'isxf-entries-css', ISXF_PLUGIN_URL . 'assets/css/isxf-entries.css', [], \isxf_asset_ver( 'assets/css/isxf-entries.css' ) );
         }
         // Load on analytics page
         if ( isset($_GET['page']) && $_GET['page'] === 'isxf-analytics' ) {
-            wp_enqueue_style( 'isxf-analytics-css', ISXF_PLUGIN_URL . 'assets/css/isxf-analytics.css', [], ISXF_PLUGIN_VERSION );
+            wp_enqueue_style( 'isxf-analytics-css', ISXF_PLUGIN_URL . 'assets/css/isxf-analytics.css', [], \isxf_asset_ver( 'assets/css/isxf-analytics.css' ) );
             // Bundled Chart.js v4.4.1 UMD build (source: https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js).
             wp_enqueue_script( 'chart-js', ISXF_PLUGIN_URL . 'assets/libs/chartjs/chart.umd.min.js', [], '4.4.1', true );
-            wp_enqueue_script( 'isxf-analytics-js', ISXF_PLUGIN_URL . 'assets/js/isxf-analytics.js', ['chart-js'], ISXF_PLUGIN_VERSION, true );
+            wp_enqueue_script( 'isxf-analytics-js', ISXF_PLUGIN_URL . 'assets/js/isxf-analytics.js', ['chart-js'], \isxf_asset_ver( 'assets/js/isxf-analytics.js' ), true );
             wp_localize_script( 'isxf-analytics-js', 'isxf_analytics_env', [
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce'    => wp_create_nonce('isxf_analytics_nonce'),

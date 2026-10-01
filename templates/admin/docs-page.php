@@ -9,29 +9,29 @@
             <style>
                 .isxf-docs-wrap { max-width:900px; }
                 .isxf-docs-wrap h1 { display:flex; align-items:center; gap:10px; }
-                .isxf-docs-ver { font-size:12px; background:#2271b1; color:#fff; padding:2px 10px; border-radius:12px; font-weight:400; }
-                .isxf-docs-section { background:#fff; border:1px solid #ccd0d4; border-radius:6px; margin-bottom:12px; overflow:hidden; }
-                .isxf-docs-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; user-select:none; transition:background 0.2s; font-weight:600; font-size:14px; color:#1d2327; }
-                .isxf-docs-header:hover { background:#f6f7f7; }
+                .isxf-docs-ver { font-size:12px; background:#0079ff; color:#fff; padding:2px 10px; border-radius:12px; font-weight:400; }
+                .isxf-docs-section { background:#fff; border:1px solid #e2e8f0; border-radius:6px; margin-bottom:12px; overflow:hidden; }
+                .isxf-docs-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; user-select:none; transition:background 0.2s; font-weight:600; font-size:14px; color:#0f172a; }
+                .isxf-docs-header:hover { background:#f8fafc; }
                 .isxf-docs-arrow { transition:transform 0.3s; font-size:12px; color:#999; }
                 .isxf-docs-section.open .isxf-docs-arrow { transform:rotate(180deg); }
-                .isxf-docs-body { display:none; padding:0 20px 20px; color:#50575e; font-size:13px; line-height:1.8; }
+                .isxf-docs-body { display:none; padding:0 20px 20px; color:#5a6881; font-size:13px; line-height:1.8; }
                 .isxf-docs-section.open .isxf-docs-body { display:block; }
-                .isxf-docs-body h4 { color:#1d2327; margin:18px 0 8px; font-size:14px; }
+                .isxf-docs-body h4 { color:#0f172a; margin:18px 0 8px; font-size:14px; }
                 .isxf-docs-body table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
-                .isxf-docs-body th { background:#f0f0f1; text-align:left; padding:8px 12px; border:1px solid #ddd; font-weight:600; }
+                .isxf-docs-body th { background:#f1f5f9; text-align:left; padding:8px 12px; border:1px solid #ddd; font-weight:600; }
                 .isxf-docs-body td { padding:8px 12px; border:1px solid #eee; }
-                .isxf-docs-body code { background:#f0f0f1; padding:2px 6px; border-radius:3px; font-size:12px; }
+                .isxf-docs-body code { background:#f1f5f9; padding:2px 6px; border-radius:3px; font-size:12px; }
                 .isxf-docs-body .step { display:flex; gap:12px; margin:8px 0; }
-                .isxf-docs-body .step-num { flex-shrink:0; width:24px; height:24px; background:#2271b1; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; margin-top:1px; }
+                .isxf-docs-body .step-num { flex-shrink:0; width:24px; height:24px; background:#0079ff; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; margin-top:1px; }
                 .isxf-docs-body .step-text { flex:1; }
-                .isxf-docs-body .tip-box { background:#f0f7ff; border-left:4px solid #2271b1; padding:10px 14px; border-radius:0 4px 4px 0; margin:12px 0; font-size:12px; }
+                .isxf-docs-body .tip-box { background:#e6f2ff; border-left:4px solid #0079ff; padding:10px 14px; border-radius:0 4px 4px 0; margin:12px 0; font-size:12px; }
                 .isxf-docs-body .warn-box { background:#fff8e5; border-left:4px solid #dba617; padding:10px 14px; border-radius:0 4px 4px 0; margin:12px 0; font-size:12px; }
             </style>
 
             <div class="wrap isxf-docs-wrap">
                 <h1><?php esc_html_e( '📖 User Guide', 'insightx-form' ); ?> <span class="isxf-docs-ver">v<?php echo ISXF_PLUGIN_VERSION; ?></span></h1>
-                <p style="color:#50575e; margin-bottom:20px;"><?php esc_html_e( 'InsightX Form — A form and customer data management system for businesses', 'insightx-form' ); ?></p>
+                <p style="color:#5a6881; margin-bottom:20px;"><?php esc_html_e( 'InsightX Form — A form and customer data management system for businesses', 'insightx-form' ); ?></p>
 
                 <div class="isxf-docs-section open">
                     <div class="isxf-docs-header"><?php esc_html_e( '📝 Creating a Form', 'insightx-form' ); ?> <span class="isxf-docs-arrow">▼</span></div>

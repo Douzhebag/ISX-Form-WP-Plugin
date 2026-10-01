@@ -20,6 +20,18 @@ define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 define( 'ISXF_PLUGIN_VERSION', '0.9.1' );
 define( 'ISXF_DB_VERSION', '1.1' );
 
+/**
+ * Cache-busting `ver` for a bundled asset: the plugin version plus the file's
+ * mtime, so an edited CSS/JS file gets a new URL without a version bump.
+ *
+ * @param string $rel Path relative to the plugin root, e.g. 'assets/css/isxf-admin.css'.
+ * @return string
+ */
+function isxf_asset_ver( $rel ) {
+    $mtime = @filemtime( ISXF_PLUGIN_DIR . $rel );
+    return $mtime ? ISXF_PLUGIN_VERSION . '.' . $mtime : ISXF_PLUGIN_VERSION;
+}
+
 // === GitHub Plugin Update Checker ===
 require_once ISXF_PLUGIN_DIR . 'libs/plugin-update-checker/plugin-update-checker.php';
 

@@ -11,12 +11,12 @@
 
     // Color palette
     var colors = {
-        primary: '#4F46E5',
-        primaryLight: 'rgba(79,70,229,0.1)',
-        new: '#2271b1',
+        primary: '#0079ff',
+        primaryLight: 'rgba(0, 121, 255,0.1)',
+        new: '#0079ff',
         in_progress: '#996800',
-        done: '#2e7d32',
-        junk: '#aa0000'
+        done: '#16a34a',
+        junk: '#db0000'
     };
 
     /**
@@ -96,13 +96,13 @@
         var msg = env.i18n.error_loading;
         document.querySelectorAll('.ix-loading').forEach(function (el) {
             el.textContent = msg;
-            el.style.color = '#d63638';
+            el.style.color = '#db0000';
         });
         var statsWrap = document.querySelector('.ix-analytics-stats');
         if (statsWrap && !statsWrap.dataset.errorShown) {
             statsWrap.dataset.errorShown = '1';
             var div = document.createElement('div');
-            div.style.cssText = 'padding:20px;text-align:center;color:#d63638;grid-column:1/-1;';
+            div.style.cssText = 'padding:20px;text-align:center;color:#db0000;grid-column:1/-1;';
             div.textContent = msg;
             statsWrap.appendChild(div);
         }
@@ -200,7 +200,7 @@
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(17,24,39,0.9)',
+                        backgroundColor: 'rgba(15, 23, 42,0.9)',
                         titleFont: { size: 12 },
                         bodyFont: { size: 13, weight: '600' },
                         padding: 10,
@@ -213,14 +213,14 @@
                 scales: {
                     x: {
                         grid: { display: false },
-                        ticks: { font: { size: 11 }, color: '#9CA3AF', maxRotation: 45 }
+                        ticks: { font: { size: 11 }, color: '#94a3b8', maxRotation: 45 }
                     },
                     y: {
                         beginAtZero: true,
                         grid: { color: 'rgba(0,0,0,0.04)' },
                         ticks: {
                             font: { size: 11 },
-                            color: '#9CA3AF',
+                            color: '#94a3b8',
                             stepSize: 1,
                             callback: function (v) { return Number.isInteger(v) ? v : ''; }
                         }
@@ -292,7 +292,7 @@
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: 'rgba(17,24,39,0.9)',
+                        backgroundColor: 'rgba(15, 23, 42,0.9)',
                         padding: 10,
                         cornerRadius: 8,
                         callbacks: {
@@ -353,19 +353,19 @@
 
         var statusIcons = { 'new': '🔵', 'in_progress': '🟡', 'done': '✅', 'junk': '🔴' };
         var statusLabels = { 'new': isxf_analytics_env.i18n.status_new, 'in_progress': isxf_analytics_env.i18n.status_in_progress, 'done': isxf_analytics_env.i18n.status_done, 'junk': isxf_analytics_env.i18n.status_junk };
-        var statusColors = { 'new': '#2271b1', 'in_progress': '#996800', 'done': '#2e7d32', 'junk': '#aa0000' };
-        var statusBgs = { 'new': '#e8f0fe', 'in_progress': '#fff8e5', 'done': '#edf7ed', 'junk': '#fef0f0' };
+        var statusColors = { 'new': '#0079ff', 'in_progress': '#996800', 'done': '#16a34a', 'junk': '#db0000' };
+        var statusBgs = { 'new': '#e6f2ff', 'in_progress': '#fff8e5', 'done': '#e6f7ec', 'junk': '#ffe8e8' };
 
         var html = '';
         recent.forEach(function (entry) {
             var st = entry.status || 'new';
             html += '<div class="ix-recent-item">' +
-                '<div class="ix-recent-icon" style="background:' + (statusBgs[st] || '#f3f4f6') + '">' + (statusIcons[st] || '🔵') + '</div>' +
+                '<div class="ix-recent-icon" style="background:' + (statusBgs[st] || '#f1f5f9') + '">' + (statusIcons[st] || '🔵') + '</div>' +
                 '<div class="ix-recent-info">' +
                 '<div class="ix-recent-title">' + escapeHtml(entry.form_title) + '</div>' +
                 '<div class="ix-recent-meta">' + escapeHtml(entry.time_ago) + ' · ' + escapeHtml(entry.ip) + '</div>' +
                 '</div>' +
-                '<span class="ix-recent-badge" style="color:' + (statusColors[st] || '#6B7280') + '; background:' + (statusBgs[st] || '#f3f4f6') + '">' +
+                '<span class="ix-recent-badge" style="color:' + (statusColors[st] || '#5a6881') + '; background:' + (statusBgs[st] || '#f1f5f9') + '">' +
                 (statusIcons[st] || '') + ' ' + (statusLabels[st] || st) +
                 '</span>' +
                 '</div>';

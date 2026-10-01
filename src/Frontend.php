@@ -33,9 +33,9 @@ class Frontend {
             wp_enqueue_script( 'flatpickr-js', ISXF_PLUGIN_URL . 'assets/libs/flatpickr/flatpickr.min.js', [], '4.6.13', true );
             wp_enqueue_script( 'flatpickr-th', ISXF_PLUGIN_URL . 'assets/libs/flatpickr/th.js', ['flatpickr-js'], '4.6.13', true );
 
-            wp_enqueue_style( 'isxf-frontend-style', ISXF_PLUGIN_URL . 'assets/css/isxf-frontend.css', [], ISXF_PLUGIN_VERSION );
+            wp_enqueue_style( 'isxf-frontend-style', ISXF_PLUGIN_URL . 'assets/css/isxf-frontend.css', [], \isxf_asset_ver( 'assets/css/isxf-frontend.css' ) );
             // isxf-frontend.js is vanilla JS — no jQuery dependency.
-            wp_enqueue_script( 'isxf-frontend-script', ISXF_PLUGIN_URL . 'assets/js/isxf-frontend.js', ['flatpickr-js'], ISXF_PLUGIN_VERSION, true );
+            wp_enqueue_script( 'isxf-frontend-script', ISXF_PLUGIN_URL . 'assets/js/isxf-frontend.js', ['flatpickr-js'], \isxf_asset_ver( 'assets/js/isxf-frontend.js' ), true );
 
             wp_localize_script( 'isxf-frontend-script', 'isxf_env', [
                 'ajax_url' => admin_url( 'admin-ajax.php' ),

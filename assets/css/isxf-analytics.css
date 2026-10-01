@@ -2,7 +2,7 @@
 
 .ix-analytics-wrap {
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    color: #111827;
+    color: #0f172a;
     max-width: 1400px;
 }
 
@@ -37,32 +37,32 @@
     background: #fff;
     padding: 8px 16px;
     border-radius: 10px;
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e2e8f0;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .ix-date-filter label {
     font-size: 13px;
     font-weight: 600;
-    color: #374151;
+    color: #334155;
 }
 
 .ix-date-filter select,
 .ix-date-filter input[type="date"] {
     padding: 6px 10px;
-    border: 1px solid #D1D5DB;
+    border: 1px solid #cbd5e1;
     border-radius: 6px;
     font-size: 13px;
     background: #fff;
     font-family: inherit;
-    color: #374151;
+    color: #334155;
 }
 
 .ix-date-filter select:focus,
 .ix-date-filter input:focus {
     outline: none;
-    border-color: #4F46E5;
-    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+    border-color: #0079ff;
+    box-shadow: 0 0 0 2px rgba(0, 121, 255, 0.1);
 }
 
 .ix-date-custom {
@@ -87,7 +87,7 @@
     background: #fff;
     border-radius: 12px;
     padding: 20px 24px;
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e2e8f0;
     transition: all 0.25s;
     position: relative;
     overflow: hidden;
@@ -111,7 +111,7 @@
 
 .ix-analytics-card .ix-card-label {
     font-size: 13px;
-    color: #6B7280;
+    color: #5a6881;
     margin-top: 4px;
     font-weight: 500;
 }
@@ -127,18 +127,18 @@
 }
 
 .ix-card-delta.up {
-    color: #059669;
-    background: #ECFDF5;
+    color: #16a34a;
+    background: #e6f7ec;
 }
 
 .ix-card-delta.down {
-    color: #DC2626;
-    background: #FEF2F2;
+    color: #db0000;
+    background: #ffe8e8;
 }
 
 .ix-card-delta.neutral {
-    color: #6B7280;
-    background: #F3F4F6;
+    color: #5a6881;
+    background: #f1f5f9;
 }
 
 /* Charts Grid */
@@ -153,7 +153,7 @@
     background: #fff;
     border-radius: 12px;
     padding: 24px;
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e2e8f0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
@@ -161,7 +161,7 @@
     font-size: 15px;
     font-weight: 700;
     margin: 0 0 16px 0;
-    color: #111827;
+    color: #0f172a;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -188,7 +188,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
-    border-bottom: 1px solid #F3F4F6;
+    border-bottom: 1px solid #f1f5f9;
     font-size: 14px;
 }
 
@@ -210,12 +210,12 @@
     align-items: center;
     gap: 6px;
     font-weight: 500;
-    color: #374151;
+    color: #334155;
 }
 
 .ix-status-count {
     font-weight: 700;
-    color: #111827;
+    color: #0f172a;
     font-size: 15px;
 }
 
@@ -232,7 +232,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 0;
-    border-bottom: 1px solid #F3F4F6;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 .ix-top-form-item:last-child {
@@ -249,21 +249,21 @@
     font-size: 12px;
     font-weight: 700;
     color: #fff;
-    background: #4F46E5;
+    background: #0079ff;
     flex-shrink: 0;
 }
 
 .ix-top-form-rank.r2 {
-    background: #7C3AED;
+    background: #0062d1;
 }
 
 .ix-top-form-rank.r3 {
-    background: #9333EA;
+    background: #0f172a;
 }
 
 .ix-top-form-rank.rn {
-    background: #D1D5DB;
-    color: #374151;
+    background: #cbd5e1;
+    color: #334155;
 }
 
 .ix-top-form-info {
@@ -274,7 +274,7 @@
 .ix-top-form-name {
     font-weight: 600;
     font-size: 14px;
-    color: #111827;
+    color: #0f172a;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -282,7 +282,7 @@
 
 .ix-top-form-bar {
     height: 6px;
-    background: #EEF2FF;
+    background: #e6f2ff;
     border-radius: 3px;
     margin-top: 6px;
     overflow: hidden;
@@ -291,14 +291,14 @@
 .ix-top-form-bar-fill {
     height: 100%;
     border-radius: 3px;
-    background: linear-gradient(90deg, #4F46E5, #7C3AED);
+    background: linear-gradient(90deg, #0079ff, #38bdf8);
     transition: width 0.5s ease;
 }
 
 .ix-top-form-count {
     font-weight: 700;
     font-size: 16px;
-    color: #4F46E5;
+    color: #0079ff;
     flex-shrink: 0;
 }
 
@@ -308,7 +308,7 @@
     align-items: center;
     gap: 12px;
     padding: 10px 0;
-    border-bottom: 1px solid #F3F4F6;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 .ix-recent-item:last-child {
@@ -334,7 +334,7 @@
 .ix-recent-title {
     font-weight: 600;
     font-size: 13px;
-    color: #111827;
+    color: #0f172a;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -342,7 +342,7 @@
 
 .ix-recent-meta {
     font-size: 12px;
-    color: #9CA3AF;
+    color: #94a3b8;
     margin-top: 2px;
 }
 
@@ -359,7 +359,7 @@
 .ix-loading {
     text-align: center;
     padding: 40px;
-    color: #9CA3AF;
+    color: #94a3b8;
     font-size: 14px;
 }
 
@@ -369,7 +369,7 @@
     padding: 60px 20px;
     background: #fff;
     border-radius: 12px;
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e2e8f0;
 }
 
 .ix-analytics-empty .ix-empty-icon {
@@ -380,7 +380,7 @@
 
 .ix-analytics-empty .ix-empty-text {
     font-size: 15px;
-    color: #6B7280;
+    color: #5a6881;
 }
 
 /* Responsive */

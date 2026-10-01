@@ -21,7 +21,7 @@
                     </select>
                     <div id="ix-custom-dates" class="ix-date-custom">
                         <input type="date" id="ix-start-date">
-                        <span style="color:#9CA3AF">→</span>
+                        <span style="color:#94a3b8">→</span>
                         <input type="date" id="ix-end-date">
                         <button type="button" id="ix-apply-dates" class="button button-primary" style="padding:4px 14px;"><?php esc_html_e( 'OK', 'insightx-form' ); ?></button>
                     </div>

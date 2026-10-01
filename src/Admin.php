@@ -67,14 +67,14 @@ class Admin {
                 'isxf-admin-css',
                 plugin_dir_url( __DIR__ ) . 'assets/css/isxf-admin.css',
                 [],
-                ISXF_PLUGIN_VERSION
+                \isxf_asset_ver( 'assets/css/isxf-admin.css' )
             );
 
             wp_enqueue_script(
                 'isxf-admin-js',
                 plugin_dir_url( __DIR__ ) . 'assets/js/isxf-admin.js',
                 [ 'jquery', 'jquery-ui-sortable' ],
-                ISXF_PLUGIN_VERSION,
+                \isxf_asset_ver( 'assets/js/isxf-admin.js' ),
                 true
             );
 
