@@ -1067,19 +1067,16 @@ msgstr ""
 "แอดมินจะได้รับ Email แจ้งเตือนทันที"
 
 #: templates/admin/docs-page.php:101
-msgid "🔐 Connect SMTP via OAuth2 (Google / Microsoft 365)"
-msgstr "🔐 เชื่อมต่อ SMTP ด้วย OAuth2 (Google / Microsoft 365)"
+msgid "🔐 Connect SMTP via OAuth2 (Google)"
+msgstr "🔐 เชื่อมต่อ SMTP ด้วย OAuth2 (Google)"
 
 #: templates/admin/docs-page.php:103
 msgid ""
-"OAuth2 is more secure than Basic Auth and <strong>required for Microsoft "
-"365</strong> because Microsoft has disabled Basic Auth (SMTP AUTH) for "
-"Exchange Online. In the settings page, set \"Authentication Method\" to "
-"Google OAuth2 or Microsoft 365 OAuth2"
+"OAuth2 is more secure than Basic Auth. In the settings page, set "
+"\"Authentication Method\" to Google OAuth2"
 msgstr ""
-"OAuth2 ปลอดภัยกว่า Basic Auth และ <strong>จำเป็นสำหรับ Microsoft 365</strong> "
-"เพราะ Microsoft ปิด Basic Auth (SMTP AUTH) ของ Exchange Online ไปแล้ว "
-"ในหน้าตั้งค่าให้เลือก \"วิธียืนยันตัวตน\" เป็น Google OAuth2 หรือ Microsoft 365 OAuth2"
+"OAuth2 ปลอดภัยกว่า Basic Auth ในหน้าตั้งค่าให้เลือก \"วิธียืนยันตัวตน\" "
+"เป็น Google OAuth2"
 
 #: templates/admin/docs-page.php:105
 msgid ""
@@ -1801,8 +1798,8 @@ msgid "Enter your Azure Tenant ID (Directory ID) or leave it as %s"
 msgstr "ใส่ Tenant ID (Directory ID) ของ Azure หรือเว้นไว้เป็น %s"
 
 #: templates/admin/settings-page.php:175
-msgid "Copy this value into Google Cloud Console / Azure App registration"
-msgstr "คัดลอกค่านี้ไปใส่ใน Google Cloud Console / Azure App registration"
+msgid "Copy this value into Google Cloud Console"
+msgstr "คัดลอกค่านี้ไปใส่ใน Google Cloud Console"
 
 #: templates/admin/settings-page.php:179
 msgid "Reconnect"
@@ -1818,12 +1815,11 @@ msgstr "💡 ดูวิธีตั้งค่า OAuth2 ได้ที่�
 
 #: templates/admin/settings-page.php:184
 msgid ""
-"You need to register an OAuth app in Google Cloud Console (Gmail) or Azure "
-"App registration (Microsoft 365), then configure the Redirect URI above to "
-"match."
+"You need to register an OAuth app in Google Cloud Console (Gmail), then "
+"configure the Redirect URI above to match."
 msgstr ""
-"ต้องลงทะเบียน OAuth App ที่ Google Cloud Console (Gmail) หรือ Azure App "
-"registration (Microsoft 365) แล้วนำ Redirect URI ด้านบนไปตั้งค่าให้ตรงกัน"
+"ต้องลงทะเบียน OAuth App ที่ Google Cloud Console (Gmail) "
+"แล้วนำ Redirect URI ด้านบนไปตั้งค่าให้ตรงกัน"
 
 #: templates/admin/settings-page.php:192
 msgid "⚠️ Disable SSL Certificate Verification"
@@ -1960,3 +1956,31 @@ msgstr "โปรดเลือก"
 #: templates/frontend/form.php:96
 msgid "Please fill in all required fields to submit the form."
 msgstr "กรุณากรอกข้อมูลในช่องที่จำเป็นให้ครบก่อนส่งแบบฟอร์ม"
+
+#: templates/admin/settings-page.php
+#. translators: 1: username "resend" in <code> tags, 2: link to the Resend API keys page.
+msgid ""
+"Username is %1$s and Password is your API key from %2$s. The From Email "
+"domain must be verified in Resend."
+msgstr ""
+"Username ใส่ %1$s ส่วน Password ใส่ API key จาก %2$s "
+"และโดเมนของ From Email ต้อง verify ใน Resend แล้ว"
+
+#: templates/admin/docs-page.php
+msgid "Example Values for Resend"
+msgstr "ค่าตัวอย่างสำหรับ Resend"
+
+#: templates/admin/docs-page.php
+msgid ""
+"API key from <a href=\"https://resend.com/api-keys\" target=\"_blank\">resend."
+"com/api-keys</a>"
+msgstr ""
+"API key จาก <a href=\"https://resend.com/api-keys\" target=\"_blank\">resend."
+"com/api-keys</a>"
+
+#: templates/admin/docs-page.php
+msgid ""
+"⚠️ The From Email domain must be verified in Resend (Domains) before emails "
+"can be sent"
+msgstr ""
+"⚠️ โดเมนของ From Email ต้อง verify ในเมนู Domains ของ Resend ก่อน ไม่งั้นจะส่งอีเมลไม่ได้"

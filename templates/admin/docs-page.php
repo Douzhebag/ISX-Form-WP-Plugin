@@ -86,6 +86,16 @@
                         </table>
                         <div class="warn-box"><?php esc_html_e( '⚠️ You must enable 2-Step Verification in your Google Account and create an App Password before it will work', 'insightx-form' ); ?></div>
 
+                        <h4><?php esc_html_e( 'Example Values for Resend', 'insightx-form' ); ?></h4>
+                        <table>
+                            <tr><th><?php esc_html_e( 'Field', 'insightx-form' ); ?></th><th><?php esc_html_e( 'Value', 'insightx-form' ); ?></th></tr>
+                            <tr><td>Host</td><td><code>smtp.resend.com</code></td></tr>
+                            <tr><td>Port</td><td><code>587</code></td></tr>
+                            <tr><td>Username</td><td><code>resend</code></td></tr>
+                            <tr><td>Password</td><td><?php echo __( 'API key from <a href="https://resend.com/api-keys" target="_blank">resend.com/api-keys</a>', 'insightx-form' ); ?></td></tr>
+                        </table>
+                        <div class="warn-box"><?php esc_html_e( '⚠️ The From Email domain must be verified in Resend (Domains) before emails can be sent', 'insightx-form' ); ?></div>
+
                         <h4><?php esc_html_e( '🔐 SMTP Security', 'insightx-form' ); ?></h4>
                         <ul style="margin:8px 0; padding-left:20px; font-size:13px;">
                             <li><?php echo __( '🔒 <strong>Password is encrypted with AES-256-CBC</strong> automatically before saving — leave it blank if you do not want to change it', 'insightx-form' ); ?></li>
@@ -98,9 +108,9 @@
                 </div>
 
                 <div class="isxf-docs-section">
-                    <div class="isxf-docs-header"><?php esc_html_e( '🔐 Connect SMTP via OAuth2 (Google / Microsoft 365)', 'insightx-form' ); ?> <span class="isxf-docs-arrow">▼</span></div>
+                    <div class="isxf-docs-header"><?php esc_html_e( '🔐 Connect SMTP via OAuth2 (Google)', 'insightx-form' ); ?> <span class="isxf-docs-arrow">▼</span></div>
                     <div class="isxf-docs-body">
-                        <p><?php echo __( 'OAuth2 is more secure than Basic Auth and <strong>required for Microsoft 365</strong> because Microsoft has disabled Basic Auth (SMTP AUTH) for Exchange Online. In the settings page, set "Authentication Method" to Google OAuth2 or Microsoft 365 OAuth2', 'insightx-form' ); ?></p>
+                        <p><?php esc_html_e( 'OAuth2 is more secure than Basic Auth. In the settings page, set "Authentication Method" to Google OAuth2', 'insightx-form' ); ?></p>
 
                         <div class="tip-box"><?php echo __( '💡 The settings page has a <strong>Redirect URI</strong> field — copy it into the steps below. It must match 100%', 'insightx-form' ); ?></div>
 
@@ -110,14 +120,6 @@
                         <div class="step"><span class="step-num">3</span><span class="step-text"><?php echo __( 'Create an <strong>OAuth client ID</strong> of type <em>Web application</em>, then enter the <strong>Redirect URI</strong> from the settings page', 'insightx-form' ); ?></span></div>
                         <div class="step"><span class="step-num">4</span><span class="step-text"><?php echo __( 'Copy the <strong>Client ID</strong> and <strong>Client Secret</strong> into the settings page → click <strong>Save</strong> → click <strong>Connect Account</strong>', 'insightx-form' ); ?></span></div>
 
-                        <h4><?php esc_html_e( '🟧 Microsoft 365 (Outlook / Exchange Online)', 'insightx-form' ); ?></h4>
-                        <div class="step"><span class="step-num">1</span><span class="step-text"><?php echo __( 'Go to <a href="https://entra.microsoft.com/" target="_blank">Microsoft Entra (Azure AD) → App registrations</a> → New registration', 'insightx-form' ); ?></span></div>
-                        <div class="step"><span class="step-num">2</span><span class="step-text"><?php echo __( 'Set a <em>Web</em> Redirect URI to the value from the settings page', 'insightx-form' ); ?></span></div>
-                        <div class="step"><span class="step-num">3</span><span class="step-text"><?php echo __( 'Go to <strong>API permissions</strong> → add <code>https://outlook.office.com/SMTP.Send</code> and <code>offline_access</code>', 'insightx-form' ); ?></span></div>
-                        <div class="step"><span class="step-num">4</span><span class="step-text"><?php echo __( 'Go to <strong>Certificates &amp; secrets</strong> → create a <strong>Client secret</strong>', 'insightx-form' ); ?></span></div>
-                        <div class="step"><span class="step-num">5</span><span class="step-text"><?php echo __( 'Enter the <strong>Client ID</strong>, <strong>Client Secret</strong>, and <strong>Tenant ID</strong> (Directory ID) on the settings page → click <strong>Save</strong> → click <strong>Connect Account</strong>', 'insightx-form' ); ?></span></div>
-
-                        <div class="warn-box"><?php echo __( '⚠️ An Exchange administrator must also grant the <code>SMTP.Send</code> permission to the mailbox used to send email', 'insightx-form' ); ?></div>
                         <div class="tip-box"><?php esc_html_e( '🔒 The Client Secret and Refresh Token are encrypted with AES-256-CBC before being stored in the database', 'insightx-form' ); ?></div>
                     </div>
                 </div>

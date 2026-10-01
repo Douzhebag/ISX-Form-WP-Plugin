@@ -214,13 +214,13 @@ abstract class AbstractAjaxController {
     public function configure_smtp( $phpmailer ) {
         if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) return;
 
-        // === OAuth2 (XOAUTH2) — Google / Microsoft 365 ===
+        // === OAuth2 (XOAUTH2) — Google ===
         $auth_method = get_option( 'isxf_smtp_auth_method', 'password' );
-        if ( ( $auth_method === 'oauth_google' || $auth_method === 'oauth_microsoft' )
+        if ( $auth_method === 'oauth_google'
             && class_exists( OAuth::class ) && class_exists( OAuthTokenProvider::class )
             && OAuth::is_connected() ) {
 
-            $provider = ( $auth_method === 'oauth_google' ) ? 'google' : 'microsoft';
+            $provider = 'google';
             $email    = OAuth::connected_email();
             if ( ! is_email( $email ) ) {
                 // id_token ไม่ได้คืน email — fallback ไปที่ช่อง Username เดิม

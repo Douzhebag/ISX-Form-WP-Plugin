@@ -31,7 +31,6 @@ class Admin {
         private $smtp_auth_method   = 'isxf_smtp_auth_method';
         private $oauth_client_id    = 'isxf_smtp_oauth_client_id';
         private $oauth_client_secret = 'isxf_smtp_oauth_client_secret';
-        private $oauth_tenant       = 'isxf_smtp_oauth_tenant';
 
 
 
@@ -45,6 +44,7 @@ class Admin {
             add_action( 'manage_isxf_form_posts_custom_column', [ $this, 'fill_form_columns' ], 10, 2 );
             add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
             add_action( 'admin_init', [ $this, 'maybe_migrate_smtp_password' ], 5 );
+            add_action( 'admin_init', [ $this, 'maybe_drop_microsoft_oauth' ], 5 );
             add_action( 'admin_notices', [ $this, 'captcha_missing_notice' ] );
             add_action( 'admin_notices', [ $this, 'legacy_deprecation_notice' ] );
             add_action( 'admin_init', [ $this, 'maybe_dismiss_legacy_deprecation_notice' ] );
@@ -155,7 +155,7 @@ class Admin {
                 $this->smtp_enable, $this->smtp_host, $this->smtp_port, $this->smtp_user, $this->smtp_pass, $this->smtp_secure, $this->smtp_from_e, $this->smtp_from_n,
                 $this->admin_notify_enable, $this->admin_notify_email,
                 $this->smtp_ssl_verify_off,
-                $this->smtp_auth_method, $this->oauth_client_id, $this->oauth_client_secret, $this->oauth_tenant
+                $this->smtp_auth_method, $this->oauth_client_id, $this->oauth_client_secret
             ];
             // Checkbox options submit nothing when unchecked → the sanitize
             // callback receives null. They get a dedicated null-safe callback
@@ -203,8 +203,8 @@ class Admin {
             $oauth_error_msg = isset( $_GET['msg'] ) ? esc_html( rawurldecode( wp_unslash( $_GET['msg'] ) ) ) : __( 'An error occurred', 'insightx-form' );
 
             $auth_method    = get_option( $this->smtp_auth_method, 'password' );
-            $is_oauth       = in_array( $auth_method, [ 'oauth_google', 'oauth_microsoft' ], true );
-            $oauth_provider = ( $auth_method === 'oauth_microsoft' ) ? 'microsoft' : 'google';
+            $is_oauth       = $auth_method === 'oauth_google';
+            $oauth_provider = 'google';
 
             Template::render( 'admin/settings-page', [
                 'opt' => [
@@ -225,7 +225,6 @@ class Admin {
                     'smtp_pass'           => $this->smtp_pass,
                     'oauth_client_id'     => $this->oauth_client_id,
                     'oauth_client_secret' => $this->oauth_client_secret,
-                    'oauth_tenant'        => $this->oauth_tenant,
                     'smtp_ssl_verify_off' => $this->smtp_ssl_verify_off,
                 ],
                 'v' => [
@@ -244,7 +243,6 @@ class Admin {
                     'smtp_pass'           => get_option($this->smtp_pass),
                     'oauth_client_id'     => get_option($this->oauth_client_id),
                     'oauth_client_secret' => get_option($this->oauth_client_secret),
-                    'oauth_tenant'        => get_option($this->oauth_tenant),
                     'smtp_ssl_verify_off' => get_option($this->smtp_ssl_verify_off),
                 ],
                 'service'            => $service,
@@ -428,6 +426,20 @@ class Admin {
                 return;
             }
             update_option( $this->smtp_pass, $encrypted );
+        }
+
+        /**
+         * Microsoft 365 OAuth2 was removed — fall back to Basic Auth and clear
+         * its leftover tokens so sites that used it don't send with an empty config.
+         */
+        public function maybe_drop_microsoft_oauth() {
+            if ( get_option( $this->smtp_auth_method ) !== 'oauth_microsoft' ) return;
+
+            update_option( $this->smtp_auth_method, 'password' );
+            delete_option( 'isxf_smtp_oauth_refresh_token' );
+            delete_option( 'isxf_smtp_oauth_connected' );
+            delete_option( 'isxf_smtp_oauth_tenant' );
+            delete_transient( 'isxf_oauth_access_token' );
         }
 
         public function save_form_fields( $post_id ) {
