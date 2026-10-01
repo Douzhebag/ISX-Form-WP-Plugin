@@ -1,6 +1,6 @@
 <?php
 /**
- * Template: Analytics Dashboard page (wp-admin → แบบฟอร์ม → 📊 Analytics).
+ * Template: Analytics Dashboard page (wp-admin → InsightX Form → 📊 Analytics).
  *
  * Extracted from ISXF\Entries::render_analytics_page() (Phase 2.2 view
  * split). Static markup — all data is fetched client-side via the
@@ -27,6 +27,7 @@
                     </div>
                 </div>
             </div>
+            <hr class="wp-header-end">
 
             <!-- Stat Cards -->
             <div class="ix-analytics-stats">

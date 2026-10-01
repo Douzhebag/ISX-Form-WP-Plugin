@@ -890,8 +890,8 @@ msgid "📝 Creating a Form"
 msgstr "📝 การสร้างฟอร์ม"
 
 #: templates/admin/docs-page.php:39
-msgid "Go to <strong>Forms → Create New Form</strong>"
-msgstr "ไปที่ <strong>แบบฟอร์ม → สร้างฟอร์มใหม่</strong>"
+msgid "Go to <strong>InsightX Form → Create New Form</strong>"
+msgstr "ไปที่ <strong>InsightX Form → สร้างฟอร์มใหม่</strong>"
 
 #: templates/admin/docs-page.php:40
 msgid "Set a <strong>form name</strong> (e.g. \"Room Booking Form\")"
@@ -967,8 +967,8 @@ msgid "🖥️ Displaying a Form on Your Site"
 msgstr "🖥️ การแสดงฟอร์มบนหน้าเว็บ"
 
 #: templates/admin/docs-page.php:64
-msgid "Go to <strong>Forms → All Forms</strong>"
-msgstr "ไปที่ <strong>แบบฟอร์ม → ฟอร์มทั้งหมด</strong>"
+msgid "Go to <strong>InsightX Form → All Forms</strong>"
+msgstr "ไปที่ <strong>InsightX Form → ฟอร์มทั้งหมด</strong>"
 
 #: templates/admin/docs-page.php:65
 msgid "Copy the shortcode, e.g. <code>[advanced_form id=\"123\"]</code>"
@@ -987,8 +987,8 @@ msgid "📧 SMTP Settings & Email Testing"
 msgstr "📧 ตั้งค่า SMTP & ทดสอบอีเมล"
 
 #: templates/admin/docs-page.php:74
-msgid "Go to <strong>Forms → ⚙️ System Settings</strong>"
-msgstr "ไปที่ <strong>แบบฟอร์ม → ⚙️ ตั้งค่าระบบ</strong>"
+msgid "Go to <strong>InsightX Form → ⚙️ System Settings</strong>"
+msgstr "ไปที่ <strong>InsightX Form → ⚙️ ตั้งค่าระบบ</strong>"
 
 #: templates/admin/docs-page.php:75
 msgid "Check <strong>Enable SMTP</strong>"
@@ -1286,8 +1286,8 @@ msgid "📥 Managing Entries"
 msgstr "📥 จัดการรายการข้อมูล (Entries)"
 
 #: templates/admin/docs-page.php:164
-msgid "Go to <strong>Forms → 📥 Entries</strong>"
-msgstr "ไปที่ <strong>แบบฟอร์ม → 📥 รายการข้อมูล</strong>"
+msgid "Go to <strong>InsightX Form → 📥 Entries</strong>"
+msgstr "ไปที่ <strong>InsightX Form → 📥 รายการข้อมูล</strong>"
 
 #: templates/admin/docs-page.php:166
 msgid "Filters"
@@ -1984,3 +1984,169 @@ msgid ""
 "can be sent"
 msgstr ""
 "⚠️ โดเมนของ From Email ต้อง verify ในเมนู Domains ของ Resend ก่อน ไม่งั้นจะส่งอีเมลไม่ได้"
+
+#. translators: 1: username "api_token" in <code> tags, 2: "Email Sending: Edit" permission name in <code> tags.
+#: templates/admin/settings-page.php
+#, php-format
+msgid "Username is %1$s and Password is a Cloudflare API token with the %2$s permission. The From Email domain must be onboarded under Email Service → Email Sending in Cloudflare."
+msgstr "Username คือ %1$s และ Password คือ Cloudflare API token ที่มีสิทธิ์ %2$s ส่วนโดเมนของ From Email ต้องเพิ่มไว้ในเมนู Email Service → Email Sending ของ Cloudflare แล้ว"
+
+#: templates/admin/docs-page.php
+msgid "Submit Button Style"
+msgstr "สไตล์ปุ่มส่ง"
+
+#: templates/admin/docs-page.php
+msgid "In the 🎨 panel, pick the background, text and hover colours, the corner radius and the font size. Leave a field empty to use the default. Advanced CSS applies to this form's button only."
+msgstr "ในแผง 🎨 เลือกสีพื้นหลัง สีตัวอักษร สีตอนชี้เมาส์ ความโค้งของมุม และขนาดตัวอักษรได้ ช่องไหนเว้นว่างจะใช้ค่าเริ่มต้น ส่วน Advanced CSS มีผลกับปุ่มของฟอร์มนี้เท่านั้น"
+
+#: templates/admin/docs-page.php
+msgid "Auto-reply Email Tools"
+msgstr "เครื่องมืออีเมลตอบกลับลูกค้า"
+
+#: templates/admin/docs-page.php
+msgid "<strong>👁️ Preview</strong> — see the email with sample data, even before you save the form"
+msgstr "<strong>👁️ ดูตัวอย่าง</strong> — ดูหน้าตาอีเมลด้วยข้อมูลตัวอย่าง ใช้ได้แม้ยังไม่บันทึกฟอร์ม"
+
+#: templates/admin/docs-page.php
+msgid "<strong>✏️ Edit from this template</strong> — copy the Booking / Inquiry template into the custom editor to adjust it"
+msgstr "<strong>✏️ แก้ไขจากเทมเพลตนี้</strong> — คัดลอกเทมเพลต Booking / Inquiry ไปแก้ต่อในช่อง Custom"
+
+#: templates/admin/docs-page.php
+msgid "<strong>🧪 Send a test email to me</strong> — send the sample email to your own address through your SMTP settings"
+msgstr "<strong>🧪 ส่งอีเมลทดสอบถึงฉัน</strong> — ส่งอีเมลตัวอย่างไปหาตัวเองผ่าน SMTP ที่ตั้งไว้"
+
+#: templates/admin/docs-page.php
+msgid "Copy the shortcode, e.g. <code>[isxf_form id=\"123\"]</code>"
+msgstr "คัดลอก shortcode เช่น <code>[isxf_form id=\"123\"]</code>"
+
+#: templates/admin/docs-page.php
+msgid "Under <strong>Authentication Method</strong>, click the card for your email service: <strong>Google</strong>, <strong>Resend</strong>, <strong>Cloudflare</strong> or <strong>Custom</strong>"
+msgstr "ที่หัวข้อ <strong>วิธียืนยันตัวตน</strong> กดการ์ดของผู้ให้บริการอีเมลที่ใช้: <strong>Google</strong>, <strong>Resend</strong>, <strong>Cloudflare</strong> หรือ <strong>กำหนดเอง</strong>"
+
+#: templates/admin/docs-page.php
+msgid "Fill in the remaining fields — see \"How to Connect Each Email Provider\" below for the exact values"
+msgstr "กรอกช่องที่เหลือ — ค่าที่ต้องใช้ของแต่ละเจ้าดูได้ในหัวข้อ \"วิธีเชื่อมต่อผู้ให้บริการอีเมลแต่ละเจ้า\" ด้านล่าง"
+
+#: templates/admin/docs-page.php
+msgid "🔌 How to Connect Each Email Provider"
+msgstr "🔌 วิธีเชื่อมต่อผู้ให้บริการอีเมลแต่ละเจ้า"
+
+#: templates/admin/docs-page.php
+msgid "Pick the card that matches your email service on the settings page. Each provider needs different values:"
+msgstr "เลือกการ์ดให้ตรงกับบริการอีเมลที่ใช้ในหน้าตั้งค่าระบบ แต่ละเจ้าใช้ค่าต่างกันตามนี้"
+
+#: templates/admin/docs-page.php
+msgid "Connects with OAuth2, so no email password is stored on the site. Best for Google Workspace accounts."
+msgstr "เชื่อมต่อด้วย OAuth2 จึงไม่ต้องเก็บรหัสผ่านอีเมลไว้ในเว็บ เหมาะกับบัญชี Google Workspace"
+
+#: templates/admin/docs-page.php
+msgid "⬛ Resend"
+msgstr "⬛ Resend"
+
+#: templates/admin/docs-page.php
+msgid "Sign up at <a href=\"https://resend.com\" target=\"_blank\">resend.com</a>, add your domain under <strong>Domains</strong> and add the DNS records it shows until the domain is <strong>Verified</strong>"
+msgstr "สมัครที่ <a href=\"https://resend.com\" target=\"_blank\">resend.com</a> เพิ่มโดเมนในเมนู <strong>Domains</strong> แล้วใส่ DNS record ตามที่บอกจนโดเมนขึ้นว่า <strong>Verified</strong>"
+
+#: templates/admin/docs-page.php
+msgid "Create an API key at <a href=\"https://resend.com/api-keys\" target=\"_blank\">resend.com/api-keys</a> (Sending access is enough)"
+msgstr "สร้าง API key ที่ <a href=\"https://resend.com/api-keys\" target=\"_blank\">resend.com/api-keys</a> (สิทธิ์ Sending access ก็พอ)"
+
+#: templates/admin/docs-page.php
+msgid "Click the <strong>Resend</strong> card — Host, Port and Username are filled in for you — then paste the API key into <strong>Password</strong>"
+msgstr "กดการ์ด <strong>Resend</strong> ระบบจะเติม Host, Port และ Username ให้ แล้ววาง API key ในช่อง <strong>Password</strong>"
+
+#: templates/admin/docs-page.php
+msgid "🟧 Cloudflare"
+msgstr "🟧 Cloudflare"
+
+#: templates/admin/docs-page.php
+msgid "In the <a href=\"https://dash.cloudflare.com\" target=\"_blank\">Cloudflare Dashboard</a>, go to <strong>Email Service → Email Sending</strong> and onboard your domain"
+msgstr "ใน <a href=\"https://dash.cloudflare.com\" target=\"_blank\">Cloudflare Dashboard</a> ไปที่ <strong>Email Service → Email Sending</strong> แล้วเพิ่มโดเมนของคุณ"
+
+#: templates/admin/docs-page.php
+msgid "Create an API token (<strong>My Profile → API Tokens</strong>) with the <code>Email Sending: Edit</code> permission"
+msgstr "สร้าง API token (<strong>My Profile → API Tokens</strong>) ที่มีสิทธิ์ <code>Email Sending: Edit</code>"
+
+#: templates/admin/docs-page.php
+msgid "Click the <strong>Cloudflare</strong> card — Host, Port and Username are filled in for you — then paste the API token into <strong>Password</strong>"
+msgstr "กดการ์ด <strong>Cloudflare</strong> ระบบจะเติม Host, Port และ Username ให้ แล้ววาง API token ในช่อง <strong>Password</strong>"
+
+#: templates/admin/docs-page.php
+msgid "API token with the <code>Email Sending: Edit</code> permission"
+msgstr "API token ที่มีสิทธิ์ <code>Email Sending: Edit</code>"
+
+#: templates/admin/docs-page.php
+msgid "⚠️ Cloudflare only accepts port 465 (SSL). The From Email domain must be onboarded in Email Sending, and each email can go to at most 50 recipients"
+msgstr "⚠️ Cloudflare รับแค่ port 465 (SSL) โดเมนของ From Email ต้องเพิ่มไว้ใน Email Sending แล้ว และอีเมลแต่ละฉบับส่งได้ไม่เกิน 50 ผู้รับ"
+
+#: templates/admin/docs-page.php
+msgid "⚙️ Custom (any SMTP server)"
+msgstr "⚙️ กำหนดเอง (SMTP เจ้าอื่น)"
+
+#: templates/admin/docs-page.php
+msgid "For any other service (Gmail with an App Password, Microsoft 365, your hosting mail server, etc.), click <strong>Custom</strong> and enter the Host, Port, Username and Password from that provider. Port 465 uses SSL; other ports use TLS automatically."
+msgstr "บริการอื่นๆ (Gmail แบบ App Password, Microsoft 365, เมลเซิร์ฟเวอร์ของโฮสติ้ง ฯลฯ) ให้กด <strong>กำหนดเอง</strong> แล้วกรอก Host, Port, Username และ Password ตามที่ผู้ให้บริการกำหนด port 465 ใช้ SSL ส่วน port อื่นใช้ TLS ให้อัตโนมัติ"
+
+#: templates/admin/docs-page.php
+msgid "⚠️ Keep <strong>\"Block form submissions when CAPTCHA is not configured\"</strong> enabled — if the Secret Key is missing, submissions are rejected instead of letting bots through"
+msgstr "⚠️ ควรเปิด <strong>\"บล็อกการส่งฟอร์มเมื่อยังไม่ได้ตั้งค่า CAPTCHA\"</strong> ไว้ ถ้ายังไม่ได้ใส่ Secret Key ระบบจะปฏิเสธการส่งฟอร์ม แทนที่จะปล่อยให้บอทส่งผ่านได้"
+
+#: templates/admin/docs-page.php
+msgid "🌐 Trusted Proxies (Cloudflare / CDN)"
+msgstr "🌐 Trusted Proxies (Cloudflare / CDN)"
+
+#: templates/admin/docs-page.php
+msgid "If your site sits behind Cloudflare, a CDN or a reverse proxy, every visitor appears to come from the proxy's IP, so the per-IP rate limit would block everyone at once."
+msgstr "ถ้าเว็บอยู่หลัง Cloudflare, CDN หรือ reverse proxy ผู้เข้าชมทุกคนจะดูเหมือนมาจาก IP ของ proxy ตัวจำกัดจำนวนการส่งต่อ IP จึงบล็อกทุกคนพร้อมกัน"
+
+#: templates/admin/docs-page.php
+msgid "Enter the proxy IP ranges (one CIDR per line) under <strong>Trusted Proxies</strong> on the settings page. The real visitor IP is then read from the <code>CF-Connecting-IP</code> / <code>X-Forwarded-For</code> header, but only for requests that come from those ranges."
+msgstr "ใส่ช่วง IP ของ proxy (บรรทัดละหนึ่ง CIDR) ในหัวข้อ <strong>Trusted Proxies</strong> ของหน้าตั้งค่าระบบ ระบบจะอ่าน IP จริงของผู้เข้าชมจาก header <code>CF-Connecting-IP</code> / <code>X-Forwarded-For</code> เฉพาะ request ที่มาจากช่วง IP เหล่านั้น"
+
+#: templates/admin/docs-page.php
+msgid "💡 Cloudflare lists its IP ranges at <a href=\"https://www.cloudflare.com/ips/\" target=\"_blank\">cloudflare.com/ips</a>. Leave the box empty if the site is not behind a proxy"
+msgstr "💡 ช่วง IP ของ Cloudflare ดูได้ที่ <a href=\"https://www.cloudflare.com/ips/\" target=\"_blank\">cloudflare.com/ips</a> ถ้าเว็บไม่ได้อยู่หลัง proxy ให้เว้นว่างไว้"
+
+#: templates/admin/docs-page.php
+msgid "✉️ Custom Email Template"
+msgstr "✉️ Custom Email Template"
+
+#: templates/admin/docs-page.php
+msgid "Write your own subject and body for the customer auto-reply email in the form editor"
+msgstr "เขียนหัวเรื่องและเนื้อหาอีเมลตอบกลับลูกค้าเองได้ในหน้าแก้ไขฟอร์ม"
+
+#: templates/admin/docs-page.php
+msgid "📈 Analytics"
+msgstr "📈 Analytics"
+
+#: templates/admin/docs-page.php
+msgid "Go to <strong>InsightX Form → 📊 Analytics</strong>"
+msgstr "ไปที่ <strong>InsightX Form → 📊 Analytics</strong>"
+
+#: templates/admin/docs-page.php
+msgid "Stat cards: all entries, entries in the selected range (compared with the previous period), today and average per day"
+msgstr "การ์ดตัวเลข: ทั้งหมด, ช่วงที่เลือก (เทียบกับช่วงก่อนหน้า), วันนี้ และเฉลี่ยต่อวัน"
+
+#: templates/admin/docs-page.php
+msgid "Daily submissions line chart"
+msgstr "กราฟเส้นจำนวนการส่งรายวัน"
+
+#: templates/admin/docs-page.php
+msgid "Status breakdown (doughnut chart)"
+msgstr "สัดส่วนสถานะ (กราฟโดนัท)"
+
+#: templates/admin/docs-page.php
+msgid "Top forms and the latest entries"
+msgstr "ฟอร์มยอดนิยม และรายการล่าสุด"
+
+#: templates/admin/docs-page.php
+msgid "Choose a range at the top right: 7 / 30 / 90 days, 1 year or a custom date range"
+msgstr "เลือกช่วงเวลาได้ที่มุมขวาบน: 7 / 30 / 90 วัน, 1 ปี หรือกำหนดวันที่เอง"
+
+#: templates/admin/docs-page.php
+msgid "Which email provider should I choose?"
+msgstr "ควรเลือกผู้ให้บริการอีเมลเจ้าไหน?"
+
+#: templates/admin/docs-page.php
+msgid "Google Workspace → Google. Your own domain without a mail server → Resend or Cloudflare. A mail server from your host or another provider → Custom."
+msgstr "ใช้ Google Workspace → เลือก Google / มีโดเมนแต่ไม่มีเมลเซิร์ฟเวอร์ → Resend หรือ Cloudflare / มีเมลเซิร์ฟเวอร์ของโฮสติ้งหรือเจ้าอื่น → กำหนดเอง"

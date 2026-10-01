@@ -3,7 +3,7 @@ Tags: forms, contact form, email, entries, form builder
 Requires at least: 7.0
 Tested up to: 7.1.2
 Requires PHP: 8.1
-Stable tag: 0.9.1
+Stable tag: 0.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +23,7 @@ InsightX Form คือระบบฟอร์มสำหรับธุรก
 
 = ส่งอีเมล =
 
-* ส่งผ่าน SMTP ได้ทั้ง Username / Password (มี preset สำหรับ Gmail และ Resend) หรือ OAuth2 ของ Google แบบไม่ต้องเก็บรหัสผ่าน
+* ส่งผ่าน SMTP ได้ทั้ง Username / Password (มี preset สำหรับ Resend) หรือ OAuth2 ของ Google แบบไม่ต้องเก็บรหัสผ่าน
 * ส่งอีเมลตอบกลับลูกค้าและแจ้งเตือนผู้ดูแลอัตโนมัติ
 * เลือก template สำเร็จรูป (booking / inquiry) หรือเขียนเองด้วย merge tag เช่น `{site_name}`, `{all_fields}`, `{field:ชื่อ}`
 * ดูตัวอย่างอีเมลและส่งอีเมลทดสอบหาตัวเองได้ก่อนใช้งานจริง
@@ -40,7 +40,7 @@ InsightX Form คือระบบฟอร์มสำหรับธุรก
 * กันสแปมด้วย reCAPTCHA v3 หรือ Cloudflare Turnstile และจำกัดจำนวนการส่งต่อ IP
 * รหัสผ่าน SMTP และ OAuth secret ถูกเข้ารหัส (AES-256 + HMAC) ก่อนบันทึก
 
-คู่มือฉบับเต็มอยู่ในเมนู แบบฟอร์ม → 📖 คู่มือการใช้งาน ในหลังบ้าน และใน README.md ที่มากับปลั๊กอิน
+คู่มือฉบับเต็มอยู่ในเมนู InsightX Form → 📖 คู่มือการใช้งาน ในหลังบ้าน และใน README.md ที่มากับปลั๊กอิน
 
 == Installation ==
 
@@ -49,9 +49,9 @@ InsightX Form คือระบบฟอร์มสำหรับธุรก
 1. ดาวน์โหลดไฟล์ `insightx-form-<เวอร์ชัน>.zip` จากหัวข้อ Assets ของ GitHub Releases: https://github.com/Douzhebag/ISX-Form-WP-Plugin/releases (ใช้ไฟล์นี้ ไม่ใช่ "Source code")
 2. ในหลังบ้าน WordPress ไปที่ ปลั๊กอิน → เพิ่มปลั๊กอินใหม่ → อัปโหลดปลั๊กอิน เลือกไฟล์ ZIP แล้วกด ติดตั้งเดี๋ยวนี้
 3. กด เปิดใช้งาน ที่ InsightX Form
-4. ไปที่ แบบฟอร์ม → ⚙️ ตั้งค่าระบบ เปิด SMTP แล้วกรอกข้อมูลอีเมล (เลือก preset Gmail หรือ Resend ได้) จากนั้นกดปุ่ม ทดสอบส่งอีเมล
+4. ไปที่ InsightX Form → ⚙️ ตั้งค่าระบบ เปิด SMTP แล้วกรอกข้อมูลอีเมล (เลือก Google OAuth2, Resend หรือกำหนดเอง) จากนั้นกดปุ่ม ทดสอบส่งอีเมล
 5. ตั้งค่า CAPTCHA (reCAPTCHA v3 หรือ Cloudflare Turnstile) ในหน้าเดียวกัน — ถ้าเลือกไว้แต่ไม่ใส่ secret key ระบบจะบล็อกการส่งฟอร์มทั้งหมด
-6. ไปที่ แบบฟอร์ม → เพิ่มใหม่ สร้างฟอร์มและเพิ่มฟิลด์ แล้วกด เผยแพร่
+6. ไปที่ InsightX Form → เพิ่มใหม่ สร้างฟอร์มและเพิ่มฟิลด์ แล้วกด เผยแพร่
 7. คัดลอก shortcode เช่น `[isxf_form id="123"]` ไปวางในหน้าเว็บ แล้วลองส่งฟอร์มจริงหนึ่งครั้ง
 
 = อัปโหลดโฟลเดอร์เอง =

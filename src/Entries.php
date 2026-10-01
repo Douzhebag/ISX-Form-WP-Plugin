@@ -51,7 +51,7 @@ class Entries {
         if ( null === $this->status_map ) {
             $this->status_map = [
                 'new'         => [ 'label' => __( 'New', 'insightx-form' ),         'color' => '#0079ff', 'bg' => '#e6f2ff', 'icon' => '🔵' ],
-                'in_progress' => [ 'label' => __( 'In Progress', 'insightx-form' ), 'color' => '#996800', 'bg' => '#fff8e5', 'icon' => '🟡' ],
+                'in_progress' => [ 'label' => __( 'In Progress', 'insightx-form' ), 'color' => '#D97706', 'bg' => '#fff8e5', 'icon' => '🟡' ],
                 'done'        => [ 'label' => __( 'Done', 'insightx-form' ),        'color' => '#16a34a', 'bg' => '#e6f7ec', 'icon' => '✅' ],
                 'junk'        => [ 'label' => __( 'Junk', 'insightx-form' ),        'color' => '#db0000',    'bg' => '#ffe8e8', 'icon' => '🔴' ],
             ];
@@ -110,7 +110,8 @@ class Entries {
         }
         // Load on analytics page
         if ( isset($_GET['page']) && $_GET['page'] === 'isxf-analytics' ) {
-            wp_enqueue_style( 'isxf-analytics-css', ISXF_PLUGIN_URL . 'assets/css/isxf-analytics.css', [], \isxf_asset_ver( 'assets/css/isxf-analytics.css' ) );
+            wp_enqueue_style( 'isxf-entries-css', ISXF_PLUGIN_URL . 'assets/css/isxf-entries.css', [], \isxf_asset_ver( 'assets/css/isxf-entries.css' ) );
+            wp_enqueue_style( 'isxf-analytics-css', ISXF_PLUGIN_URL . 'assets/css/isxf-analytics.css', [ 'isxf-entries-css' ], \isxf_asset_ver( 'assets/css/isxf-analytics.css' ) );
             // Bundled Chart.js v4.4.1 UMD build (source: https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js).
             wp_enqueue_script( 'chart-js', ISXF_PLUGIN_URL . 'assets/libs/chartjs/chart.umd.min.js', [], '4.4.1', true );
             wp_enqueue_script( 'isxf-analytics-js', ISXF_PLUGIN_URL . 'assets/js/isxf-analytics.js', ['chart-js'], \isxf_asset_ver( 'assets/js/isxf-analytics.js' ), true );

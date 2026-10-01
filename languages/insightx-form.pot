@@ -889,7 +889,7 @@ msgid "📝 Creating a Form"
 msgstr ""
 
 #: templates/admin/docs-page.php:39
-msgid "Go to <strong>Forms → Create New Form</strong>"
+msgid "Go to <strong>InsightX Form → Create New Form</strong>"
 msgstr ""
 
 #: templates/admin/docs-page.php:40
@@ -962,7 +962,7 @@ msgid "🖥️ Displaying a Form on Your Site"
 msgstr ""
 
 #: templates/admin/docs-page.php:64
-msgid "Go to <strong>Forms → All Forms</strong>"
+msgid "Go to <strong>InsightX Form → All Forms</strong>"
 msgstr ""
 
 #: templates/admin/docs-page.php:65
@@ -982,7 +982,7 @@ msgid "📧 SMTP Settings & Email Testing"
 msgstr ""
 
 #: templates/admin/docs-page.php:74
-msgid "Go to <strong>Forms → ⚙️ System Settings</strong>"
+msgid "Go to <strong>InsightX Form → ⚙️ System Settings</strong>"
 msgstr ""
 
 #: templates/admin/docs-page.php:75
@@ -1194,7 +1194,7 @@ msgid "📥 Managing Entries"
 msgstr ""
 
 #: templates/admin/docs-page.php:164
-msgid "Go to <strong>Forms → 📥 Entries</strong>"
+msgid "Go to <strong>InsightX Form → 📥 Entries</strong>"
 msgstr ""
 
 #: templates/admin/docs-page.php:166
@@ -1816,4 +1816,170 @@ msgstr ""
 
 #: templates/frontend/form.php:96
 msgid "Please fill in all required fields to submit the form."
+msgstr ""
+
+#. translators: 1: username "api_token" in <code> tags, 2: "Email Sending: Edit" permission name in <code> tags.
+#: templates/admin/settings-page.php
+#, php-format
+msgid "Username is %1$s and Password is a Cloudflare API token with the %2$s permission. The From Email domain must be onboarded under Email Service → Email Sending in Cloudflare."
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Submit Button Style"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "In the 🎨 panel, pick the background, text and hover colours, the corner radius and the font size. Leave a field empty to use the default. Advanced CSS applies to this form's button only."
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Auto-reply Email Tools"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "<strong>👁️ Preview</strong> — see the email with sample data, even before you save the form"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "<strong>✏️ Edit from this template</strong> — copy the Booking / Inquiry template into the custom editor to adjust it"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "<strong>🧪 Send a test email to me</strong> — send the sample email to your own address through your SMTP settings"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Copy the shortcode, e.g. <code>[isxf_form id=\"123\"]</code>"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Under <strong>Authentication Method</strong>, click the card for your email service: <strong>Google</strong>, <strong>Resend</strong>, <strong>Cloudflare</strong> or <strong>Custom</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Fill in the remaining fields — see \"How to Connect Each Email Provider\" below for the exact values"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "🔌 How to Connect Each Email Provider"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Pick the card that matches your email service on the settings page. Each provider needs different values:"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Connects with OAuth2, so no email password is stored on the site. Best for Google Workspace accounts."
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "⬛ Resend"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Sign up at <a href=\"https://resend.com\" target=\"_blank\">resend.com</a>, add your domain under <strong>Domains</strong> and add the DNS records it shows until the domain is <strong>Verified</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Create an API key at <a href=\"https://resend.com/api-keys\" target=\"_blank\">resend.com/api-keys</a> (Sending access is enough)"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Click the <strong>Resend</strong> card — Host, Port and Username are filled in for you — then paste the API key into <strong>Password</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "🟧 Cloudflare"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "In the <a href=\"https://dash.cloudflare.com\" target=\"_blank\">Cloudflare Dashboard</a>, go to <strong>Email Service → Email Sending</strong> and onboard your domain"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Create an API token (<strong>My Profile → API Tokens</strong>) with the <code>Email Sending: Edit</code> permission"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Click the <strong>Cloudflare</strong> card — Host, Port and Username are filled in for you — then paste the API token into <strong>Password</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "API token with the <code>Email Sending: Edit</code> permission"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "⚠️ Cloudflare only accepts port 465 (SSL). The From Email domain must be onboarded in Email Sending, and each email can go to at most 50 recipients"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "⚙️ Custom (any SMTP server)"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "For any other service (Gmail with an App Password, Microsoft 365, your hosting mail server, etc.), click <strong>Custom</strong> and enter the Host, Port, Username and Password from that provider. Port 465 uses SSL; other ports use TLS automatically."
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "⚠️ Keep <strong>\"Block form submissions when CAPTCHA is not configured\"</strong> enabled — if the Secret Key is missing, submissions are rejected instead of letting bots through"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "🌐 Trusted Proxies (Cloudflare / CDN)"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "If your site sits behind Cloudflare, a CDN or a reverse proxy, every visitor appears to come from the proxy's IP, so the per-IP rate limit would block everyone at once."
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Enter the proxy IP ranges (one CIDR per line) under <strong>Trusted Proxies</strong> on the settings page. The real visitor IP is then read from the <code>CF-Connecting-IP</code> / <code>X-Forwarded-For</code> header, but only for requests that come from those ranges."
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "💡 Cloudflare lists its IP ranges at <a href=\"https://www.cloudflare.com/ips/\" target=\"_blank\">cloudflare.com/ips</a>. Leave the box empty if the site is not behind a proxy"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "✉️ Custom Email Template"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Write your own subject and body for the customer auto-reply email in the form editor"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "📈 Analytics"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Go to <strong>InsightX Form → 📊 Analytics</strong>"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Stat cards: all entries, entries in the selected range (compared with the previous period), today and average per day"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Daily submissions line chart"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Status breakdown (doughnut chart)"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Top forms and the latest entries"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Choose a range at the top right: 7 / 30 / 90 days, 1 year or a custom date range"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Which email provider should I choose?"
+msgstr ""
+
+#: templates/admin/docs-page.php
+msgid "Google Workspace → Google. Your own domain without a mail server → Resend or Cloudflare. A mail server from your host or another provider → Custom."
 msgstr ""

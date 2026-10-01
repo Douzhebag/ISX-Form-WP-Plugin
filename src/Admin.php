@@ -118,6 +118,8 @@ class Admin {
             register_post_type( 'isxf_form', [
                 'labels' => [
                     'name' => __( 'Forms', 'insightx-form' ),
+                    // Brand name in the wp-admin sidebar (not translated).
+                    'menu_name' => 'InsightX Form',
                     'singular_name' => __( 'Form', 'insightx-form' ),
                     'add_new' => __( 'Create New Form', 'insightx-form' ),
                     'edit_item' => __( 'Edit Form', 'insightx-form' ),
@@ -139,7 +141,7 @@ class Admin {
 
         public function fill_form_columns( $column, $post_id ) {
             if ( $column === 'shortcode' ) {
-                echo '<input type="text" readonly="readonly" value="[isxf_form id=&quot;' . $post_id . '&quot;]" style="width: 100%; max-width: 250px; background: #f0f0f1; border-color: #8c8f94; cursor: text;" onclick="this.select();">';
+                echo '<input type="text" readonly="readonly" class="isxf-shortcode-input" value="[isxf_form id=&quot;' . $post_id . '&quot;]" onclick="this.select();">';
             }
         }
 
