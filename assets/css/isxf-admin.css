@@ -4,7 +4,7 @@
 .drag-handle {
     cursor: grab;
     font-size: 20px;
-    color: #8c8f94;
+    color: #94a3b8;
     text-align: center;
     vertical-align: middle !important;
     width: 3%;
@@ -22,13 +22,13 @@
 
 .ui-sortable-placeholder {
     visibility: visible !important;
-    background: #f0f0f1;
-    border: 1px dashed #b4b9be;
+    background: #f1f5f9;
+    border: 1px dashed #cbd5e1;
 }
 
 .isxf-settings-panel {
-    background: #f6f7f7;
-    border: 1px solid #dcdcde;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 4px;
@@ -39,7 +39,7 @@
     margin-top: 15px;
     padding: 15px;
     background: #fff;
-    border: 1px solid #dcdcde;
+    border: 1px solid #e2e8f0;
     border-radius: 4px;
 }
 
@@ -51,14 +51,14 @@
     display: block;
     font-weight: 600;
     margin-bottom: 5px;
-    color: #1d2327;
+    color: #0f172a;
 }
 
 .isxf-custom-email-panel input[type="text"],
 .isxf-custom-email-panel textarea {
     width: 100%;
     padding: 8px 10px;
-    border: 1px solid #8c8f94;
+    border: 1px solid #94a3b8;
     border-radius: 4px;
     font-size: 13px;
     font-family: inherit;
@@ -79,8 +79,8 @@
 .isxf-merge-tag {
     display: inline-block;
     padding: 3px 10px;
-    background: #e8f0fe;
-    color: #2271b1;
+    background: #e6f2ff;
+    color: #0079ff;
     border-radius: 12px;
     font-size: 12px;
     font-family: monospace;
@@ -90,7 +90,7 @@
 }
 
 .isxf-merge-tag:hover {
-    background: #2271b1;
+    background: #0079ff;
     color: #fff;
 }
 
@@ -127,13 +127,13 @@
     align-items: center;
     gap: 10px;
     padding: 10px 15px;
-    border-bottom: 1px solid #dcdcde;
-    background: #f6f7f7;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
 }
 
 .isxf-modal-subject {
     flex: 1;
-    color: #50575e;
+    color: #5a6881;
     font-size: 13px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -146,16 +146,16 @@
     font-size: 24px;
     line-height: 1;
     cursor: pointer;
-    color: #787c82;
+    color: #5a6881;
 }
 
 .isxf-modal-close:hover {
-    color: #1d2327;
+    color: #0f172a;
 }
 
 #isxf-email-preview-frame {
     flex: 1;
     width: 100%;
     border: none;
-    background: #f3f4f6;
+    background: #f1f5f9;
 }

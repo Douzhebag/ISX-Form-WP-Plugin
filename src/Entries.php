@@ -50,10 +50,10 @@ class Entries {
     private function get_status_map() {
         if ( null === $this->status_map ) {
             $this->status_map = [
-                'new'         => [ 'label' => __( 'New', 'insightx-form' ),         'color' => '#2271b1', 'bg' => '#e8f0fe', 'icon' => '🔵' ],
+                'new'         => [ 'label' => __( 'New', 'insightx-form' ),         'color' => '#0079ff', 'bg' => '#e6f2ff', 'icon' => '🔵' ],
                 'in_progress' => [ 'label' => __( 'In Progress', 'insightx-form' ), 'color' => '#996800', 'bg' => '#fff8e5', 'icon' => '🟡' ],
-                'done'        => [ 'label' => __( 'Done', 'insightx-form' ),        'color' => '#2e7d32', 'bg' => '#edf7ed', 'icon' => '✅' ],
-                'junk'        => [ 'label' => __( 'Junk', 'insightx-form' ),        'color' => '#a00',    'bg' => '#fef0f0', 'icon' => '🔴' ],
+                'done'        => [ 'label' => __( 'Done', 'insightx-form' ),        'color' => '#16a34a', 'bg' => '#e6f7ec', 'icon' => '✅' ],
+                'junk'        => [ 'label' => __( 'Junk', 'insightx-form' ),        'color' => '#db0000',    'bg' => '#ffe8e8', 'icon' => '🔴' ],
             ];
         }
         return $this->status_map;

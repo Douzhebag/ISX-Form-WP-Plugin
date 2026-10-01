@@ -18,7 +18,7 @@
 
         <div class="isxf-dash-stats">
             <div class="isxf-dash-card">
-                <div class="num" style="color:#2271b1;"><?php echo $today_c; ?></div>
+                <div class="num" style="color:#0079ff;"><?php echo $today_c; ?></div>
                 <div class="lbl"><?php esc_html_e( 'Today', 'insightx-form' ); ?></div>
             </div>
             <div class="isxf-dash-card">
@@ -26,11 +26,11 @@
                 <div class="lbl"><?php esc_html_e( 'Last 7 days', 'insightx-form' ); ?></div>
             </div>
             <div class="isxf-dash-card">
-                <div class="num" style="color:#2e7d32;"><?php echo $month_c; ?></div>
+                <div class="num" style="color:#16a34a;"><?php echo $month_c; ?></div>
                 <div class="lbl"><?php esc_html_e( 'Last 30 days', 'insightx-form' ); ?></div>
             </div>
             <div class="isxf-dash-card">
-                <div class="num" style="color:#50575e;"><?php echo $total; ?></div>
+                <div class="num" style="color:#5a6881;"><?php echo $total; ?></div>
                 <div class="lbl"><?php esc_html_e( 'Total', 'insightx-form' ); ?></div>
             </div>
         </div>

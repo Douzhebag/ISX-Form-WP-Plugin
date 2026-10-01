@@ -41,7 +41,7 @@
                     <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
                         
                         <div style="flex: 1; min-width: 400px; display: flex; flex-direction: column; gap: 20px;">
-                            <div style="background: #fff; padding: 20px; border: 1px solid #ccd0d4; border-radius: 6px; border-left: 4px solid #2271b1;">
+                            <div style="background: #fff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 6px; border-left: 4px solid #0079ff;">
                                 <h3><?php esc_html_e( '🔔 Admin Notification', 'insightx-form' ); ?></h3>
                                 <label style="display:block; margin-bottom:10px;">
                                     <input type="checkbox" name="<?php echo $opt['admin_notify_enable']; ?>" value="yes" <?php checked($v['admin_notify_enable'], 'yes'); ?>> 
@@ -54,7 +54,7 @@
                                 <input type="text" name="<?php echo $opt['admin_notify_email']; ?>" value="<?php echo esc_attr($v['admin_notify_email']); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'e.g. admin@example.com', 'insightx-form' ); ?>">
                             </div>
 
-                            <div style="background: #fff; padding: 20px; border: 1px solid #ccd0d4; border-radius: 6px;">
+                            <div style="background: #fff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 6px;">
                                 <h3><?php esc_html_e( '🛡️ Security Settings (Captcha)', 'insightx-form' ); ?></h3>
                                 <select name="<?php echo $opt['captcha_service']; ?>" id="captcha_select" style="width: 100%; margin-bottom: 20px;">
                                     <option value="google" <?php selected($service, 'google'); ?>>Google reCAPTCHA v3</option>
@@ -79,7 +79,7 @@
                                 <p class="description" style="margin:5px 0 0;"><?php esc_html_e( 'When enabled, if the selected CAPTCHA service has no Secret Key, all form submissions will be rejected instead of allowed through — disable this only if you intentionally use forms without CAPTCHA.', 'insightx-form' ); ?></p>
                             </div>
 
-                            <div style="background: #fff; padding: 20px; border: 1px solid #ccd0d4; border-radius: 6px;">
+                            <div style="background: #fff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 6px;">
                                 <h3><?php esc_html_e( '🌐 Trusted Proxies (for sites behind a Reverse Proxy / CDN)', 'insightx-form' ); ?></h3>
                                 <p class="description" style="margin-bottom:10px;"><?php
                                     /* translators: %1$s: CF-Connecting-IP header name wrapped in <code> tags, %2$s: X-Forwarded-For header name wrapped in <code> tags. */
@@ -89,7 +89,7 @@
                             </div>
                         </div>
 
-                        <div style="flex: 1; min-width: 400px; background: #fff; padding: 20px; border: 1px solid #ccd0d4; border-radius: 6px;">
+                        <div style="flex: 1; min-width: 400px; background: #fff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 6px;">
                             <?php /* OAuth URLs/state are gathered in Admin::render_settings_page(). */ ?>
                             <h3><?php esc_html_e( '📧 Email Settings (SMTP)', 'insightx-form' ); ?></h3>
                             <label><input type="checkbox" name="<?php echo $opt['smtp_enable']; ?>" value="yes" <?php checked($v['smtp_enable'], 'yes'); ?>> <?php esc_html_e( 'Enable SMTP', 'insightx-form' ); ?></label>
@@ -120,7 +120,7 @@
                                     <tr><th>Password</th><td><input type="password" name="<?php echo $opt['smtp_pass']; ?>" value="" class="regular-text" placeholder="<?php echo $v['smtp_pass'] ? '••••••••••••••••' : esc_attr__( '16-character app password', 'insightx-form' ); ?>"><p class="description" style="margin-top:5px;"><?php esc_html_e( '🔒 Password is encrypted before saving — leave empty to keep it unchanged.', 'insightx-form' ); ?></p></td></tr>
                                 </table>
 
-                                <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 15px; border-radius: 4px; margin: 15px 0;">
+                                <div style="background: #e6f2ff; border: 1px solid #bfe0ff; padding: 15px; border-radius: 4px; margin: 15px 0;">
                                     <strong style="color: #004085; display:block; margin-bottom:5px;"><?php esc_html_e( '💡 How to get an App Password for Gmail:', 'insightx-form' ); ?></strong>
                                     <ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #333; line-height: 1.6;">
                                         <li><?php
@@ -141,7 +141,7 @@
                                             printf( esc_html__( 'Copy the 16-character code into the %s field above (no spaces needed)', 'insightx-form' ), '<strong>Password</strong>' );
                                         ?></li>
                                     </ol>
-                                    <p style="margin:10px 0 0; font-size:12px; color:#333; background:#fff; border:1px solid #cce5ff; padding:8px 10px; border-radius:4px;">✉️ <strong>Resend:</strong> <?php
+                                    <p style="margin:10px 0 0; font-size:12px; color:#333; background:#fff; border:1px solid #bfe0ff; padding:8px 10px; border-radius:4px;">✉️ <strong>Resend:</strong> <?php
                                         /* translators: 1: username "resend" in <code> tags, 2: link to the Resend API keys page. */
                                         printf( esc_html__( 'Username is %1$s and Password is your API key from %2$s. The From Email domain must be verified in Resend.', 'insightx-form' ), '<code>resend</code>', '<a href="https://resend.com/api-keys" target="_blank" rel="noopener noreferrer">resend.com/api-keys</a>' );
                                     ?></p>
@@ -151,12 +151,12 @@
                             <!-- ===== OAuth2 (XOAUTH2) ===== -->
                             <div id="isxf_auth_oauth" style="<?php echo $is_oauth ? '' : 'display:none;'; ?>">
                                 <?php if ( $is_connected ) : ?>
-                                    <div style="background:#edfaef; border:1px solid #46b450; padding:12px 15px; border-radius:4px; margin:12px 0;">
+                                    <div style="background:#e6f7ec; border:1px solid #16a34a; padding:12px 15px; border-radius:4px; margin:12px 0;">
                                         ✅ <strong><?php esc_html_e( 'Connected', 'insightx-form' ); ?></strong><?php echo $connected_email && is_email($connected_email) ? ' — ' . esc_html($connected_email) : ''; ?>
                                         <a href="<?php echo esc_url($disconnect_url); ?>" class="button" style="margin-left:10px;"><?php esc_html_e( 'Disconnect', 'insightx-form' ); ?></a>
                                     </div>
                                 <?php else : ?>
-                                    <div style="background:#fef0f0; border:1px solid #f0b8b8; padding:12px 15px; border-radius:4px; margin:12px 0;">
+                                    <div style="background:#ffe8e8; border:1px solid #f0b8b8; padding:12px 15px; border-radius:4px; margin:12px 0;">
                                         ⚠️ <strong><?php esc_html_e( 'Not connected', 'insightx-form' ); ?></strong> — <?php
                                             /* translators: %s: "save the settings" label wrapped in <strong> tags. */
                                             printf( esc_html__( 'Enter your Client ID / Secret and %s first, then click the "Connect" button below', 'insightx-form' ), '<strong>' . esc_html__( 'save the settings', 'insightx-form' ) . '</strong>' );
@@ -167,14 +167,14 @@
                                 <table class="form-table">
                                     <tr><th>Client ID</th><td><input type="text" name="<?php echo $opt['oauth_client_id']; ?>" value="<?php echo esc_attr($v['oauth_client_id']); ?>" class="regular-text"></td></tr>
                                     <tr><th>Client Secret</th><td><input type="password" name="<?php echo $opt['oauth_client_secret']; ?>" value="" class="regular-text" placeholder="<?php echo $v['oauth_client_secret'] ? '••••••••••••••••' : ''; ?>"><p class="description" style="margin-top:5px;"><?php esc_html_e( '🔒 Encrypted before saving — leave empty to keep it unchanged.', 'insightx-form' ); ?></p></td></tr>
-                                    <tr><th>Redirect URI</th><td><input type="text" readonly value="<?php echo esc_attr($redirect_uri); ?>" class="regular-text" onclick="this.select();" style="background:#f0f0f1;"><p class="description" style="margin-top:5px;"><?php esc_html_e( 'Copy this value into Google Cloud Console', 'insightx-form' ); ?></p></td></tr>
+                                    <tr><th>Redirect URI</th><td><input type="text" readonly value="<?php echo esc_attr($redirect_uri); ?>" class="regular-text" onclick="this.select();" style="background:#f1f5f9;"><p class="description" style="margin-top:5px;"><?php esc_html_e( 'Copy this value into Google Cloud Console', 'insightx-form' ); ?></p></td></tr>
                                 </table>
 
                                 <p>
                                     <a href="<?php echo esc_url($connect_url); ?>" class="button button-primary">🔗 <?php echo $is_connected ? esc_html__( 'Reconnect', 'insightx-form' ) : esc_html__( 'Connect Account', 'insightx-form' ); ?></a>
                                 </p>
 
-                                <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 15px; border-radius: 4px; margin: 15px 0; font-size:13px; line-height:1.6; color:#333;">
+                                <div style="background: #e6f2ff; border: 1px solid #bfe0ff; padding: 15px; border-radius: 4px; margin: 15px 0; font-size:13px; line-height:1.6; color:#333;">
                                     <strong style="color:#004085; display:block; margin-bottom:5px;"><?php esc_html_e( '💡 See the "User Guide" page for OAuth2 setup instructions', 'insightx-form' ); ?></strong>
                                     <span><?php esc_html_e( 'You need to register an OAuth app in Google Cloud Console (Gmail), then configure the Redirect URI above to match.', 'insightx-form' ); ?></span>
                                 </div>
@@ -196,12 +196,12 @@
                     <?php submit_button( __( 'Save All Settings', 'insightx-form' ) ); ?>
                 </form>
 
-                <div style="background: #fff; padding: 20px; border: 1px solid #ccd0d4; border-radius: 6px; margin-top: 20px; border-left: 4px solid #dba617;">
+                <div style="background: #fff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 6px; margin-top: 20px; border-left: 4px solid #dba617;">
                     <h3 style="margin-top:0;"><?php esc_html_e( '📨 Test Email Sending (SMTP Test)', 'insightx-form' ); ?></h3>
-                    <p style="color:#50575e; margin-bottom:15px;"><?php esc_html_e( 'Send a test email to the specified address to verify that your SMTP settings are correct.', 'insightx-form' ); ?></p>
+                    <p style="color:#5a6881; margin-bottom:15px;"><?php esc_html_e( 'Send a test email to the specified address to verify that your SMTP settings are correct.', 'insightx-form' ); ?></p>
                     <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
                         <div style="flex:1; min-width:250px;">
-                            <label style="display:block; font-weight:600; margin-bottom:5px; color:#1d2327;"><?php esc_html_e( 'Recipient email:', 'insightx-form' ); ?></label>
+                            <label style="display:block; font-weight:600; margin-bottom:5px; color:#0f172a;"><?php esc_html_e( 'Recipient email:', 'insightx-form' ); ?></label>
                             <input type="email" id="isxf-test-email-to" value="<?php echo esc_attr( $admin_email ); ?>" class="regular-text" style="width:100%;" placeholder="your@email.com">
                         </div>
                         <button type="button" id="isxf-test-email-btn" class="button button-primary" style="height:36px; min-width:160px;">
