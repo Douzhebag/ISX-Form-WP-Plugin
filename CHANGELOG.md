@@ -1,174 +1,188 @@
 # Changelog
 
-All notable changes to InsightX Form are documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-> **Note:** This file is the canonical changelog as of v0.8.0. `README.md`
-> still carries its own (Thai) changelog section — the two will be deduplicated
-> in a later docs pass.
+บันทึกการเปลี่ยนแปลงทั้งหมดของ InsightX Form รูปแบบอิง [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) และใช้ [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
-### Fixed
+## [0.9.0] - 2026-10-01
 
-- Fatal error `Class "Parsedown" not found` when opening the plugin's "View details" modal: the bare `vendor/` pattern in `.distignore` matched at every level, stripping `libs/plugin-update-checker/vendor/` (Parsedown, readme parser) from the v0.8.0/v0.8.1 release zips. Patterns are now root-anchored, and the release workflow has a zip-integrity step that fails the build if required runtime files are missing.
+### นำออก
+
+- **เลิกรองรับการส่งอีเมลผ่าน Microsoft 365** — ถอดทั้ง OAuth2 (Microsoft), ช่อง Tenant ID, คู่มือส่วน Microsoft และ preset SMTP ของ Microsoft 365 ออก เว็บที่ตั้งค่าใช้ Microsoft อยู่จะถูกสลับกลับเป็น Username / Password (Basic Auth) อัตโนมัติเมื่อเปิดหน้า admin ครั้งถัดไป และ token ของ Microsoft ที่เก็บไว้จะถูกลบทิ้ง — **ต้องเข้าไปตั้งค่า SMTP ใหม่** ไม่งั้นฟอร์มจะส่งอีเมลไม่ออก
+
+### เพิ่ม
+
+- **ภาพปกในหน้า "ดูรายละเอียด" ของปลั๊กอิน** ขนาด 1544×500 และ 772×250 พร้อมไฟล์ต้นฉบับใน `assets/branding/`
+- **ไฟล์ `readme.txt`** — หน้า "ดูรายละเอียด" แสดงคำอธิบาย วิธีติดตั้ง และ FAQ เป็นภาษาไทย และระบุ "Tested up to: 7.1.2" จึงไม่ขึ้นคำเตือนว่าปลั๊กอินไม่ได้ถูกทดสอบกับ WordPress รุ่นปัจจุบัน
+- **Preset SMTP สำหรับ Resend** — เลือกจาก dropdown แล้วระบบเติม host `smtp.resend.com` port `587` และ username `resend` ให้ เหลือแค่ใส่ API key เป็นรหัสผ่าน มีคำแนะนำการตั้งค่าในหน้าตั้งค่าและหน้าคู่มือ (From Email ต้องเป็นโดเมนที่ verify แล้วใน Resend)
+
+### แก้บั๊ก
+
+- **WordPress database error `admin_note can't have a default value` ใน debug.log** — schema ประกาศคอลัมน์ `admin_note` (ชนิด TEXT) ให้มีค่า default ซึ่ง MySQL ไม่รองรับ ทุกครั้งที่ปลั๊กอินอัปเกรดฐานข้อมูลจึงพยายามแก้คอลัมน์แล้ว error ซ้ำ ตอนนี้เอา default ออกแล้ว (ข้อมูลเดิมไม่กระทบ ไม่ต้อง migrate)
+
+## [0.8.2] - 2026-07-30
+
+### แก้บั๊ก
+
+- **กด "ดูรายละเอียด" ของปลั๊กอินแล้วขึ้น Fatal error `Class "Parsedown" not found`** — ไฟล์ zip ของ v0.8.0 และ v0.8.1 ขาดไลบรารีที่ใช้แสดงหน้ารายละเอียด เพราะกฎ `vendor/` ใน `.distignore` ไปตัดโฟลเดอร์ `libs/plugin-update-checker/vendor/` ทิ้งด้วย ตอนนี้กฎตัดเฉพาะโฟลเดอร์ระดับบนสุด และขั้นตอน release จะตรวจว่าใน zip มีไฟล์ที่จำเป็นครบ ถ้าขาดจะ build ไม่ผ่าน
 
 ## [0.8.1] - 2026-07-30
 
-### Fixed
+### แก้บั๊ก
 
-- Analytics dashboard stuck on "Loading…" forever: `AnalyticsController` used `DateTimeImmutable` unqualified inside the `ISXF\Ajax` namespace, so the endpoint fataled (class not found) and the JS only logged to the console. The endpoint is fixed, `isxf-analytics.js` now checks HTTP status and shows a visible error state instead of hanging, and a new `AnalyticsTest` integration suite covers the endpoint (structure, custom range, nonce rejection).
+- **หน้า Analytics ค้างที่ "กำลังโหลด…" ไม่ขึ้นข้อมูล** — endpoint ฝั่งเซิร์ฟเวอร์ error เพราะเรียก `DateTimeImmutable` ผิด namespace แก้แล้ว และถ้าโหลดข้อมูลไม่สำเร็จ หน้าจะแสดงข้อความ error ให้เห็นแทนการค้างเงียบๆ เพิ่มเทสต์ `AnalyticsTest` ครอบคลุม endpoint นี้ (โครงสร้างข้อมูล, ช่วงวันที่กำหนดเอง, ปฏิเสธ nonce ไม่ถูกต้อง)
 
 ## [0.8.0] - 2026-07-27
 
-Phase 0–3 consolidation release: the v0.6.1 security hotfix plus the full
-testing/CI foundation (Phase 1), the structural refactor, i18n and
-accessibility work (Phase 2), and the legacy-deprecation announcement and
-release-process automation (Phase 3) ship together as the first tagged
-release since v0.6.0.
+รวม Phase 0–3 ไว้ใน release เดียว: hotfix ความปลอดภัยของ v0.6.1, ระบบเทสต์และ CI (Phase 1), ปรับโครงสร้างโค้ด แปลภาษา และ accessibility (Phase 2), ประกาศเลิกใช้ของเก่า และ release อัตโนมัติ (Phase 3) — เป็น release ที่ติด tag ครั้งแรกหลัง v0.6.0
 
-### Added
+### เพิ่ม
 
-- Per-form submit button style: a 🎨 "Submit Button Style" panel in the form builder meta box with color pickers for background/text/hover (`_isxf_form_button_color`, `_isxf_form_button_text_color`, `_isxf_form_button_hover_color`), border-radius and font-size fields, and an Advanced CSS box (`_isxf_form_button_css`, sanitized against `</style>` breakouts, `expression()`, `javascript:`, `@import`). Structured fields render as CSS custom properties on the form container (empty = stylesheet default; explicit hover color wins over the auto-computed 15%-lighter shade); advanced CSS is output as a `<style>` block scoped to `.isxf-form-{id} .isxf-submit-btn`. The disabled state uses the button color at 55% opacity, and the hover rule's specificity was raised past page-builder hover rules (e.g. Elementor kit CSS).
-- PHPUnit test suite: pure unit tests (crypto, trusted-proxy/CIDR logic) that run without WordPress, plus integration tests (legacy migration/upgrade path, AJAX submission flow, uninstall, crypto with real salts) on the WordPress test suite.
-- GitHub Actions CI: phpcs lint, unit tests (PHP 8.1–8.3), integration tests against MySQL (PHP 8.1–8.3 × WP latest).
-- `composer.json` with dev tooling (PHPUnit 9.6, wp-phpunit, WPCS, PHPCompatibility) and `test` / `test:unit` / `lint` / `lint:fix` scripts.
-- `phpcs.xml.dist` (WordPress-Core + WordPress-Docs) with a documented, minimal exclusion list.
-- `bin/install-wp-tests.sh` for local and CI test-suite setup.
-- `docs/KNOWN-ISSUES.md` — known bugs and deferred phpcs rules.
-- Release automation: `.github/workflows/release.yml` builds the distributable plugin zip (per `.distignore`) and attaches it to the GitHub Release on every `v*` tag push; `docs/RELEASING.md` documents the release procedure.
-- Deprecation announcement for the v1.0 legacy removal: README section plus a dismissible admin notice (shown only on plugin screens to administrators, and only on sites that came from the legacy `acf` era — detected via the `isxf_legacy_acf_migration_done` flag; clean installs never see it).
-- Email template tools in the form builder meta box: a "👁️ Preview" button renders the selected customer-reply template (booking/inquiry/custom) through the real server-side pipeline with type-aware sample data generated from the builder's current (even unsaved) fields, shown in a modal iframe; a "✏️ Edit from this template" button (booking/inquiry) copies the template's inner body markup — merge tags intact, via a new `$body_only` render variant of `templates/emails/booking.php` / `inquiry.php` — into the custom editor (with overwrite confirmation); and a "🧪 Send a test email to me" button sends the sample-data rendering to the current admin user through the plugin's SMTP configuration (🧪-prefixed subject, inline success/failure). Backed by the new `ISXF\Ajax\EmailToolsController` (`wp_ajax_isxf_preview_email` / `wp_ajax_isxf_send_template_test`, nonce + `edit_posts` gated), registered via the `AjaxHandler` facade.
-- Plugin headers: `Requires at least: 6.0`, `Requires PHP: 8.1`, `License: GPLv2 or later`, `License URI`.
+- **ตั้งสีและรูปแบบปุ่มส่งฟอร์มแยกแต่ละฟอร์มได้** — แผง 🎨 "Submit Button Style" ในหน้าแก้ไขฟอร์ม เลือกสีพื้นหลัง สีตัวอักษร สีตอน hover, ความโค้งมุม และขนาดตัวอักษร ช่องไหนเว้นว่างจะใช้ค่าเริ่มต้น (สี hover ถ้าไม่กำหนดจะคำนวณให้อ่อนลง 15%) มีช่อง Advanced CSS สำหรับเขียน CSS เองซึ่งมีผลกับปุ่มของฟอร์มนั้นเท่านั้น และกรองโค้ดอันตรายออก (`</style>`, `expression()`, `javascript:`, `@import`) ปุ่มตอนกดไม่ได้จะเป็นสีเดิมแบบจางลง และสี hover ชนะ CSS ของ page builder อย่าง Elementor
+- **เครื่องมือ template อีเมลในหน้าแก้ไขฟอร์ม**
+  - 👁️ **Preview** — ดูหน้าตาอีเมลตอบกลับลูกค้า (booking / inquiry / custom) ด้วยข้อมูลตัวอย่างจากฟิลด์ในฟอร์ม ใช้ได้แม้ยังไม่กดบันทึก
+  - ✏️ **แก้จาก template นี้** — คัดลอก template booking / inquiry (พร้อม merge tag) ไปใส่ในช่อง custom เพื่อแก้ต่อ มีถามยืนยันก่อนเขียนทับ
+  - 🧪 **ส่งอีเมลทดสอบหาตัวเอง** — ส่งอีเมลตัวอย่างไปหาผู้ดูแลที่ล็อกอินอยู่ผ่าน SMTP ที่ตั้งไว้ หัวเรื่องขึ้นต้นด้วย 🧪 และแจ้งผลสำเร็จ / ไม่สำเร็จทันที
+- **ประกาศเลิกใช้ของเก่าก่อน v1.0** — ใน README และเป็นแจ้งเตือนในหน้า admin (ปิดได้) แสดงเฉพาะผู้ดูแลในหน้าของปลั๊กอิน และเฉพาะเว็บที่อัปเกรดมาจากรุ่นเก่ายุค `acf` เท่านั้น เว็บที่ติดตั้งใหม่จะไม่เห็น
+- Plugin header ระบุ `Requires at least: 6.0`, `Requires PHP: 8.1` และ license `GPLv2 or later`
+- **ระบบเทสต์อัตโนมัติ** — PHPUnit แบ่งเป็น unit test (การเข้ารหัส, การตรวจ IP / proxy) ที่รันได้โดยไม่ต้องมี WordPress และ integration test (การย้ายข้อมูลจากรุ่นเก่า, การส่งฟอร์ม, uninstall, การเข้ารหัสด้วย salt จริง) บน WordPress test suite
+- **CI บน GitHub Actions** — ตรวจ coding standard (phpcs), unit test บน PHP 8.1–8.3 และ integration test กับ MySQL บน PHP 8.1–8.3 × WordPress ล่าสุด
+- **Release อัตโนมัติ** — push tag `v*` แล้ว GitHub Actions จะ build zip ของปลั๊กอินตาม `.distignore` และแนบไว้ที่ GitHub Release ให้ ขั้นตอนอยู่ใน `docs/RELEASING.md`
+- ไฟล์สำหรับนักพัฒนา: `composer.json` (PHPUnit 9.6, wp-phpunit, WPCS, PHPCompatibility และคำสั่ง `test` / `test:unit` / `lint` / `lint:fix`), `phpcs.xml.dist`, `bin/install-wp-tests.sh` และ `docs/KNOWN-ISSUES.md` (บั๊กที่รู้แล้วและกฎ phpcs ที่ยังเลื่อนไว้)
 
-### Changed
+### เปลี่ยนแปลง
 
-- Phase 2.1 refactor: plugin classes moved from `includes/class-isxf-*.php` to PSR-4 `src/` under the `ISXF\` namespace (`Crypto`, `OAuth`, `OAuthTokenProvider`, `Admin`, `Frontend`, `AjaxHandler`, `Entries`), loaded via a runtime `spl_autoload_register` autoloader in the main file (no Composer dependency on production). Old global class names (`ISXF_Crypto`, …) keep working via `class_alias`. Classes are now instantiated on `plugins_loaded` via `isxf_bootstrap()` instead of at file load. No behavior change.
-- Phase 2.3 refactor: new `ISXF\Repository\EntryRepository` (`src/Repository/EntryRepository.php`) owns all SQL touching the `isxf_form_entries` table — submission insert, filtered/paginated list reads, status/note updates, single & bulk deletes, CSV export batch reads, and every analytics/dashboard aggregation. `Entries` and `AjaxHandler` now call the repository instead of direct `$wpdb`; the entries table name is resolved centrally via `EntryRepository::table_name()` (also used by the main file's schema/migration/uninstall code). No query shape or behavior change.
-- Caching for entry aggregates: status counts and analytics/dashboard aggregates are cached in the non-persistent `isxf` wp_cache group with a version-salt scheme — every cache key embeds `isxf_entries_cache_version`, which is bumped on every entry mutation (submission insert, status/note update, delete, bulk delete, legacy import). No TTL-based invalidation.
-- The entries-page form filter dropdown (`get_posts(..., -1)`) is now served from a cached ID=>title list in the `isxf` group, invalidated on `save_post_isxf_form`, `deleted_post`, `trashed_post` and `untrashed_post`. The unbounded `-1` semantics are kept intentionally (sites have few forms).
-- Phase 2.2 refactor: all inline HTML moved out of `src/` into `templates/` (16 template files for the settings page, entries page, analytics page, dashboard widget, docs page, form builder meta box, frontend form fields, and email templates), loaded via the new `ISXF\Template` view loader. Byte-identical rendered output (verified with a render-capture harness).
-- Phase 2.4 refactor: `ISXF\AjaxHandler` split into focused controllers under `src/Ajax/` (namespace `ISXF\Ajax`) — `SubmissionController` (public form submission incl. honeypot/CAPTCHA fail-close/rate limit and the phpmailer SMTP configuration, Basic + XOAUTH2), `SettingsController` (SMTP test email), `EntriesController` (entry status/note) and `AnalyticsController` (`isxf_get_analytics_data`, moved out of `Entries`). Shared pieces (client-IP/trusted-proxy, email header style, mail/SMTP helpers) live in `ISXF\Ajax\AbstractAjaxController`. `ISXF\AjaxHandler` remains as a slim facade that instantiates the controllers, so hook names/registration, JSON responses, nonce/capability checks, sanitization and the `ISXF_AJAX_Handler` alias are all unchanged.
-- Phase 2.5 i18n: full internationalization. Plugin header text domain fixed (`InsightX` → `insightx-form`); every user-facing string in `src/` and `templates/` converted from hardcoded Thai to English msgids wrapped in the proper i18n functions (`__`/`esc_html__`/`esc_attr__`/`esc_js`, `sprintf` for interpolated strings with `translators:` comments, `_x` where contexts collide); the previous Thai UI is preserved verbatim as the bundled translation `languages/insightx-form-th.po/.mo` (generated from `languages/insightx-form.pot`), so Thai-locale sites see no change. Hardcoded Thai in the four JS bundles moved into `wp_localize_script` i18n maps (`isxf_env`, `isxf_admin_env`, `isxf_entries_env`, `isxf_analytics_env`). The `WordPress.WP.I18n` phpcs sniff is re-enabled and runs clean. New `I18nTest` integration tests verify the bundled `.mo` loads and renders Thai (English fallback without it); `SubmissionTest` now loads the shipped `.mo` to assert the Thai user-facing messages.
-- Phase 2.6 form accessibility: the rendered frontend form is now screen-reader and keyboard friendly. Labels are associated with inputs via unique ids (`isxf-field-{form_id}-{name}` + `for`); radio/checkbox groups render as `fieldset`/`legend`; required fields carry `aria-required="true"` (deliberately *not* the native `required` attribute — the form is `novalidate` so browser popups cannot fight the JS submit flow, which keeps gating the submit button via `data-required`). Each field has a linked (`aria-describedby`), initially hidden inline error element (`role="alert"`) that the JS fills on validation failure and clears on input; invalid fields are marked `aria-invalid="true"` with a red border. Submit-time client-side validation (required fields + email format) shows inline errors plus a summary toast and focuses the first invalid field; server-side field errors (e.g. "Please fill in: X") are mapped back to the matching field by label. The toast container is a live region (`role="status"` + `aria-live="polite"`), and the disabled submit button now has a visible, `aria-describedby`-linked hint ("fill in all required fields") that hides once the form is valid. Field names, existing CSS classes and the submission flow are unchanged. Four new i18n strings (3 in the `isxf_env` JS map, 1 submit hint in the form template) added to the POT/`th` translation. New `FrontendRenderTest` integration tests assert the a11y markup.
-- Phase 2.7 hardening & cleanup: all date/time handling migrated from `date()`/`strtotime()`/`current_time()` to `wp_date()`/`current_datetime()`/`DateTimeImmutable` with `wp_timezone()` (new shared `isxf_local_datetime_to_timestamp()` helper for the WP-local `created_at` strings; the `WordPress.DateTime` phpcs sniff is re-enabled and runs clean). Displayed values are unchanged on typical sites (WP-local timezone); the one intentional behavior fix is the CSV export filename, now stamped in site-local time instead of the server timezone. Static assets are bundled instead of CDN-loaded: flatpickr 4.6.13 (js/css + Thai locale, already in `assets/libs/flatpickr/`) now enqueues locally and the jsDelivr `document.write` fallback/dns-prefetch were deleted; Chart.js 4.4.1 UMD is vendored to `assets/libs/chartjs/chart.umd.min.js` (source URL noted at the enqueue) and enqueued locally. reCAPTCHA/Turnstile stay on their vendors' hosts (vendor requirement). The unused `jquery` script dependency was dropped from the frontend enqueue (`isxf-frontend.js` is vanilla). The single-entry delete on the entries page is now a POST submit button (nonce-verified, styled as the old link) instead of a state-changing GET link; bulk actions were already POST. All `wp_redirect()` calls are now `wp_safe_redirect()` — the OAuth consent-screen redirect whitelists the provider host via `allowed_redirect_hosts` — and the `WordPress.Security.SafeRedirect` sniff is enabled and runs clean. Checkbox settings (`isxf_smtp_enable`, `isxf_captcha_required`, `isxf_admin_notify_enable`, `isxf_smtp_disable_ssl_verify`) got a null-safe `sanitize_checkbox()` callback (stored values unchanged: `'yes'`/`''`), fixing the PHP 8.1 `sanitize_text_field(null)` deprecation (KNOWN-ISSUES A1); unguarded `$_POST['isxf_form_id']`/`$_SERVER['REMOTE_ADDR']` reads in the submission controller were null-coalesced (KNOWN-ISSUES A2).
-- Database version bumped to 1.1 — indexes added on `form_id`, `entry_status`, `created_at` via dbDelta.
+- **รองรับหลายภาษา** — ข้อความทั้งหมดในปลั๊กอินเปลี่ยนเป็นภาษาอังกฤษเป็นต้นฉบับ แล้วแปลไทยผ่านไฟล์ `languages/insightx-form-th.po/.mo` ที่แถมมาด้วย **เว็บที่ตั้งภาษาไทยจะเห็นเหมือนเดิมทุกคำ** ส่วนเว็บภาษาอื่นจะเห็นเป็นภาษาอังกฤษ รวมข้อความใน JavaScript ด้วย และแก้ text domain ใน header จาก `InsightX` เป็น `insightx-form`
+- **ฟอร์มหน้าเว็บใช้งานกับ screen reader และคีย์บอร์ดได้ดีขึ้น**
+  - label ผูกกับช่องกรอกถูกต้อง, กลุ่ม radio / checkbox อยู่ใน `fieldset` + `legend`, ช่องบังคับกรอกมี `aria-required`
+  - กดส่งแล้วกรอกไม่ครบหรืออีเมลผิดรูปแบบ จะขึ้นข้อความ error ใต้ช่องนั้น กรอบสีแดง และเลื่อนไปที่ช่องแรกที่ผิด error จากเซิร์ฟเวอร์ (เช่น "กรุณากรอก: X") ก็แสดงใต้ช่องที่ตรงกัน
+  - ปุ่มส่งที่ยังกดไม่ได้มีข้อความบอกว่า "กรอกช่องที่บังคับให้ครบ" ซึ่งจะหายไปเมื่อกรอกครบ
+  - ชื่อฟิลด์, class CSS เดิม และขั้นตอนการส่งฟอร์มไม่เปลี่ยน
+- **โหลด JS / CSS จากในปลั๊กอินแทน CDN** — flatpickr 4.6.13 และ Chart.js 4.4.1 โหลดจากไฟล์ในปลั๊กอินแล้ว ไม่ต้องพึ่ง jsDelivr (ยกเว้น reCAPTCHA / Turnstile ที่ผู้ให้บริการบังคับให้โหลดจากเว็บของเขา) และฟอร์มหน้าเว็บไม่โหลด jQuery แล้ว
+- **ลบรายการเดียวในหน้า Entries เป็นการกดปุ่มแบบ POST** ที่ตรวจ nonce แทนลิงก์ GET (หน้าตาเหมือนเดิม) กันการถูกหลอกให้กดลิงก์ลบ
+- **วันเวลาทั้งหมดใช้ timezone ของเว็บ** (`wp_date()` / `wp_timezone()`) — ค่าที่แสดงบนเว็บทั่วไปไม่เปลี่ยน ยกเว้นชื่อไฟล์ CSV ตอน export ที่ตอนนี้ใช้เวลาของเว็บแทนเวลาของเซิร์ฟเวอร์
+- redirect ทั้งหมดใช้ `wp_safe_redirect()` (หน้าขอสิทธิ์ OAuth อนุญาตเฉพาะโดเมนของผู้ให้บริการ)
+- แก้คำเตือน deprecation บน PHP 8.1 ตอนบันทึก checkbox ในหน้าตั้งค่า (ค่าที่เก็บยังเป็น `'yes'` / `''` เหมือนเดิม) และกันค่า `$_POST` / `$_SERVER` ที่อาจไม่มีในการส่งฟอร์ม
+- **หน้า Entries / Analytics เร็วขึ้น** — ฐานข้อมูลอัปเป็นเวอร์ชัน 1.1 เพิ่ม index ที่ `form_id`, `entry_status`, `created_at` และ cache ตัวเลขสรุป (จำนวนตามสถานะ, ข้อมูล analytics, รายชื่อฟอร์มใน dropdown) โดย cache จะล้างทันทีเมื่อมีการส่งฟอร์ม แก้ไข หรือลบรายการ
+- **ปรับโครงสร้างโค้ดภายใน (ผลลัพธ์ที่ผู้ใช้เห็นไม่เปลี่ยน)**
+  - ย้ายคลาสจาก `includes/class-isxf-*.php` ไปเป็น `src/` แบบ PSR-4 ใต้ namespace `ISXF\` ชื่อคลาสเดิม (`ISXF_Crypto` ฯลฯ) ยังใช้ได้ผ่าน `class_alias` และคลาสถูกสร้างตอน `plugins_loaded`
+  - SQL ของตาราง entries รวมไว้ที่ `ISXF\Repository\EntryRepository` ที่เดียว
+  - HTML ทั้งหมดย้ายออกจากโค้ด PHP ไปเป็นไฟล์ใน `templates/` (16 ไฟล์) ผลลัพธ์ HTML เหมือนเดิมทุกตัวอักษร
+  - `AjaxHandler` แยกเป็น controller ย่อยใน `src/Ajax/` (ส่งฟอร์ม, ตั้งค่า, entries, analytics) ชื่อ hook, การตรวจสิทธิ์ และ response เหมือนเดิม
 
-### Deprecated
+### เลิกใช้ (Deprecated)
 
-- The `[advanced_form]` shortcode alias, the legacy `acf_*` → `isxf_*` auto-migration, and the legacy `ENC:` crypto format are deprecated and will be **removed in v1.0**. Upgrading to v1.0 will require passing through v0.8.x first — do not skip v0.8.x when coming from ≤ v0.7.
+- shortcode `[advanced_form]`, การย้ายค่าอัตโนมัติจาก `acf_*` เป็น `isxf_*` และรูปแบบการเข้ารหัสเก่า `ENC:` **จะถูกลบใน v1.0** — ถ้าอัปเกรดจาก v0.7 หรือเก่ากว่า **ต้องผ่าน v0.8.x ก่อน** ห้ามข้ามไป v1.0 ตรงๆ ไม่งั้นค่าตั้งและข้อมูลเก่าจะไม่ถูกย้าย
 
-### Fixed
+### แก้บั๊ก
 
-- Submit button styling no longer loses to theme/page-builder CSS: the `.isxf-submit-btn` rules are now scoped under `.isxf-form-container` so they outrank rules like Elementor's `.elementor-kit-N button` (which was overriding both the color and border-radius).
-- Thai-locale sites rendering the whole plugin in English — two compounding causes: (1) the bundled Thai translation files were named `insightx-form-th_TH.*` but the WordPress Thai locale code is `th` (a site set to ไทย looks for `insightx-form-th.mo`), so the translation never matched; files renamed to `insightx-form-th.po/.mo`. (2) `Entries` built its translated status map in the constructor, which runs at `plugins_loaded` (before `init`); WordPress's just-in-time loader then cached a NOOP translation for the entire `insightx-form` domain before the textdomain path was registered — the status map is now built lazily on first use (regression test: `EntriesLazyStatusMapTest`).
-- Legacy `acf_` → `isxf_` migration now runs once (guarded by `isxf_legacy_acf_migration_done` flag) instead of on every admin page load, and renames only the 4 whitelisted meta keys instead of a blanket `_acf_` prefix replace that could clobber other plugins' meta.
-- Uninstall now removes everything: `isxf_form` posts, `_isxf_*` post meta, and rate-limit/OAuth transients (previously left behind).
+- **เว็บที่ตั้งภาษาไทยกลับเห็นปลั๊กอินเป็นภาษาอังกฤษทั้งหมด** — มีสองสาเหตุ: ไฟล์แปลตั้งชื่อเป็น `th_TH` แต่ WordPress ภาษาไทยใช้รหัส `th` และคำแปลบางส่วนถูกเรียกก่อน WordPress โหลดไฟล์แปลเสร็จ แก้ทั้งสองจุดแล้ว
+- **สีและมุมโค้งของปุ่มส่งฟอร์มถูก CSS ของธีม / Elementor ทับ** — ตอนนี้ style ของปุ่มชนะแล้ว
+- **การย้ายค่าจากรุ่นเก่า (`acf_` → `isxf_`) ทำงานแค่ครั้งเดียว** แทนการทำซ้ำทุกครั้งที่เปิดหน้า admin และแก้เฉพาะ meta 4 ตัวของปลั๊กอินเอง (เดิมไปแก้ meta ที่ขึ้นต้นด้วย `_acf_` ทั้งหมด ซึ่งอาจทำให้ข้อมูลของปลั๊กอินอื่นเสีย)
+- **Uninstall ลบข้อมูลครบ** — ลบทั้งฟอร์ม (`isxf_form`), meta `_isxf_*` และ transient ของ rate limit / OAuth (เดิมเหลือค้างในฐานข้อมูล)
 
-### Security
+### ความปลอดภัย
 
-- Crypto: new `ENC3:` format — AES-256-CBC with random IV + HMAC-SHA256 (Encrypt-then-MAC). Encryption failure now returns `WP_Error` instead of silently storing plaintext. `ENC2:` and legacy `ENC:` values remain decryptable.
-- Client-IP detection: proxy headers (`CF-Connecting-IP`, `X-Forwarded-For`, `X-Real-IP`) are only trusted when `REMOTE_ADDR` matches a configurable trusted-proxy list (option `isxf_trusted_proxies` / filter, IPv4/IPv6 CIDR). Default trusts no proxy — closes the rate-limit IP-spoofing hole.
-- CAPTCHA now fails closed: new `isxf_captcha_required` option (default on) blocks all submissions when the selected CAPTCHA service has no secret key configured, with a persistent admin notice.
-- JS XSS fixes: `showToast()` uses `textContent` instead of `innerHTML`; unescaped `time_ago` output in analytics is escaped.
+- **การเข้ารหัสรหัสผ่านและ secret แบบใหม่ `ENC3:`** — AES-256-CBC + HMAC-SHA256 ตรวจได้ว่าข้อมูลถูกแก้หรือไม่ และถ้าเข้ารหัสไม่สำเร็จจะแจ้ง error แทนการบันทึกรหัสผ่านเป็นข้อความธรรมดา ค่าเก่า `ENC2:` / `ENC:` ยังถอดรหัสได้
+- **ปิดช่องปลอม IP เพื่อหลบ rate limit** — header อย่าง `CF-Connecting-IP`, `X-Forwarded-For`, `X-Real-IP` จะเชื่อเฉพาะเมื่อ request มาจาก proxy ที่อยู่ในรายการ trusted (option `isxf_trusted_proxies` หรือ filter รองรับ IPv4 / IPv6 CIDR) ค่าเริ่มต้นไม่เชื่อ proxy ใดเลย **ถ้าเว็บอยู่หลัง Cloudflare หรือ reverse proxy ต้องเพิ่ม IP ของ proxy เข้าไป** ไม่งั้นทุกคนจะถูกนับเป็น IP เดียวกัน
+- **CAPTCHA ไม่ยอมให้ผ่านเมื่อตั้งค่าไม่ครบ** — option ใหม่ `isxf_captcha_required` (เปิดเป็นค่าเริ่มต้น) ถ้าเลือกบริการ CAPTCHA ไว้แต่ไม่ได้ใส่ secret key จะบล็อกการส่งฟอร์มทั้งหมด และมีแจ้งเตือนค้างในหน้า admin
+- แก้ช่อง XSS ใน JavaScript: ข้อความแจ้งเตือน (toast) และเวลา "time ago" ในหน้า analytics ไม่แสดง HTML ดิบอีก
 
 ## [0.6.0] - 2026-07-10
 
-### Added
+### เพิ่ม
 
-- OAuth2 SMTP (XOAUTH2) for Google and Microsoft 365 — send email without username/password, automatic refresh tokens, CSRF `state` protection throughout the flow.
-- In-app "คู่มือการใช้งาน" (user guide) admin page with accordion documentation.
-- SMTP preset dropdown (Gmail / Microsoft 365 / Custom) with host/port auto-fill.
-- GitHub-based auto-update via plugin-update-checker with release assets.
+- **ส่งอีเมลผ่าน OAuth2 (XOAUTH2) ของ Google และ Microsoft 365** — ไม่ต้องเก็บ username / password อีเมลไว้ในเว็บ token ต่ออายุอัตโนมัติ และป้องกัน CSRF ด้วย `state` ตลอดขั้นตอน
+- หน้า "คู่มือการใช้งาน" ในเมนู admin แบบหัวข้อพับ / กางได้
+- Preset SMTP แบบ dropdown (Gmail / Microsoft 365 / Custom) เติม host และ port ให้อัตโนมัติ
+- อัปเดตปลั๊กอินอัตโนมัติจาก GitHub Release (plugin-update-checker)
 
-### Changed
+### เปลี่ยนแปลง
 
-- Encryption upgraded to `ENC2:` format (random IV per encryption) for SMTP password and OAuth secret/refresh token, with automatic migration of old values.
+- รหัสผ่าน SMTP, OAuth secret และ refresh token เข้ารหัสแบบ `ENC2:` (IV สุ่มใหม่ทุกครั้ง) ค่าเก่าถูกแปลงให้อัตโนมัติ
 
 ## [0.5.4] - 2026-02-27
 
-### Fixed
+### แก้บั๊ก
 
-- SMTP test button on the settings page not working (hook name mismatch with submenu slug).
-- Legacy settings (SMTP, CAPTCHA, admin notification) automatically restored after the prefix change.
+- ปุ่มทดสอบส่งอีเมลในหน้าตั้งค่ากดแล้วไม่ทำงาน (ชื่อ hook ไม่ตรงกับ slug ของเมนู)
+- ค่าตั้ง SMTP, CAPTCHA และการแจ้งเตือนผู้ดูแลจากรุ่นเก่าถูกดึงกลับมาให้อัตโนมัติหลังเปลี่ยน prefix
 
 ## [0.5.3] - 2026-02-27
 
-> Retroactively documented (present in git history, missing from the README changelog).
+> บันทึกย้อนหลัง (มีใน git history แต่ตกหล่นจาก changelog ใน README)
 
-### Fixed
+### แก้บั๊ก
 
-- Hotfix: migrate legacy `acf_*` options to `isxf_*` for SMTP/CAPTCHA settings.
+- Hotfix: ย้ายค่าตั้ง SMTP / CAPTCHA จาก `acf_*` เป็น `isxf_*` ให้อัตโนมัติ
 
 ## [0.5.2] - 2026-02-27
 
-### Fixed
+### แก้บั๊ก
 
-- Hotfix: restored the legacy `[advanced_form]` shortcode alias so existing embedded forms keep working, and restored the CPT admin list view after the prefix change.
+- Hotfix: ใส่ shortcode `[advanced_form]` กลับมา ฟอร์มที่ฝังไว้ในหน้าเดิมจึงยังแสดงได้ และแก้หน้ารายการฟอร์มใน admin ที่หายไปหลังเปลี่ยน prefix
 
 ## [0.5.1] - 2026-02-27
 
-### Fixed
+### แก้บั๊ก
 
-- Hotfix: automatic database migration copying `acf_form_entries` rows into the new `isxf_form_entries` table (old data appeared lost after upgrading to 0.5.0).
+- Hotfix: **ข้อมูลที่ลูกค้าส่งมาดูเหมือนหายหลังอัปเกรดเป็น 0.5.0** — เพิ่มการย้ายข้อมูลอัตโนมัติจากตาราง `acf_form_entries` ไปตารางใหม่ `isxf_form_entries`
 
 ## [0.5.0] - 2026-02-27
 
-### Changed
+### เปลี่ยนแปลง
 
-- Prefix changed to `ISXF_` throughout to avoid collisions with other plugins.
-- i18n groundwork (`insightx-form` text domain) for future multi-language support.
-- Improved Flatpickr loading with local fallback when the CDN is unavailable.
-- Submit-button accessibility improvements (`aria-busy`, `aria-label`).
+- เปลี่ยน prefix ทั้งหมดเป็น `ISXF_` กันชื่อชนกับปลั๊กอินอื่น
+- เตรียมระบบแปลภาษา (text domain `insightx-form`)
+- โหลด Flatpickr ดีขึ้น ถ้า CDN ล่มจะใช้ไฟล์ในปลั๊กอินแทน
+- ปุ่มส่งฟอร์มรองรับ screen reader ดีขึ้น (`aria-busy`, `aria-label`)
 
-### Added
+### เพิ่ม
 
-- Central `isxf_log_error` logging for email-send failures.
+- บันทึก error ตอนส่งอีเมลไม่สำเร็จไว้ที่เดียว (`isxf_log_error`)
 
 ## [0.4.1] - 2026-02
 
-> Retroactively documented — this version shipped (per the README encryption
-> section and the `@since 0.4.1` tag in `class-isxf-crypto.php`) but was never
-> added to the README changelog. Exact release date unknown; between v0.4.0
-> and v0.5.0.
+> บันทึกย้อนหลัง — รุ่นนี้ออกจริง (อ้างอิงจากหัวข้อการเข้ารหัสใน README และ `@since 0.4.1` ใน `class-isxf-crypto.php`) แต่ไม่เคยถูกเพิ่มใน changelog ไม่ทราบวันที่แน่นอน อยู่ระหว่าง v0.4.0 กับ v0.5.0
 
-### Changed
+### เปลี่ยนแปลง
 
-- Centralized `ISXF_Crypto` utility; encryption upgraded to `ENC2:` format (random IV via `openssl_random_pseudo_bytes` per encryption) replacing the legacy deterministic-IV `ENC:` format. Old values auto-migrate; `ENC:` support kept decrypt-only.
+- รวมการเข้ารหัสไว้ที่คลาส `ISXF_Crypto` และเปลี่ยนเป็นรูปแบบ `ENC2:` (IV สุ่มใหม่ทุกครั้ง) แทน `ENC:` เดิมที่ใช้ IV ตายตัว ค่าเก่าแปลงให้อัตโนมัติ ส่วน `ENC:` ยังถอดรหัสได้อย่างเดียว
 
 ## [0.4.0] - 2026-02-26
 
-### Added
+### เพิ่ม
 
-- Analytics dashboard: stat cards, submissions-per-day line chart, status-share doughnut chart, top forms.
-- Chart.js integration with animated transitions.
-- Date-range filter (7/30/90/365 days or custom range) and automatic period-over-period comparison.
-- Database migration system with version tracking and auto-upgrade.
-- CSS/JS extraction from inline blocks into separate cacheable files.
+- หน้า Analytics: การ์ดสรุปตัวเลข, กราฟเส้นจำนวนการส่งต่อวัน, กราฟโดนัทสัดส่วนสถานะ และฟอร์มยอดนิยม
+- กราฟ Chart.js พร้อม animation
+- เลือกช่วงวันที่ (7 / 30 / 90 / 365 วัน หรือกำหนดเอง) และเทียบกับช่วงก่อนหน้าให้อัตโนมัติ
+- ระบบอัปเกรดฐานข้อมูลอัตโนมัติตามเวอร์ชัน
+- แยก CSS / JS ออกจากโค้ด inline เป็นไฟล์ เบราว์เซอร์จึง cache ได้
 
-### Fixed
+### แก้บั๊ก
 
-- Error logging to `debug.log` when email sending fails.
+- บันทึก error ลง `debug.log` เมื่อส่งอีเมลไม่สำเร็จ
 
 ## [0.3.0] - 2026-02-26
 
-### Added
+### เพิ่ม
 
-- SMTP password encryption (AES-256-CBC) before storage, with auto-migration of existing passwords.
-- SSL verification enabled by default, with a dev-only toggle.
-- Custom email templates (subject + body) with merge tags: `{site_name}`, `{form_title}`, `{all_fields}`, `{field:ชื่อ}`.
+- เข้ารหัสรหัสผ่าน SMTP (AES-256-CBC) ก่อนบันทึก และแปลงรหัสผ่านเดิมให้อัตโนมัติ
+- เปิดตรวจ SSL เป็นค่าเริ่มต้น (มีปุ่มปิดไว้ใช้ตอนพัฒนาเท่านั้น)
+- Template อีเมลแบบกำหนดเอง (หัวเรื่อง + เนื้อหา) ใช้ merge tag ได้: `{site_name}`, `{form_title}`, `{all_fields}`, `{field:ชื่อ}`
 
 ## [0.2.1] - 2026-02-24
 
-### Added
+### เพิ่ม
 
-- Dashboard widget with data overview.
-- Entries management (statuses, notes, filtering, search).
-- SMTP + admin notification emails.
-- CAPTCHA support (reCAPTCHA v3 + Cloudflare Turnstile).
+- Widget สรุปข้อมูลในหน้า Dashboard
+- จัดการรายการที่ส่งเข้ามา (สถานะ, โน้ต, กรอง, ค้นหา)
+- ส่งอีเมลผ่าน SMTP และแจ้งเตือนผู้ดูแล
+- รองรับ CAPTCHA (reCAPTCHA v3 และ Cloudflare Turnstile)
 
-[Unreleased]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.8.2...v0.9.0
+[0.8.2]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.8.1...v0.8.2
+[0.8.1]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.6.0...v0.8.0
 [0.6.0]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/releases/tag/v0.6.0

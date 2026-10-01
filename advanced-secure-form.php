@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       InsightX Form
  * Plugin URI:        https://insightx.in.th/
- * Version:           0.8.2
+ * Version:           0.9.0
  * Author:            InsightX
  * Author URI:        https://www.insightx.in.th
  * Text Domain:       insightx-form
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ISXF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ISXF_PLUGIN_VERSION', '0.8.2' );
+define( 'ISXF_PLUGIN_VERSION', '0.9.0' );
 define( 'ISXF_DB_VERSION', '1.1' );
 
 // === GitHub Plugin Update Checker ===
@@ -48,7 +48,7 @@ function isxf_create_db_table() {
         entry_data longtext NOT NULL,
         user_ip varchar(100) DEFAULT '' NOT NULL,
         entry_status varchar(20) DEFAULT 'new' NOT NULL,
-        admin_note text DEFAULT '' NOT NULL,
+        admin_note text NOT NULL,
         created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
         PRIMARY KEY  (id),
         KEY form_id (form_id),

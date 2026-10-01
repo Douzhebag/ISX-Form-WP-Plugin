@@ -1,8 +1,10 @@
 # InsightX Form
 
+![InsightX Form — Build forms. Send emails. Manage entries.](assets/banner-1544x500.png)
+
 ระบบฟอร์มและจัดการข้อมูลลูกค้าสำหรับธุรกิจ — สร้างฟอร์มง่าย ส่งอีเมลอัตโนมัติ (รองรับ OAuth2) จัดการข้อมูลครบจบในที่เดียว
 
-**Version:** 0.8.0
+**Version:** 0.9.0
 **Author:** [InsightX](https://www.insightx.in.th)
 
 ---
@@ -26,7 +28,7 @@
 2. [การสร้างฟอร์ม](#-การสร้างฟอร์ม)
 3. [การแสดงฟอร์มบนหน้าเว็บ](#️-การแสดงฟอร์มบนหน้าเว็บ)
 4. [ตั้งค่าระบบอีเมล (SMTP)](#-ตั้งค่าระบบอีเมล-smtp)
-5. [เชื่อมต่ออีเมลผ่าน OAuth2 (Google / Microsoft 365)](#-เชื่อมต่ออีเมลผ่าน-oauth2-google--microsoft-365)
+5. [เชื่อมต่ออีเมลผ่าน OAuth2 (Google)](#-เชื่อมต่ออีเมลผ่าน-oauth2-google)
 6. [ตั้งค่า Captcha](#️-ตั้งค่า-captcha)
 7. [ทดสอบส่งอีเมล](#-ทดสอบส่งอีเมล)
 8. [Custom Email Template](#-custom-email-template)
@@ -47,14 +49,35 @@
 
 ## 📦 การติดตั้ง
 
-1. ดาวน์โหลดโฟลเดอร์ปลั๊กอินทั้งหมด (หรือไฟล์ `.zip` จาก [GitHub Release](https://github.com/Douzhebag/ISX-Form-WP-Plugin/releases))
-2. อัพโหลดไปที่ `/wp-content/plugins/` ในเว็บ WordPress ของคุณ (หรือใช้ **Plugins → Add New → Upload Plugin** ถ้าเป็นไฟล์ zip)
-3. ไปที่ **Plugins → Installed Plugins** แล้วกด **Activate** ปลั๊กอิน "InsightX Form"
-4. เมนู **"แบบฟอร์ม (Forms)"** จะปรากฏในแถบด้านซ้ายของ Admin
+ต้องใช้ **WordPress 7.0 ขึ้นไป** และ **PHP 8.1 ขึ้นไป** ตามข้อกำหนดในไฟล์ปลั๊กอิน
+
+### ติดตั้งผ่านหน้า WordPress
+
+1. ดาวน์โหลดไฟล์ `insightx-form-<version>.zip` ในส่วน **Assets** ของ [GitHub Releases](https://github.com/Douzhebag/ISX-Form-WP-Plugin/releases) (ไฟล์ติดตั้งที่ workflow สร้างให้)
+2. ไปที่ **Plugins → Add New → Upload Plugin** แล้วเลือกไฟล์ ZIP และกด **Install Now**
+3. กด **Activate** ที่ปลั๊กอิน **InsightX Form**
+4. เปิดเมนู **แบบฟอร์ม (Forms)** เพื่อสร้างฟอร์ม จากนั้นนำ shortcode เช่น `[isxf_form id="123"]` ไปวางในหน้าเว็บ โดยเปลี่ยน `123` เป็น ID ของฟอร์ม
+5. ตั้งค่าการส่งอีเมลและ CAPTCHA ในหน้าตั้งค่าของปลั๊กอิน แล้วทดลองส่งฟอร์มหนึ่งครั้ง
+
+### ติดตั้งด้วยการอัปโหลดโฟลเดอร์
+
+แตกไฟล์ ZIP และอัปโหลดโฟลเดอร์ `insightx-form` ไปยัง `wp-content/plugins/` โดยไฟล์หลักต้องอยู่ที่:
+
+```text
+wp-content/plugins/insightx-form/advanced-secure-form.php
+```
+
+จากนั้นเปิดใช้งาน **InsightX Form** ใน **Plugins → Installed Plugins** แพ็กเกจ Release มีไฟล์ runtime ครบแล้ว ไม่ต้องรัน Composer บนเว็บจริง
+
+### เปลี่ยนจากโฟลเดอร์ชื่อเดิม
+
+หากติดตั้งด้วยโฟลเดอร์ `ISX-Form-WP-Plugin` อยู่แล้ว ให้สำรองเว็บไซต์ ปิดใช้งานปลั๊กอินชั่วคราว เปลี่ยนชื่อโฟลเดอร์เป็น `insightx-form` แล้วเปิดใช้งานอีกครั้ง ฟอร์ม รายการข้อมูล และการตั้งค่ายังคงใช้ข้อมูลเดิม
+
+**อย่ากด Delete ปลั๊กอินเดิม** เพราะขั้นตอนถอนการติดตั้งจะลบข้อมูลของปลั๊กอิน และไม่ควรเปิดใช้งานสำเนาสองโฟลเดอร์พร้อมกัน
 
 > **หมายเหตุ:** หลังจาก Activate ระบบจะสร้างตารางฐานข้อมูล `wp_isxf_form_entries` อัตโนมัติ (ดูโครงสร้างตารางเต็มใน [ฐานข้อมูล & สถาปัตยกรรม](#️-ฐานข้อมูล--สถาปัตยกรรม-สำหรับ-dev))
 
-หลังติดตั้งแล้ว ปลั๊กอินอัปเดตตัวเองอัตโนมัติผ่าน GitHub Release (bundled [plugin-update-checker](https://github.com/YahnisElsts/plugin-update-checker)) — เห็นแจ้งเตือนอัปเดตใน **Plugins** เหมือนปลั๊กอินจาก WordPress.org ทุกครั้งที่มี Release ใหม่
+หลังติดตั้งแล้ว ตัวตรวจอัปเดตจะตรวจ GitHub Releases และแสดงแจ้งเตือนในหน้า **Plugins** เมื่อมีเวอร์ชันใหม่ ให้กด **Update now** เพื่อติดตั้งอัปเดต
 
 ---
 
@@ -124,16 +147,14 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 
 | แบบ                                  | เหมาะกับ                                                                                                                                               |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Username / Password (Basic Auth)** | Gmail (ผ่าน App Password), SMTP ทั่วไปที่ยังรองรับ Basic Auth                                                                                          |
-| **OAuth2 — Google / Microsoft 365**  | Gmail/Google Workspace หรือ Microsoft 365/Outlook ที่**ปิด Basic Auth ไปแล้ว** (ดู [หัวข้อ OAuth2](#-เชื่อมต่ออีเมลผ่าน-oauth2-google--microsoft-365)) |
-
-> ⚠️ **สำคัญ:** Microsoft ทยอยปิดการยืนยันตัวตนแบบ Basic Auth (username/password) สำหรับ SMTP ในหลาย tenant ของ Microsoft 365/Exchange Online แล้ว — ถ้าเจอ error ยืนยันตัวตนไม่ผ่านทั้งที่ username/password ถูกต้อง ให้เปลี่ยนไปใช้ OAuth2 แทน
+| **Username / Password (Basic Auth)** | Resend, Gmail (ผ่าน App Password), SMTP ทั่วไป                                                                       |
+| **OAuth2 — Google**                  | Gmail/Google Workspace แบบไม่เก็บรหัสผ่าน (ดู [หัวข้อ OAuth2](#-เชื่อมต่ออีเมลผ่าน-oauth2-google))                 |
 
 ### การเปิดใช้งาน SMTP แบบ Username / Password
 
 1. ✅ ติ๊ก **"เปิดใช้งาน SMTP"**
 2. เลือกวิธียืนยันตัวตนเป็น **Username / Password**
-3. กรอกข้อมูล (มี preset dropdown ช่วยเติม host/port อัตโนมัติสำหรับ Gmail / Microsoft 365):
+3. กรอกข้อมูล (มี preset dropdown ช่วยเติม host/port อัตโนมัติสำหรับ Gmail / Resend):
 
 | ช่อง     | ค่าตัวอย่าง (Gmail)    |
 | -------- | ---------------------- |
@@ -143,6 +164,17 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 | Password | รหัสผ่านแอป 16 หลัก    |
 
 > 🔐 **Password ถูกเข้ารหัส (AES-256-CBC)** ก่อนบันทึกลงฐานข้อมูลอัตโนมัติ — เว้นว่างหากไม่ต้องการเปลี่ยนรหัสเดิม (ดูรายละเอียด format การเข้ารหัสใน [ความปลอดภัย](#-ความปลอดภัย))
+
+### ใช้กับ Resend
+
+| ช่อง     | ค่า                                                        |
+| -------- | ---------------------------------------------------------- |
+| Host     | `smtp.resend.com`                                          |
+| Port     | `587` (หรือ `465` สำหรับ SSL)                              |
+| Username | `resend`                                                   |
+| Password | API key จาก [resend.com/api-keys](https://resend.com/api-keys) |
+
+> ⚠️ **From Email** ต้องเป็นโดเมนที่ verify แล้วใน Resend (เมนู Domains) ไม่งั้นส่งไม่ออก
 
 ### วิธีขอ App Password (Gmail)
 
@@ -165,9 +197,9 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 
 ---
 
-## 🔑 เชื่อมต่ออีเมลผ่าน OAuth2 (Google / Microsoft 365)
+## 🔑 เชื่อมต่ออีเมลผ่าน OAuth2 (Google)
 
-ฟีเจอร์ใหม่ตั้งแต่ v0.6.0 — ยืนยันตัวตนส่งอีเมลผ่าน OAuth2 (XOAUTH2) แทน username/password ตรงๆ ปลอดภัยกว่าและใช้ได้แม้ tenant ปิด Basic Auth แล้ว
+ฟีเจอร์ใหม่ตั้งแต่ v0.6.0 — ยืนยันตัวตนส่งอีเมลผ่าน OAuth2 (XOAUTH2) แทน username/password ตรงๆ ปลอดภัยกว่า
 
 ### ตั้งค่าฝั่ง Google Cloud Console
 
@@ -179,19 +211,11 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
    ```
 4. คัดลอก **Client ID** และ **Client Secret** มาใส่ในหน้าตั้งค่าระบบของปลั๊กอิน
 
-### ตั้งค่าฝั่ง Microsoft Entra ID (Azure AD)
-
-1. ไปที่ [Azure Portal → Microsoft Entra ID → App registrations](https://portal.azure.com/) → สร้าง App registration ใหม่
-2. เพิ่ม **Redirect URI** (แบบ Web) เป็น URL เดียวกับด้านบน
-3. ไปที่ **API permissions** เพิ่ม `SMTP.Send` และ `offline_access`
-4. สร้าง **Client Secret** ใน **Certificates & secrets**
-5. คัดลอก **Application (client) ID**, **Client Secret**, และ **Directory (tenant) ID** มาใส่ในปลั๊กอิน (เว้น Tenant ID ว่างได้ถ้าต้องการใช้ endpoint `common` แบบ multi-tenant)
-
 ### เชื่อมต่อในปลั๊กอิน
 
-1. ไปที่ **แบบฟอร์ม → ⚙️ ตั้งค่าระบบ** → เลือกวิธียืนยันตัวตนเป็น **OAuth2 (Google)** หรือ **OAuth2 (Microsoft 365)**
-2. กรอก Client ID / Client Secret (/ Tenant ID สำหรับ Microsoft) แล้ว **บันทึกการตั้งค่า** ก่อน
-3. กดปุ่ม **"เชื่อมต่อบัญชี"** → ระบบพาไปหน้ายืนยันตัวตนของ Google/Microsoft → อนุญาตสิทธิ์ → เด้งกลับมาที่ปลั๊กอินอัตโนมัติ
+1. ไปที่ **แบบฟอร์ม → ⚙️ ตั้งค่าระบบ** → เลือกวิธียืนยันตัวตนเป็น **OAuth2 (Google)**
+2. กรอก Client ID / Client Secret แล้ว **บันทึกการตั้งค่า** ก่อน
+3. กดปุ่ม **"เชื่อมต่อบัญชี"** → ระบบพาไปหน้ายืนยันตัวตนของ Google → อนุญาตสิทธิ์ → เด้งกลับมาที่ปลั๊กอินอัตโนมัติ
 4. เมื่อเชื่อมต่อสำเร็จจะเห็นอีเมลบัญชีที่เชื่อมต่ออยู่ในหน้าตั้งค่า พร้อมปุ่ม **"ตัดการเชื่อมต่อ"**
 
 หลังเชื่อมต่อแล้ว ระบบจะใช้ **Access Token** (ต่ออายุอัตโนมัติผ่าน **Refresh Token** ที่เก็บแบบเข้ารหัสไว้) ยืนยันตัวตนกับ SMTP server ทุกครั้งที่ส่งอีเมล ไม่ต้องเก็บรหัสผ่านอีเมลไว้ในระบบเลย
@@ -417,7 +441,7 @@ InsightX Form มีมาตรการความปลอดภัยหล
 advanced-secure-form.php        entry point — constants, activation/uninstall hook, DB migration, autoloader + bootstrap
 src/                            PSR-4 classes ใน namespace `ISXF\` (autoload ผ่าน spl_autoload_register ใน main file)
   Crypto.php                    เข้ารหัส/ถอดรหัส (AES-256-CBC, ENC/ENC2 format)
-  OAuth.php                     OAuth2 flow (Google/Microsoft)
+  OAuth.php                     OAuth2 flow (Google)
   OAuthTokenProvider.php        PHPMailer XOAUTH2 token provider
   Admin.php                     form builder CPT, meta box, global settings page (ไฟล์ใหญ่สุด)
   Frontend.php                  shortcode [isxf_form]/[advanced_form] + render ฟอร์มหน้าเว็บ
@@ -463,7 +487,7 @@ isxf_turnstile_site_key, isxf_turnstile_secret_key
 isxf_smtp_enable, isxf_smtp_host, isxf_smtp_port, isxf_smtp_user, isxf_smtp_pass
 isxf_smtp_secure, isxf_smtp_from_email, isxf_smtp_from_name, isxf_smtp_disable_ssl_verify
 isxf_smtp_auth_method, isxf_smtp_oauth_client_id, isxf_smtp_oauth_client_secret
-isxf_smtp_oauth_refresh_token, isxf_smtp_oauth_tenant, isxf_smtp_oauth_connected
+isxf_smtp_oauth_refresh_token, isxf_smtp_oauth_connected
 isxf_admin_notify_enable, isxf_admin_notify_email
 ```
 
@@ -501,7 +525,6 @@ isxf_admin_notify_enable, isxf_admin_notify_email
 - **ไม่มี custom validation pattern ต่อ field** — เช็คได้แค่ required/ไม่ required เท่านั้น (ไม่ validate รูปแบบ เช่น regex เฉพาะ)
 - **ไม่รองรับ multi-step form** — ฟอร์มแสดงเป็นหน้าเดียวเสมอ ไม่มีระบบแบ่งขั้นตอน (wizard)
 - **ไม่มี deactivation hook** — ปิดใช้งานปลั๊กอิน (Deactivate) ไม่ลบข้อมูล/ตาราง/ตั้งค่าใดๆ (ข้อมูลปลอดภัย) แต่ต้อง **Uninstall (Delete)** เท่านั้นถึงจะล้างข้อมูลทั้งหมด — ดูคำเตือนใน FAQ
-- **Uninstall ไม่ล้าง option OAuth 2 ตัว** — `isxf_smtp_oauth_tenant` และ `isxf_smtp_oauth_connected` ยังตกค้างในฐานข้อมูลหลัง uninstall (ไม่กระทบการทำงาน เพราะปลั๊กอินไม่ทำงานอยู่แล้ว แต่เป็น orphan option เล็กน้อย)
 - **Text Domain ไม่ตรงกันระหว่าง header กับโค้ด** — plugin header ระบุ `InsightX` แต่ `load_plugin_textdomain()`/`__()` ทั้งหมดใช้ `insightx-form` จริง (ไม่กระทบการทำงาน แต่ควรรู้ไว้ถ้าจะทำ translation .po/.mo)
 - **ไม่มี index เพิ่มเติมบนตาราง entries** นอกจาก PRIMARY KEY — พิจารณาเพิ่มเองถ้าข้อมูลเยอะมาก
 
@@ -510,7 +533,7 @@ isxf_admin_notify_enable, isxf_admin_notify_email
 ## ❓ FAQ
 
 **Q: ฟอร์มไม่ส่งอีเมล ทำอย่างไร?**
-A: ตรวจสอบการตั้งค่า SMTP → ใช้ปุ่ม "ทดสอบส่งอีเมล" เพื่อดู Error Message เพื่อนำไปแก้ไข ถ้าใช้ Microsoft 365 และ Basic Auth ใช้ไม่ได้ ให้ลองเปลี่ยนเป็น OAuth2
+A: ตรวจสอบการตั้งค่า SMTP → ใช้ปุ่ม "ทดสอบส่งอีเมล" เพื่อดู Error Message เพื่อนำไปแก้ไข
 
 **Q: ลูกค้ากรอก Email แล้วไม่ได้รับอีเมลยืนยัน**
 A: ให้ตรวจสอบว่าฟิลด์ประเภท `Email` ถูกตั้งค่าในฟอร์ม — ระบบจะส่งอีเมลไปที่ Email ที่กรอกในฟอร์มอัตโนมัติ
@@ -524,9 +547,6 @@ A: Google reCAPTCHA v3 และ Cloudflare Turnstile (เลือกได้�
 **Q: SMTP Password / OAuth Secret ปลอดภัยไหม?**
 A: ปลอดภัย — เข้ารหัสด้วย AES-256-CBC (IV สุ่มทุกครั้ง) ก่อนบันทึก โดยใช้ WordPress authentication salt เป็นฐานของ key
 
-**Q: Microsoft 365 ขึ้น error ยืนยันตัวตนไม่ผ่านทั้งที่ password ถูก**
-A: Tenant นั้นน่าจะปิด Basic Auth (SMTP AUTH) ไปแล้ว — เปลี่ยนไปใช้ **OAuth2 (Microsoft 365)** แทน
-
 **Q: อัพเดตปลั๊กอินแล้วข้อมูลเก่าหายไหม?**
 A: ไม่หาย ข้อมูลเก็บอยู่ในฐานข้อมูล WordPress แยกจากไฟล์ปลั๊กอิน แค่ Deactivate ก็ไม่มีผลกับข้อมูลเลย
 
@@ -537,61 +557,11 @@ A: จะหาย — เมื่อ **Uninstall (Delete)** ปลั๊กอ
 
 ## 📋 Changelog
 
-### v0.6.0
-
-- 🔑 **OAuth2 SMTP** — เชื่อมต่อส่งอีเมลผ่าน Google และ Microsoft 365 แบบ XOAUTH2 (ไม่ต้องใช้ username/password) รองรับ refresh token อัตโนมัติ พร้อม CSRF `state` protection ตลอด flow
-- 📖 เพิ่มหน้า **"คู่มือการใช้งาน"** ใน admin (in-app documentation แบบ accordion)
-- 🔐 ปรับ encryption เป็น `ENC2:` format (random IV ทุกครั้ง) ทั้ง SMTP password และ OAuth secret/refresh token — auto-migrate ค่าเก่าให้อัตโนมัติ
-- ✨ SMTP preset dropdown (Gmail / Microsoft 365 / Custom) auto-fill host/port
-
-### v0.5.4 (2026-02-27)
-
-- 🔧 แก้ไขปุ่มทดสอบส่งอีเมล (SMTP Test) บนหน้าตั้งค่าระบบไม่ทำงาน เนื่องจาก Hook name ไม่ตรงกับ Submenu slug
-- 🚑 กู้คืนการตั้งค่าระบบเดิม (SMTP, CAPTCHA, อีเมลแจ้งเตือน) ให้กลับมาทำงานอัตโนมัติ หลังจากเปลี่ยน Prefix
-
-### v0.5.2 (2026-02-27)
-
-- 🚑 **Hotfix:** กู้คืน Shortcode เดิม `[advanced_form]` ให้เว็บที่ติดฟอร์มไปแล้วยังคงทำงานได้ปกติ และอัปเดตระบบฐานข้อมูลให้แสดงฟอร์มในหลังบ้านกลับมาครบถ้วนเหมือนเดิมหลังเปลี่ยน Prefix
-
-### v0.5.1 (2026-02-27)
-
-- 🚑 **Hotfix:** เพิ่มระบบ Database Migration อัตโนมัติ เพื่อดึงข้อมูล `acf_form_entries` เดิมกลับมาใส่ตาราง `isxf_form_entries` ใหม่ (แก้ปัญหาข้อมูลเดิมหายหลังอัปเดตเป็น 0.5.0)
-
-### v0.5.0 (2026-02-27)
-
-- เปลี่ยน Prefix ให้เป็น `ISXF_` (ป้องกันการชนกับปลั๊กอินอื่น)
-- เพิ่ม/ปรับปรุง i18n สำหรับรองรับหลายภาษาในอนาคต (เพิ่ม `insightx-form` textdomain)
-- วางระบบ Logging `isxf_log_error` เพื่อดักจับ Error กรณีส่งอีเมลไม่ได้
-- ปรับปรุงการโหลด Flatpickr พร้อมรองรับ Local Fallback กรณี CDN ใช้งานไม่ได้
-- ปรับปรุง Accessibility ให้กับปุ่ม Submit ฟอร์มเพิ่มเติม (`aria-busy`, `aria-label`)
-
-### v0.4.0 (2026-02-26)
-
-- 📊 **Analytics Dashboard** — หน้าสรุปสถิติฟอร์ม: stat cards, กราฟ submissions/วัน, สัดส่วนสถานะ, ฟอร์มยอดนิยม
-- 📈 **Chart.js Integration** — Line chart + Doughnut chart พร้อม animated transitions
-- 📅 **Date Range Filter** — 7/30/90/365 วัน หรือกำหนดช่วงเอง
-- 📊 **Period Comparison** — เปรียบเทียบ % กับช่วงก่อนหน้าอัตโนมัติ
-- 🔧 **Error Logging** — log เมื่อส่ง email ไม่สำเร็จ (`debug.log`)
-- 🗃️ **DB Migration System** — version tracking + auto-upgrade ฐานข้อมูล
-- 📦 **CSS/JS Extraction** — แยก inline styles/scripts เป็นไฟล์แยก (browser cache)
-
-### v0.3.0 (2026-02-26)
-
-- 🔐 **SMTP Password Encryption** — เข้ารหัส AES-256-CBC ก่อนบันทึก พร้อม auto-migrate password เดิม
-- 🔒 **SSL Verification** — เปิด SSL verify เป็น default, เพิ่ม toggle สำหรับ dev
-- ✉️ **Custom Email Template** — กำหนดหัวข้อ + เนื้อหาอีเมลเอง พร้อม Merge Tags
-- 🏷️ **Merge Tags** — รองรับ `{site_name}`, `{form_title}`, `{all_fields}`, `{field:ชื่อ}`
-
-### v0.2.1
-
-- 📊 Dashboard Widget ภาพรวมข้อมูล
-- 📥 ระบบจัดการ Entries (สถานะ, โน้ต, กรอง, ค้นหา)
-- 📧 SMTP + Admin notification
-- 🛡️ CAPTCHA (reCAPTCHA v3 + Turnstile)
+ประวัติการเปลี่ยนแปลงทั้งหมดอยู่ใน [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
 <p align="center">
-  <strong>InsightX Form v0.6.0</strong><br>
+  <strong>InsightX Form</strong><br>
   Made by <a href="https://www.insightx.in.th">InsightX</a>
 </p>

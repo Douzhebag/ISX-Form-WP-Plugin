@@ -99,7 +99,6 @@
                                     <select name="<?php echo $opt['smtp_auth_method']; ?>" id="isxf_auth_method" style="width:100%; max-width:360px;">
                                         <option value="password" <?php selected($auth_method, 'password'); ?>><?php esc_html_e( 'App Password / Password (Basic Auth)', 'insightx-form' ); ?></option>
                                         <option value="oauth_google" <?php selected($auth_method, 'oauth_google'); ?>>Google OAuth2 (Gmail / Workspace)</option>
-                                        <option value="oauth_microsoft" <?php selected($auth_method, 'oauth_microsoft'); ?>>Microsoft 365 OAuth2 (Outlook / Exchange)</option>
                                     </select>
                                 </td></tr>
                             </table>
@@ -111,7 +110,7 @@
                                         <select id="isxf_smtp_preset" style="width:100%; max-width:360px;">
                                             <option value=""><?php esc_html_e( '— Select to auto-fill Host/Port —', 'insightx-form' ); ?></option>
                                             <option value="gmail">Gmail (smtp.gmail.com:587)</option>
-                                            <option value="m365">Microsoft 365 (smtp.office365.com:587)</option>
+                                            <option value="resend">Resend (smtp.resend.com:587)</option>
                                             <option value="custom"><?php esc_html_e( 'Custom', 'insightx-form' ); ?></option>
                                         </select>
                                     </td></tr>
@@ -142,9 +141,9 @@
                                             printf( esc_html__( 'Copy the 16-character code into the %s field above (no spaces needed)', 'insightx-form' ), '<strong>Password</strong>' );
                                         ?></li>
                                     </ol>
-                                    <p style="margin:10px 0 0; font-size:12px; color:#664d03; background:#fff8e5; border:1px solid #ffe0b2; padding:8px 10px; border-radius:4px;">⚠️ <strong>Microsoft 365:</strong> <?php
-                                        /* translators: %s: "Microsoft 365 OAuth2" label wrapped in <strong> tags. */
-                                        printf( esc_html__( 'Basic Auth only works for tenants that still have SMTP AUTH enabled — many tenants have disabled it. We recommend using %s instead.', 'insightx-form' ), '<strong>Microsoft 365 OAuth2</strong>' );
+                                    <p style="margin:10px 0 0; font-size:12px; color:#333; background:#fff; border:1px solid #cce5ff; padding:8px 10px; border-radius:4px;">✉️ <strong>Resend:</strong> <?php
+                                        /* translators: 1: username "resend" in <code> tags, 2: link to the Resend API keys page. */
+                                        printf( esc_html__( 'Username is %1$s and Password is your API key from %2$s. The From Email domain must be verified in Resend.', 'insightx-form' ), '<code>resend</code>', '<a href="https://resend.com/api-keys" target="_blank" rel="noopener noreferrer">resend.com/api-keys</a>' );
                                     ?></p>
                                 </div>
                             </div>
@@ -168,11 +167,7 @@
                                 <table class="form-table">
                                     <tr><th>Client ID</th><td><input type="text" name="<?php echo $opt['oauth_client_id']; ?>" value="<?php echo esc_attr($v['oauth_client_id']); ?>" class="regular-text"></td></tr>
                                     <tr><th>Client Secret</th><td><input type="password" name="<?php echo $opt['oauth_client_secret']; ?>" value="" class="regular-text" placeholder="<?php echo $v['oauth_client_secret'] ? '••••••••••••••••' : ''; ?>"><p class="description" style="margin-top:5px;"><?php esc_html_e( '🔒 Encrypted before saving — leave empty to keep it unchanged.', 'insightx-form' ); ?></p></td></tr>
-                                    <tr id="isxf_oauth_tenant_row" style="<?php echo $auth_method === 'oauth_microsoft' ? '' : 'display:none;'; ?>"><th>Tenant ID</th><td><input type="text" name="<?php echo $opt['oauth_tenant']; ?>" value="<?php echo esc_attr($v['oauth_tenant']); ?>" class="regular-text" placeholder="common"><p class="description" style="margin-top:5px;"><?php
-                                        /* translators: %s: the literal value "common" wrapped in <code> tags. */
-                                        printf( esc_html__( 'Enter your Azure Tenant ID (Directory ID) or leave it as %s', 'insightx-form' ), '<code>common</code>' );
-                                    ?></p></td></tr>
-                                    <tr><th>Redirect URI</th><td><input type="text" readonly value="<?php echo esc_attr($redirect_uri); ?>" class="regular-text" onclick="this.select();" style="background:#f0f0f1;"><p class="description" style="margin-top:5px;"><?php esc_html_e( 'Copy this value into Google Cloud Console / Azure App registration', 'insightx-form' ); ?></p></td></tr>
+                                    <tr><th>Redirect URI</th><td><input type="text" readonly value="<?php echo esc_attr($redirect_uri); ?>" class="regular-text" onclick="this.select();" style="background:#f0f0f1;"><p class="description" style="margin-top:5px;"><?php esc_html_e( 'Copy this value into Google Cloud Console', 'insightx-form' ); ?></p></td></tr>
                                 </table>
 
                                 <p>
@@ -181,7 +176,7 @@
 
                                 <div style="background: #f0f7ff; border: 1px solid #cce5ff; padding: 15px; border-radius: 4px; margin: 15px 0; font-size:13px; line-height:1.6; color:#333;">
                                     <strong style="color:#004085; display:block; margin-bottom:5px;"><?php esc_html_e( '💡 See the "User Guide" page for OAuth2 setup instructions', 'insightx-form' ); ?></strong>
-                                    <span><?php esc_html_e( 'You need to register an OAuth app in Google Cloud Console (Gmail) or Azure App registration (Microsoft 365), then configure the Redirect URI above to match.', 'insightx-form' ); ?></span>
+                                    <span><?php esc_html_e( 'You need to register an OAuth app in Google Cloud Console (Gmail), then configure the Redirect URI above to match.', 'insightx-form' ); ?></span>
                                 </div>
                             </div>
 

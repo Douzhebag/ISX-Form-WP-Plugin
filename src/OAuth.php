@@ -3,8 +3,8 @@
  * ISXF\OAuth — OAuth2 (XOAUTH2) support for SMTP sending.
  *
  * Handles the OAuth2 authorization-code flow and access-token refresh for
- * Google (Gmail) and Microsoft 365 (Outlook/Exchange Online), so the plugin
- * can send mail via XOAUTH2 instead of basic SMTP authentication.
+ * Google (Gmail), so the plugin can send mail via XOAUTH2 instead of basic
+ * SMTP authentication.
  *
  * No external library is required — WordPress already bundles PHPMailer with
  * the OAuthTokenProvider interface and setOAuth()/AuthType = 'XOAUTH2' support.
@@ -18,11 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class OAuth {
 
-        const OPT_AUTH_METHOD   = 'isxf_smtp_auth_method';   // password | oauth_google | oauth_microsoft
+        const OPT_AUTH_METHOD   = 'isxf_smtp_auth_method';   // password | oauth_google
         const OPT_CLIENT_ID     = 'isxf_smtp_oauth_client_id';
         const OPT_CLIENT_SECRET = 'isxf_smtp_oauth_client_secret'; // encrypted
         const OPT_REFRESH_TOKEN = 'isxf_smtp_oauth_refresh_token'; // encrypted
-        const OPT_TENANT        = 'isxf_smtp_oauth_tenant';        // microsoft only
         const OPT_CONNECTED     = 'isxf_smtp_oauth_connected';      // connected account email
 
         const TOKEN_TRANSIENT   = 'isxf_oauth_access_token';
@@ -48,15 +47,6 @@ class OAuth {
                     'host'      => 'smtp.gmail.com',
                     'port'      => 587,
                 ],
-                'microsoft' => [
-                    'label'     => 'Microsoft 365 / Outlook',
-                    'authorize' => 'https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize',
-                    'token'     => 'https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token',
-                    'scope'     => 'https://outlook.office.com/SMTP.Send offline_access openid email',
-                    'extra'     => [ 'prompt' => 'consent' ],
-                    'host'      => 'smtp.office365.com',
-                    'port'      => 587,
-                ],
             ];
         }
 
@@ -66,7 +56,6 @@ class OAuth {
         public static function current_provider() {
             $method = get_option( self::OPT_AUTH_METHOD, 'password' );
             if ( $method === 'oauth_google' )    return 'google';
-            if ( $method === 'oauth_microsoft' ) return 'microsoft';
             return null;
         }
 
@@ -94,7 +83,7 @@ class OAuth {
         }
 
         /**
-         * The redirect URI to register in the Google/Azure console.
+         * The redirect URI to register in the Google Cloud console.
          */
         public static function redirect_uri() {
             return admin_url( 'admin-post.php?action=isxf_oauth_callback' );
@@ -105,15 +94,9 @@ class OAuth {
             return $args ? add_query_arg( $args, $base ) : $base;
         }
 
-        private static function tenant() {
-            $tenant = trim( (string) get_option( self::OPT_TENANT, '' ) );
-            return $tenant !== '' ? $tenant : 'common';
-        }
-
         private static function endpoint( $provider, $which ) {
             $providers = self::providers();
-            $url = isset( $providers[ $provider ][ $which ] ) ? $providers[ $provider ][ $which ] : '';
-            return str_replace( '{tenant}', rawurlencode( self::tenant() ), $url );
+            return isset( $providers[ $provider ][ $which ] ) ? $providers[ $provider ][ $which ] : '';
         }
 
         /**
@@ -145,8 +128,8 @@ class OAuth {
             ], $providers[ $provider ]['extra'] );
 
             $authorize_url = self::endpoint( $provider, 'authorize' ) . '?' . http_build_query( $args );
-            // The consent screen is an external URL (accounts.google.com /
-            // login.microsoftonline.com) — whitelist its host so
+            // The consent screen is an external URL (accounts.google.com)
+            // — whitelist its host so
             // wp_safe_redirect() accepts it for this redirect.
             add_filter( 'allowed_redirect_hosts', function ( $hosts ) use ( $authorize_url ) {
                 $host = wp_parse_url( $authorize_url, PHP_URL_HOST );

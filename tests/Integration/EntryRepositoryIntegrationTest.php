@@ -262,18 +262,24 @@ class EntryRepositoryIntegrationTest extends WP_UnitTestCase {
     }
 
     public function test_analytics_cache_hit_and_invalidation(): void {
-        $this->seed_entry( [ 'created_at' => '2026-07-21 11:00:00' ] );
+        // insert_submission() stamps "now", so the window must be relative to
+        // today (a fixed month made this test fail once that month was over).
+        // The end is tomorrow so a run crossing midnight still counts it.
+        $now   = current_datetime();
+        $start = $now->modify( '-30 days' )->format( 'Y-m-d' );
+        $end   = $now->modify( '+1 day' )->format( 'Y-m-d' );
+        $this->seed_entry( [ 'created_at' => $now->format( 'Y-m-d H:i:s' ) ] );
 
         $before = $this->query_count;
-        $this->assertSame( 1, $this->repo->count_between( '2026-07-01', '2026-07-31' ) );
+        $this->assertSame( 1, $this->repo->count_between( $start, $end ) );
         $this->assertSame( 1, $this->query_count - $before );
 
         $before = $this->query_count;
-        $this->assertSame( 1, $this->repo->count_between( '2026-07-01', '2026-07-31' ) );
+        $this->assertSame( 1, $this->repo->count_between( $start, $end ) );
         $this->assertSame( 0, $this->query_count - $before, 'cached aggregate must not re-query' );
 
         $this->seed_and_invalidate_via_repo();
-        $this->assertSame( 2, $this->repo->count_between( '2026-07-01', '2026-07-31' ) );
+        $this->assertSame( 2, $this->repo->count_between( $start, $end ) );
     }
 
     /**
