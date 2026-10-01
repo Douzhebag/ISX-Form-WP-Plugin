@@ -1,5 +1,82 @@
 /* === InsightX Form — Admin (Builder + Settings) === */
 
+.isxf-settings .isxf-smtp-password::placeholder {
+  color: #334155 !important;
+  opacity: 1;
+  letter-spacing: 0.12em;
+}
+
+.isxf-settings .isxf-smtp-connection-test {
+  margin-top: 14px;
+}
+
+.isxf-settings .isxf-smtp-status:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 7px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.isxf-settings .isxf-smtp-status.is-connected {
+  color: #087f5b;
+  background: #ecfdf3;
+  border-color: #a6f4c5;
+}
+
+.isxf-settings .isxf-smtp-status.is-connected::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 3px #d1fae5;
+}
+
+.isxf-settings .isxf-smtp-status.has-error {
+  color: #b42318;
+  background: #fff1f0;
+  border-color: #fecdca;
+}
+
+.isxf-settings-toast {
+  position: fixed;
+  z-index: 100000;
+  top: 46px;
+  right: 24px;
+  max-width: min(420px, calc(100vw - 48px));
+  padding: 11px 16px;
+  border: 1px solid #a6f4c5;
+  border-radius: 999px;
+  background: #ecfdf3;
+  color: #087f5b;
+  box-shadow: 0 4px 14px rgb(15 23 42 / 12%);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.isxf-settings-toast.is-saving {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.isxf-settings-toast.is-error {
+  border-color: #fecdca;
+  background: #fff1f0;
+  color: #b42318;
+}
+
+.isxf-settings-toast[hidden] {
+  display: none;
+}
+
 /* Form Builder Meta Box */
 .drag-handle {
   cursor: grab;

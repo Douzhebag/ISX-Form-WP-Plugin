@@ -1775,12 +1775,9 @@ msgid "Not connected"
 msgstr "ยังไม่ได้เชื่อมต่อ"
 
 #. translators: %s: "save the settings" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:163
-#, php-format
-msgid ""
-"Enter your Client ID / Secret and %s first, then click the \"Connect\" "
-"button below"
-msgstr "กรอก Client ID / Secret แล้ว %s ก่อน จากนั้นกดปุ่ม \"เชื่อมต่อ\" ด้านล่าง"
+#: templates/admin/settings-page.php
+msgid "Enter your Client ID / Secret. Changes are saved automatically before you connect."
+msgstr "กรอก Client ID / Secret ระบบจะบันทึกให้อัตโนมัติก่อนเชื่อมต่อ"
 
 #. translators: %s: "save the settings" label wrapped in <strong> tags.
 #: templates/admin/settings-page.php:163
@@ -2150,3 +2147,43 @@ msgstr "ควรเลือกผู้ให้บริการอีเม
 #: templates/admin/docs-page.php
 msgid "Google Workspace → Google. Your own domain without a mail server → Resend or Cloudflare. A mail server from your host or another provider → Custom."
 msgstr "ใช้ Google Workspace → เลือก Google / มีโดเมนแต่ไม่มีเมลเซิร์ฟเวอร์ → Resend หรือ Cloudflare / มีเมลเซิร์ฟเวอร์ของโฮสติ้งหรือเจ้าอื่น → กำหนดเอง"
+
+#: templates/admin/settings-page.php
+msgid "Connect"
+msgstr "เชื่อมต่อ"
+
+#: templates/admin/settings-page.php
+msgid "Save the settings first. This checks the server connection and login without sending an email."
+msgstr "บันทึกการตั้งค่าก่อน ระบบจะตรวจการเชื่อมต่อและการเข้าสู่ระบบโดยไม่ส่งอีเมล"
+
+#: src/Admin.php
+msgid "⏳ Checking connection..."
+msgstr "⏳ กำลังตรวจสอบการเชื่อมต่อ..."
+
+#: src/Ajax/SettingsController.php
+msgid "SMTP is disabled. Enable it and save the settings first."
+msgstr "ยังไม่ได้เปิดใช้ SMTP กรุณาเปิดใช้และบันทึกการตั้งค่าก่อน"
+
+#: src/Ajax/SettingsController.php
+msgid "Google is not connected. Connect the account and save the settings first."
+msgstr "ยังไม่ได้เชื่อมต่อ Google กรุณาเชื่อมต่อบัญชีและบันทึกการตั้งค่าก่อน"
+
+#: src/Ajax/SettingsController.php
+msgid "SMTP password or API key is missing. Enter it and save the settings first."
+msgstr "ไม่มีรหัสผ่าน SMTP หรือ API key กรุณากรอกและบันทึกการตั้งค่าก่อน"
+
+#: src/Ajax/SettingsController.php
+msgid "SMTP host or port is missing."
+msgstr "ไม่มี SMTP host หรือ port"
+
+#: src/Ajax/SettingsController.php
+msgid "Could not connect to the SMTP server."
+msgstr "เชื่อมต่อเซิร์ฟเวอร์ SMTP ไม่ได้"
+
+#: src/Ajax/SettingsController.php
+msgid "Connected successfully"
+msgstr "เชื่อมต่อสำเร็จ"
+
+#: src/Ajax/SettingsController.php
+msgid "Connection failed: %s"
+msgstr "เชื่อมต่อไม่สำเร็จ: %s"

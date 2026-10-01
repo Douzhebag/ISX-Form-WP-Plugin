@@ -85,12 +85,18 @@ class Admin {
             wp_localize_script( 'isxf-admin-js', 'isxf_admin_env', [
                 'ajax_url'          => admin_url( 'admin-ajax.php' ),
                 'test_email_nonce'  => wp_create_nonce( 'isxf_test_email_nonce' ),
+                'smtp_connection_nonce' => wp_create_nonce( 'isxf_smtp_connection_nonce' ),
+                'settings_save_nonce' => wp_create_nonce( 'isxf_save_settings_nonce' ),
                 'email_tools_nonce' => wp_create_nonce( 'isxf_email_tools_nonce' ),
                 'field_count'       => count( $fields ),
                 'i18n'             => [
                     'sending'            => __( '⏳ Sending...', 'insightx-form' ),
                     'conn_error'         => __( '❌ Connection error', 'insightx-form' ),
                     'send_test_email'    => __( '📨 Send Test Email', 'insightx-form' ),
+                    'checking_smtp_connection' => __( '⏳ Checking connection...', 'insightx-form' ),
+                    'settings_saving' => __( 'กำลังบันทึกการตั้งค่า…', 'insightx-form' ),
+                    'settings_saved' => __( 'บันทึกการตั้งค่าสำเร็จ', 'insightx-form' ),
+                    'settings_save_failed' => __( 'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง', 'insightx-form' ),
                     'loading_preview'    => __( '⏳ Loading preview...', 'insightx-form' ),
                     'preview_failed'     => __( '❌ Failed to load the preview', 'insightx-form' ),
                     'confirm_overwrite'  => __( 'The current custom email body is not empty. Overwrite it with the content of this template?', 'insightx-form' ),

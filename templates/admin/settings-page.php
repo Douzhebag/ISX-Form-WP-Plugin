@@ -40,6 +40,7 @@
 
                 <form method="post" action="options.php">
                     <?php settings_fields( 'isxf_global_group' ); ?>
+                    <div class="isxf-settings-save-status" role="status" aria-live="polite"></div>
 
                     <!-- ===== Admin notification ===== -->
                     <div class="isxf-section">
@@ -122,9 +123,16 @@
                                 </div>
                                 <div class="isxf-field isxf-field-wide">
                                     <label>Password</label>
-                                    <input type="password" name="<?php echo $opt['smtp_pass']; ?>" value="" autocomplete="new-password" placeholder="<?php echo $v['smtp_pass'] ? '••••••••••••••••' : ''; ?>">
+                                    <input type="password" class="isxf-smtp-password" name="<?php echo $opt['smtp_pass']; ?>" value="" autocomplete="new-password" placeholder="<?php echo $v['smtp_pass'] ? '••••••••••••••••' : ''; ?>">
                                     <p class="isxf-hint"><?php esc_html_e( '🔒 Password is encrypted before saving — leave empty to keep it unchanged.', 'insightx-form' ); ?></p>
                                 </div>
+                            </div>
+
+                            <div class="isxf-smtp-connection-test">
+                                <button type="button" id="isxf-test-smtp-connection-btn" class="button button-primary isxf-btn">
+                                    <?php esc_html_e( 'Connect', 'insightx-form' ); ?>
+                                </button>
+                                <div id="isxf-test-smtp-connection-result" class="isxf-smtp-status" role="status" aria-live="polite" hidden></div>
                             </div>
 
                             <?php /* Only the note for the selected provider card is shown (isxf-admin.js toggles it). */ ?>
@@ -150,8 +158,7 @@
                             <?php else : ?>
                                 <div class="isxf-status is-error">
                                     ⚠️ <strong><?php esc_html_e( 'Not connected', 'insightx-form' ); ?></strong> — <?php
-                                        /* translators: %s: "save the settings" label wrapped in <strong> tags. */
-                                        printf( esc_html__( 'Enter your Client ID / Secret and %s first, then click the "Connect" button below', 'insightx-form' ), '<strong>' . esc_html__( 'save the settings', 'insightx-form' ) . '</strong>' );
+                                        esc_html_e( 'Enter your Client ID / Secret. Changes are saved automatically before you connect.', 'insightx-form' );
                                     ?>
                                 </div>
                             <?php endif; ?>
@@ -252,9 +259,6 @@
                         </div>
                     </div>
 
-                    <div class="isxf-actions">
-                        <?php submit_button( __( 'Save All Settings', 'insightx-form' ), 'primary isxf-btn', 'submit', false ); ?>
-                    </div>
                 </form>
 
                 <!-- ===== SMTP test ===== -->
