@@ -1,8 +1,8 @@
-# Changelog
+## [0.9.1] - 2026-10-01
 
-บันทึกการเปลี่ยนแปลงทั้งหมดของ InsightX Form รูปแบบอิง [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) และใช้ [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+### เปลี่ยนแปลง
 
-## [Unreleased]
+- แท็บ "บันทึกการเปลี่ยนแปลง" ในหน้า "ดูรายละเอียด" แสดงจาก CHANGELOG.md โดยตรง ไม่มีหัวเรื่อง คำโปรย และหัวข้อ Unreleased อีก — readme.txt ไม่มีหัวข้อ Changelog ซ้ำแล้ว
 
 ## [0.9.0] - 2026-10-01
 
@@ -179,10 +179,3 @@
 - จัดการรายการที่ส่งเข้ามา (สถานะ, โน้ต, กรอง, ค้นหา)
 - ส่งอีเมลผ่าน SMTP และแจ้งเตือนผู้ดูแล
 - รองรับ CAPTCHA (reCAPTCHA v3 และ Cloudflare Turnstile)
-
-[Unreleased]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.9.0...HEAD
-[0.9.0]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.8.2...v0.9.0
-[0.8.2]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.8.1...v0.8.2
-[0.8.1]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.8.0...v0.8.1
-[0.8.0]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/compare/v0.6.0...v0.8.0
-[0.6.0]: https://github.com/Douzhebag/ISX-Form-WP-Plugin/releases/tag/v0.6.0
