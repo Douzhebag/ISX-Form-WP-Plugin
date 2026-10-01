@@ -104,6 +104,7 @@ class SettingsController extends AbstractAjaxController {
             if ( is_string( $secret ) && $secret !== '' ) {
                 $message = str_replace( $secret, '[hidden]', $message );
             }
+            /* translators: %s: SMTP connection error details returned by the mail server. */
             $result = [ 'success' => false, 'message' => sprintf( __( 'Connection failed: %s', 'insightx-form' ), $message ) ];
         } finally {
             if ( $mailer instanceof PHPMailer ) {
