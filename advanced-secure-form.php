@@ -48,7 +48,7 @@ function isxf_create_db_table() {
         entry_data longtext NOT NULL,
         user_ip varchar(100) DEFAULT '' NOT NULL,
         entry_status varchar(20) DEFAULT 'new' NOT NULL,
-        admin_note text DEFAULT '' NOT NULL,
+        admin_note text NOT NULL,
         created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
         PRIMARY KEY  (id),
         KEY form_id (form_id),

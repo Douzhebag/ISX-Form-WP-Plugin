@@ -16,6 +16,10 @@
 - **ไฟล์ `readme.txt`** — หน้า "ดูรายละเอียด" แสดงคำอธิบาย วิธีติดตั้ง และ FAQ เป็นภาษาไทย และระบุ "Tested up to: 7.1.2" จึงไม่ขึ้นคำเตือนว่าปลั๊กอินไม่ได้ถูกทดสอบกับ WordPress รุ่นปัจจุบัน
 - **Preset SMTP สำหรับ Resend** — เลือกจาก dropdown แล้วระบบเติม host `smtp.resend.com` port `587` และ username `resend` ให้ เหลือแค่ใส่ API key เป็นรหัสผ่าน มีคำแนะนำการตั้งค่าในหน้าตั้งค่าและหน้าคู่มือ (From Email ต้องเป็นโดเมนที่ verify แล้วใน Resend)
 
+### แก้บั๊ก
+
+- **WordPress database error `admin_note can't have a default value` ใน debug.log** — schema ประกาศคอลัมน์ `admin_note` (ชนิด TEXT) ให้มีค่า default ซึ่ง MySQL ไม่รองรับ ทุกครั้งที่ปลั๊กอินอัปเกรดฐานข้อมูลจึงพยายามแก้คอลัมน์แล้ว error ซ้ำ ตอนนี้เอา default ออกแล้ว (ข้อมูลเดิมไม่กระทบ ไม่ต้อง migrate)
+
 ## [0.8.2] - 2026-07-30
 
 ### แก้บั๊ก
