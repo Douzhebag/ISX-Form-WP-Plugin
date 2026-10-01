@@ -19,6 +19,82 @@
         };
     }
 
+    // === Settings Page: save global settings automatically ===
+    var settingsForm = document.querySelector('.isxf-settings form[action="options.php"]');
+    if (settingsForm) {
+        var saveTimer = null;
+        var saveInProgress = false;
+        var saveAgain = false;
+        var saveToast = document.createElement('div');
+        saveToast.className = 'isxf-settings-toast';
+        saveToast.setAttribute('role', 'status');
+        saveToast.setAttribute('aria-live', 'polite');
+        document.body.appendChild(saveToast);
+
+        var showSaveToast = function (message, state) {
+            saveToast.textContent = message;
+            saveToast.className = 'isxf-settings-toast is-' + state;
+            saveToast.hidden = false;
+            window.clearTimeout(saveToast.hideTimer);
+            if (state !== 'saving') {
+                saveToast.hideTimer = window.setTimeout(function () {
+                    saveToast.hidden = true;
+                }, 2800);
+            }
+        };
+
+        var saveSettings = function () {
+            if (saveInProgress) {
+                saveAgain = true;
+                return;
+            }
+            saveInProgress = true;
+            saveAgain = false;
+            showSaveToast(isxf_admin_env.i18n.settings_saving, 'saving');
+
+            var fd = new FormData();
+            fd.append('action', 'isxf_save_settings');
+            fd.append('nonce', isxf_admin_env.settings_save_nonce);
+            settingsForm.querySelectorAll('input[name], select[name], textarea[name]').forEach(function (field) {
+                if (field.name === 'option_page' || field.name === '_wpnonce' || field.name === '_wp_http_referer') return;
+                if (field.type === 'checkbox') {
+                    if (field.checked) fd.set('settings[' + field.name + ']', field.value || 'yes');
+                    else if (!fd.has('settings[' + field.name + ']')) fd.set('settings[' + field.name + ']', '');
+                } else if (field.type !== 'button' && field.type !== 'submit') {
+                    fd.set('settings[' + field.name + ']', field.value);
+                }
+            });
+
+            fetch(isxf_admin_env.ajax_url, { method: 'POST', body: fd })
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
+                    if (data.success) showSaveToast(isxf_admin_env.i18n.settings_saved, 'success');
+                    else showSaveToast(data.data && data.data.message ? data.data.message : isxf_admin_env.i18n.settings_save_failed, 'error');
+                })
+                .catch(function () { showSaveToast(isxf_admin_env.i18n.settings_save_failed, 'error'); })
+                .finally(function () {
+                    saveInProgress = false;
+                    if (saveAgain) saveSettings();
+                });
+        };
+
+        var queueSettingsSave = function () {
+            window.clearTimeout(saveTimer);
+            saveTimer = window.setTimeout(saveSettings, 650);
+        };
+        settingsForm.addEventListener('input', queueSettingsSave);
+        settingsForm.addEventListener('change', queueSettingsSave);
+        settingsForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            window.clearTimeout(saveTimer);
+            saveSettings();
+        });
+        window.isxfSaveSettingsNow = function () {
+            window.clearTimeout(saveTimer);
+            saveSettings();
+        };
+    }
+
     // === Settings Page: SMTP auth method toggle (Basic vs OAuth2) ===
     var authSelect = document.getElementById('isxf_auth_method');
     if (authSelect) {
@@ -79,8 +155,41 @@
                 });
                 notes.hidden = !any;
             }
+            if (window.isxfSaveSettingsNow) window.isxfSaveSettingsNow();
         });
     });
+
+    // === Settings Page: verify saved SMTP credentials without sending mail ===
+    var smtpConnectBtn = document.getElementById('isxf-test-smtp-connection-btn');
+    if (smtpConnectBtn) {
+        var smtpConnectResult = document.getElementById('isxf-test-smtp-connection-result');
+        var smtpConnectLabel = smtpConnectBtn.textContent;
+        smtpConnectBtn.addEventListener('click', function () {
+            smtpConnectBtn.disabled = true;
+            smtpConnectBtn.textContent = isxf_admin_env.i18n.checking_smtp_connection;
+            smtpConnectResult.style.display = 'none';
+            var fd = new FormData();
+            fd.append('action', 'isxf_test_smtp_connection');
+            fd.append('nonce', isxf_admin_env.smtp_connection_nonce);
+            fetch(isxf_admin_env.ajax_url, { method: 'POST', body: fd })
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
+                    var success = !!data.success;
+                    smtpConnectResult.hidden = false;
+                    smtpConnectResult.className = 'isxf-smtp-status ' + (success ? 'is-connected' : 'has-error');
+                    smtpConnectResult.textContent = data.data && data.data.message ? data.data.message : isxf_admin_env.i18n.conn_error;
+                })
+                .catch(function () {
+                    smtpConnectResult.hidden = false;
+                    smtpConnectResult.className = 'isxf-smtp-status has-error';
+                    smtpConnectResult.textContent = isxf_admin_env.i18n.conn_error;
+                })
+                .finally(function () {
+                    smtpConnectBtn.disabled = false;
+                    smtpConnectBtn.textContent = smtpConnectLabel;
+                });
+        });
+    }
 
     // === Settings Page: SMTP test email ===
     var testBtn = document.getElementById('isxf-test-email-btn');

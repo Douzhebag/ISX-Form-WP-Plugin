@@ -18,6 +18,15 @@ Thumbs.db
 /vendor/
 composer.phar
 
+# Test / lint caches (phpunit.xml.dist turns result caching off, but a
+# local run with other flags or PHPUnit 10+ still writes these)
+.phpunit.result.cache
+.phpunit.cache/
+.phpcs-cache
+
+# Node (no build step today — guard against a stray `npm install`)
+/node_modules/
+
 # Local env / secrets
 .env
 .env.*
@@ -26,5 +35,7 @@ composer.phar
 # bundled vendor code ที่ deploy จริง (ไม่มี composer/npm build step)
 # ต้อง commit เข้า repo — ห้าม ignore
 
-# gettext backups
+# gettext backups / leftover merge files
 *.po~
+*.orig
+*.rej
