@@ -2227,3 +2227,15 @@ msgstr "ใบรับรอง SSL มีปัญหา — ตรวจ Port
 #: src/Ajax/SettingsController.php
 msgid "Cannot reach the SMTP server — check the host and port."
 msgstr "เชื่อมต่อเซิร์ฟเวอร์ SMTP ไม่ได้ — ตรวจ Host และ Port"
+
+#: src/Frontend.php
+msgid "Sent successfully"
+msgstr "ส่งข้อมูลเรียบร้อย"
+
+#: src/Frontend.php
+msgid "Could not send"
+msgstr "ส่งไม่สำเร็จ"
+
+#: src/Frontend.php
+msgid "Close"
+msgstr "ปิด"

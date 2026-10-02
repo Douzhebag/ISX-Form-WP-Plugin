@@ -29,6 +29,7 @@
         saveToast.className = 'isxf-settings-toast';
         saveToast.setAttribute('role', 'status');
         saveToast.setAttribute('aria-live', 'polite');
+        saveToast.hidden = true; // nothing to say until the first save
         document.body.appendChild(saveToast);
 
         var showSaveToast = function (message, state) {

@@ -203,62 +203,184 @@
 
 .isxf-toast-container {
   position: fixed;
-  bottom: 30px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 999999;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  pointer-events: none;
 }
 
 .isxf-toast {
-  min-width: 280px;
-  padding: 16px 20px;
-  border-radius: 8px;
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 500;
-  color: #fff;
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
+  /* Same colours as the "connected" pill badge: soft tint, light border,
+     dark text of the same hue. */
+  --isxf-toast-accent: #16a34a;
+  --isxf-toast-soft: #e6f7ec;
+  --isxf-toast-line: #a7f3d0;
+  --isxf-toast-ink: #067a56;
+  position: relative;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  width: 380px;
+  max-width: 100%;
+  padding: 14px 14px 16px 16px;
+  overflow: hidden;
+  border: 1px solid var(--isxf-toast-line);
+  border-radius: 14px;
+  background: var(--isxf-toast-soft);
+  color: var(--isxf-toast-ink);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.05),
+    0 12px 32px -8px rgba(15, 23, 42, 0.22);
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  pointer-events: auto;
+}
+
+.isxf-toast.error {
+  --isxf-toast-accent: #db0000;
+  --isxf-toast-soft: #ffe8e8;
+  --isxf-toast-line: #f0b8b8;
+  --isxf-toast-ink: #b00000;
 }
 
 .isxf-toast.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-.isxf-toast.success {
-  background-color: #10b981;
-  border-left: 6px solid #059669;
+.isxf-toast.hide {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
 }
 
-.isxf-toast.error {
-  background-color: #ef4444;
-  border-left: 6px solid #b91c1c;
+.isxf-toast-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--isxf-toast-accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--isxf-toast-accent) 18%, transparent);
+}
+
+.isxf-toast-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.isxf-toast-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 5px;
+}
+
+.isxf-toast-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--isxf-toast-ink);
+}
+
+.isxf-toast-text {
+  color: var(--isxf-toast-ink);
+  opacity: 0.85;
+  overflow-wrap: anywhere;
 }
 
 .isxf-toast-close {
-  cursor: pointer;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--isxf-toast-ink);
+  opacity: 0.6;
   font-size: 20px;
-  margin-left: 15px;
-  opacity: 0.8;
-  transition: opacity 0.2s;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .isxf-toast-close:hover {
+  background: color-mix(in srgb, var(--isxf-toast-accent) 12%, transparent);
   opacity: 1;
+}
+
+.isxf-toast-close:focus-visible {
+  outline: 2px solid var(--isxf-toast-accent);
+  outline-offset: 1px;
+}
+
+/* Countdown until the toast closes itself; pauses on hover / focus. */
+.isxf-toast-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--isxf-toast-accent);
+  opacity: 0.85;
+  transform-origin: left;
+  animation: isxf-toast-countdown var(--isxf-toast-duration, 4500ms) linear forwards;
+}
+
+.isxf-toast.paused .isxf-toast-bar {
+  animation-play-state: paused;
+}
+
+@keyframes isxf-toast-countdown {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@media (max-width: 480px) {
+  .isxf-toast-container {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    transform: none;
+    width: auto;
+    max-width: none;
+  }
+
+  .isxf-toast {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isxf-toast,
+  .isxf-toast.show,
+  .isxf-toast.hide {
+    transition: opacity 0.2s ease;
+    transform: none;
+  }
+
+  .isxf-toast-bar {
+    animation: none;
+    display: none;
+  }
 }
 
 .isxf-spinner {

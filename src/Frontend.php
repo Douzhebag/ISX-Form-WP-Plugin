@@ -50,7 +50,10 @@ class Frontend {
                     'submit_form'       => __( 'Submit Form', 'insightx-form' ),
                     'field_required'    => __( 'This field is required', 'insightx-form' ),
                     'email_invalid'     => __( 'Please enter a valid email address', 'insightx-form' ),
-                    'form_has_errors'   => __( 'Please correct the highlighted fields and try again', 'insightx-form' )
+                    'form_has_errors'   => __( 'Please correct the highlighted fields and try again', 'insightx-form' ),
+                    'toast_success_title' => __( 'Sent successfully', 'insightx-form' ),
+                    'toast_error_title'   => __( 'Could not send', 'insightx-form' ),
+                    'toast_close'         => __( 'Close', 'insightx-form' )
                 ]
             ]);
         }

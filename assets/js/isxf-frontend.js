@@ -1,29 +1,75 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // Toast: white card, coloured icon, title + message, countdown bar.
+    // Pauses while hovered/focused; errors stay a little longer.
+    const TOAST_ICONS = {
+        success: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        error: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v6m0 4h.01" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>'
+    };
+
     function showToast(message, type = 'success') {
         let container = document.querySelector('.isxf-toast-container');
         if (!container) {
             container = document.createElement('div');
             container.className = 'isxf-toast-container';
-            container.setAttribute('role', 'status');
-            container.setAttribute('aria-live', 'polite');
             document.body.appendChild(container);
         }
+        const kind = type === 'success' ? 'success' : 'error';
+        const i18n = (window.isxf_env && isxf_env.i18n) || {};
+        const duration = kind === 'success' ? 4500 : 6500;
+
         const toast = document.createElement('div');
-        toast.className = `isxf-toast ${type}`;
-        const icon = type === 'success' ? '✅ ' : '⚠️ ';
-        const msgSpan = document.createElement('span');
-        msgSpan.textContent = icon + ' ' + message;
-        const closeSpan = document.createElement('span');
-        closeSpan.className = 'isxf-toast-close';
-        closeSpan.style.cssText = 'cursor:pointer; margin-left:10px;';
-        closeSpan.textContent = '×';
-        toast.appendChild(msgSpan);
-        toast.appendChild(closeSpan);
+        toast.className = 'isxf-toast ' + kind;
+        // Errors interrupt (alert); successes are announced politely.
+        toast.setAttribute('role', kind === 'error' ? 'alert' : 'status');
+        toast.style.setProperty('--isxf-toast-duration', duration + 'ms');
+
+        const icon = document.createElement('span');
+        icon.className = 'isxf-toast-icon';
+        icon.innerHTML = TOAST_ICONS[kind]; // static markup above, no user data
+
+        const body = document.createElement('div');
+        body.className = 'isxf-toast-body';
+        const title = document.createElement('strong');
+        title.className = 'isxf-toast-title';
+        title.textContent = kind === 'success' ? (i18n.toast_success_title || '') : (i18n.toast_error_title || '');
+        const text = document.createElement('span');
+        text.className = 'isxf-toast-text';
+        text.textContent = message;
+        if (title.textContent) body.appendChild(title);
+        body.appendChild(text);
+
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'isxf-toast-close';
+        close.setAttribute('aria-label', i18n.toast_close || 'Close');
+        close.textContent = '×';
+
+        const bar = document.createElement('span');
+        bar.className = 'isxf-toast-bar';
+        bar.setAttribute('aria-hidden', 'true');
+
+        toast.append(icon, body, close, bar);
         container.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 10);
-        toast.querySelector('.isxf-toast-close').onclick = () => toast.remove();
-        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 4000);
+        requestAnimationFrame(() => toast.classList.add('show'));
+
+        let timer = null;
+        let remaining = duration;
+        let startedAt = 0;
+        const dismiss = () => {
+            clearTimeout(timer);
+            toast.classList.remove('show');
+            toast.classList.add('hide');
+            setTimeout(() => toast.remove(), 350);
+        };
+        const start = () => { startedAt = Date.now(); timer = setTimeout(dismiss, remaining); toast.classList.remove('paused'); };
+        const pause = () => { clearTimeout(timer); remaining -= Date.now() - startedAt; toast.classList.add('paused'); };
+        close.addEventListener('click', dismiss);
+        toast.addEventListener('mouseenter', pause);
+        toast.addEventListener('mouseleave', start);
+        toast.addEventListener('focusin', pause);
+        toast.addEventListener('focusout', start);
+        start();
     }
 
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

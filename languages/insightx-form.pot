@@ -2023,3 +2023,15 @@ msgstr ""
 #: src/Ajax/SettingsController.php
 msgid "Cannot reach the SMTP server — check the host and port."
 msgstr ""
+
+#: src/Frontend.php
+msgid "Sent successfully"
+msgstr ""
+
+#: src/Frontend.php
+msgid "Could not send"
+msgstr ""
+
+#: src/Frontend.php
+msgid "Close"
+msgstr ""
