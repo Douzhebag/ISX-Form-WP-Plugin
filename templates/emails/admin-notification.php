@@ -11,40 +11,32 @@
  * @var string $user_ip    Submitter IP address.
  */
 ?>
-            <!DOCTYPE html>
-            <html>
-            <head><meta charset="UTF-8"></head>
-            <body style="margin:0; padding:20px; background-color:#f0f0f1; font-family:sans-serif;">
-                <div style="max-width:600px; margin:0 auto; background:#fff; padding:20px; border:1px solid #ccc; border-radius:5px;">
-                    <h2 style="color:#23282d; border-bottom:1px solid #eee; padding-bottom:10px;">🔔 <?php
-                        /* translators: %s: form title. */
-                        echo sprintf( __( 'New Submission: %s', 'insightx-form' ), esc_html( $form_title ) );
-                    ?></h2>
-                    <p><?php
-                        /* translators: %s: site name wrapped in <strong> tags. */
-                        echo sprintf( __( 'A new submission has arrived from the website %s', 'insightx-form' ), '<strong>' . esc_html( $site_name ) . '</strong>' );
-                    ?></p>
-                    
-                    <table style="width:100%; border-collapse:collapse; margin-top:15px;">
-                        <?php foreach ( $entry_data as $label => $value ) : ?>
-                            <tr>
-                                <td style="padding:10px; border:1px solid #ddd; background:#f9f9f9; width:35%; font-weight:bold;"><?php echo esc_html($label); ?></td>
-                                <td style="padding:10px; border:1px solid #ddd;"><?php echo nl2br(esc_html($value)); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-
-                    <div style="margin-top:20px; font-size:12px; color:#666; border-top:1px solid #eee; padding-top:10px;">
-                        <p><strong><?php esc_html_e( 'System Info:', 'insightx-form' ); ?></strong></p>
-                        <ul>
-                            <li><strong><?php esc_html_e( 'Date:', 'insightx-form' ); ?></strong> <?php echo esc_html( wp_date( 'Y-m-d H:i:s' ) ); ?></li>
-                            <li><strong><?php esc_html_e( 'IP Address:', 'insightx-form' ); ?></strong> <?php echo esc_html($user_ip); ?></li>
-                        </ul>
-                        <p style="text-align:center; margin-top:20px;">
-                            <a href="<?php echo admin_url('edit.php?post_type=isxf_form&page=isxf-entries'); ?>" style="background:#2271b1; color:#fff; padding:10px 20px; text-decoration:none; border-radius:3px;"><?php esc_html_e( 'Log in to manage submissions', 'insightx-form' ); ?></a>
-                        </p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            
+<?php
+ob_start();
+?>
+                            <p style="margin:0 0 20px;"><?php
+                                /* translators: %s: site name wrapped in <strong> tags. */
+                                echo sprintf( __( 'A new submission has arrived from the website %s', 'insightx-form' ), '<strong>' . esc_html( $site_name ) . '</strong>' );
+                            ?></p>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="width:100%; background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; border-collapse:separate; border-spacing:0;">
+                                <?php foreach ( $entry_data as $label => $value ) : ?>
+                                    <tr><td style="padding:12px 15px; border-bottom:1px solid #e2e8f0; width:35%; color:#5a6881; font-weight:600; font-size:14px; vertical-align:top;"><?php echo esc_html( $label ); ?></td><td style="padding:12px 15px; border-bottom:1px solid #e2e8f0; width:65%; color:#0f172a; font-size:15px; vertical-align:top;"><?php echo nl2br( esc_html( $value ) ); ?></td></tr>
+                                <?php endforeach; ?>
+                            </table>
+                            <p style="margin:18px 0 0; font-size:13px; color:#94a3b8;">
+                                <strong><?php esc_html_e( 'Date:', 'insightx-form' ); ?></strong> <?php echo esc_html( wp_date( 'Y-m-d H:i:s' ) ); ?>
+                                &nbsp;&middot;&nbsp;
+                                <strong><?php esc_html_e( 'IP Address:', 'insightx-form' ); ?></strong> <?php echo esc_html( $user_ip ); ?>
+                            </p>
+<?php
+echo \ISXF\Template::get( 'emails/layout', [
+    'site_name'   => $site_name,
+    /* translators: %s: form title. */
+    'title'       => sprintf( __( 'New Submission: %s', 'insightx-form' ), $form_title ),
+    'icon'        => 'bell',
+    'content'     => ob_get_clean(),
+    'cta'         => [
+        'url'   => admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries' ),
+        'label' => __( 'Log in to manage submissions', 'insightx-form' ),
+    ],
+] );

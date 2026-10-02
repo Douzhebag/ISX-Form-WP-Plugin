@@ -22,29 +22,23 @@ $body_only = ! empty( $body_only );
                             <p class="text-body"><?php esc_html_e( 'Thank you for contacting us. Our team will review your information and get back to you as soon as possible.', 'insightx-form' ); ?><br><?php esc_html_e( 'The details you submitted are as follows:', 'insightx-form' ); ?></p>
                             {all_fields}
 <?php else : ?>
-            <!DOCTYPE html>
-            <html>
-            <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><?php echo $header_style; ?></head>
-            <body style="margin:0; padding:0; background-color:#F3F4F6;">
-                <br>
-                <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr><td align="center"><div class="email-container">
-                        <div class="header-bg">
-                            <h1 class="site-title"><?php echo esc_html($site_name); ?></h1>
-                            <p class="sub-title"><?php esc_html_e( 'General Inquiry', 'insightx-form' ); ?></p>
-                        </div>
-                        <div class="content-body">
-                            <h2 class="heading-primary"><?php esc_html_e( 'We Have Received Your Message', 'insightx-form' ); ?></h2>
-                            <p class="text-body"><?php esc_html_e( 'Thank you for contacting us. Our team will review your information and get back to you as soon as possible.', 'insightx-form' ); ?><br><?php esc_html_e( 'The details you submitted are as follows:', 'insightx-form' ); ?></p>
-                            <table class="data-table">
+<?php
+ob_start();
+?>
+                            <p style="margin:0 0 20px;"><?php esc_html_e( 'Thank you for contacting us. Our team will review your information and get back to you as soon as possible.', 'insightx-form' ); ?><br><?php esc_html_e( 'The details you submitted are as follows:', 'insightx-form' ); ?></p>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="width:100%; background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; border-collapse:separate; border-spacing:0;">
                                 <?php foreach ( $entry_data as $label => $value ) : ?>
-                                    <tr><td class="data-cell label-cell"><?php echo esc_html($label); ?></td><td class="data-cell value-cell"><?php echo nl2br(esc_html($value)); ?></td></tr>
+                                    <tr><td style="padding:12px 15px; border-bottom:1px solid #e2e8f0; width:35%; color:#5a6881; font-weight:600; font-size:14px; vertical-align:top;"><?php echo esc_html( $label ); ?></td><td style="padding:12px 15px; border-bottom:1px solid #e2e8f0; width:65%; color:#0f172a; font-size:15px; vertical-align:top;"><?php echo nl2br( esc_html( $value ) ); ?></td></tr>
                                 <?php endforeach; ?>
                             </table>
-                        </div>
-                        <div class="footer"><p class="footer-text"><strong><?php echo esc_html($site_name); ?></strong><br><?php esc_html_e( 'This is an automated message from the website.', 'insightx-form' ); ?><br>&copy; <?php echo wp_date('Y'); ?> <?php esc_html_e( 'All rights reserved.', 'insightx-form' ); ?></p></div>
-                    </div></td></tr>
-                </table><br>
-            </body>
-            </html>
+<?php
+echo \ISXF\Template::get( 'emails/layout', [
+    'site_name'    => $site_name,
+    'title'        => __( 'We Have Received Your Message', 'insightx-form' ),
+    'subtitle'     => __( 'General Inquiry', 'insightx-form' ),
+    'icon'         => 'check',
+    'content'      => ob_get_clean(),
+    'header_style' => $header_style,
+] );
+?>
 <?php endif; ?>
