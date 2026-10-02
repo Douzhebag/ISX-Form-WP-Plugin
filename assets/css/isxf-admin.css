@@ -1010,3 +1010,88 @@
 .isxf-settings .isxf-callout p {
     margin: 0;
 }
+
+/* SMTP connection badge — same pill as InsightX Offload's connection badge
+   (.isxs-conn-badge): green = connected, red = failed, grey = not checked. */
+.isxf-settings .isxf-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.isxf-settings .isxf-section-head .isxf-section-title {
+    margin: 0;
+}
+
+.isxf-settings .isxf-conn-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 13px;
+    border: 1px solid var(--isxf-line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--isxf-muted);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.isxf-settings .isxf-conn-dot {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #94a3b8;
+}
+
+.isxf-settings .isxf-conn-badge[data-state="ok"] {
+    color: #067a56;
+    border-color: #a7f3d0;
+    background: #e6f7ec;
+}
+
+.isxf-settings .isxf-conn-badge[data-state="ok"] .isxf-conn-dot {
+    background: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+}
+
+.isxf-settings .isxf-conn-badge[data-state="error"] {
+    color: var(--isxf-danger);
+    border-color: #f0b8b8;
+    background: var(--isxf-danger-soft);
+}
+
+.isxf-settings .isxf-conn-badge[data-state="error"] .isxf-conn-dot {
+    background: var(--isxf-danger);
+}
+
+.isxf-settings .isxf-conn-badge[data-state="checking"] {
+    color: var(--isxf-accent-hover);
+    border-color: var(--isxf-accent-line);
+    background: var(--isxf-accent-soft);
+}
+
+.isxf-settings .isxf-conn-badge[data-state="checking"] .isxf-conn-dot {
+    background: var(--isxf-accent);
+    animation: isxf-conn-blink 1s ease-in-out infinite;
+}
+
+@keyframes isxf-conn-blink {
+    50% { opacity: 0.3; }
+}
+
+/* Why the last check failed, under the Connect button. */
+.isxf-settings .isxf-smtp-reason {
+    margin: 10px 0 0;
+    padding: 10px 14px;
+    border: 1px solid #f0b8b8;
+    border-radius: var(--isxf-radius-sm);
+    background: var(--isxf-danger-soft);
+    color: var(--isxf-danger);
+    font-size: 13px;
+    line-height: 1.5;
+}

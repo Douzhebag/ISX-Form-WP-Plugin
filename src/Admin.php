@@ -95,6 +95,10 @@ class Admin {
                     'conn_error'         => __( '❌ Connection error', 'insightx-form' ),
                     'send_test_email'    => __( '📨 Send Test Email', 'insightx-form' ),
                     'checking_smtp_connection' => __( '⏳ Checking connection...', 'insightx-form' ),
+                    'smtp_checking'      => __( 'Checking…', 'insightx-form' ),
+                    'smtp_connected'     => __( 'Connected successfully', 'insightx-form' ),
+                    'smtp_failed'        => __( 'Connection failed', 'insightx-form' ),
+                    'smtp_not_checked'   => __( 'Not checked yet', 'insightx-form' ),
                     'settings_saving' => __( 'กำลังบันทึกการตั้งค่า…', 'insightx-form' ),
                     'settings_saved' => __( 'บันทึกการตั้งค่าสำเร็จ', 'insightx-form' ),
                     'settings_save_failed' => __( 'บันทึกไม่สำเร็จ กรุณาลองอีกครั้ง', 'insightx-form' ),
@@ -264,6 +268,7 @@ class Admin {
                 'oauth_error_msg'    => $oauth_error_msg,
                 'admin_email'        => get_option( 'admin_email' ),
                 'auth_method'        => $auth_method,
+                'smtp_check'         => $this->smtp_check_state(),
                 'is_oauth'           => $is_oauth,
                 'redirect_uri'       => OAuth::redirect_uri(),
                 'connected_email'    => OAuth::connected_email(),
@@ -541,6 +546,20 @@ class Admin {
                 }
                 update_post_meta( $post_id, '_isxf_form_fields', $sanitized_fields );
             }
+        }
+
+        /**
+         * Badge state for the SMTP section: the last "Connect" result while the
+         * SMTP settings are unchanged, otherwise "not checked yet".
+         *
+         * @return array{state: string, message: string}
+         */
+        private function smtp_check_state() {
+            $last = get_option( 'isxf_smtp_last_check' );
+            if ( is_array( $last ) && isset( $last['hash'] ) && $last['hash'] === \ISXF\Ajax\SettingsController::smtp_config_hash() ) {
+                return [ 'state' => ! empty( $last['ok'] ) ? 'ok' : 'error', 'message' => (string) ( $last['message'] ?? '' ) ];
+            }
+            return [ 'state' => 'idle', 'message' => '' ];
         }
 
         public function render_docs_page() {

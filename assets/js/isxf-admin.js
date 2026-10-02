@@ -142,6 +142,7 @@
                 authSelect.value = card.dataset.auth;
                 toggleAuth();
             }
+            setSmtpBadge('idle', isxf_admin_env.i18n.smtp_not_checked);
             applyPreset(card.dataset.preset);
 
             // Show only the setup note of the chosen provider (none for Google / Custom).
@@ -160,29 +161,45 @@
     });
 
     // === Settings Page: verify saved SMTP credentials without sending mail ===
+    // Badge in the SMTP header (green = connected, red = failed, grey = not
+    // checked) + the reason under the button when it failed.
     var smtpConnectBtn = document.getElementById('isxf-test-smtp-connection-btn');
+    var smtpBadge = document.getElementById('isxf-smtp-badge');
+    var setSmtpBadge = function (state, text) {
+        if (!smtpBadge) return;
+        smtpBadge.setAttribute('data-state', state);
+        smtpBadge.querySelector('.isxf-conn-badge-text').textContent = text;
+    };
     if (smtpConnectBtn) {
         var smtpConnectResult = document.getElementById('isxf-test-smtp-connection-result');
         var smtpConnectLabel = smtpConnectBtn.textContent;
+        var i18n = isxf_admin_env.i18n;
+        var showReason = function (text) {
+            smtpConnectResult.textContent = text || '';
+            smtpConnectResult.hidden = !text;
+        };
         smtpConnectBtn.addEventListener('click', function () {
             smtpConnectBtn.disabled = true;
-            smtpConnectBtn.textContent = isxf_admin_env.i18n.checking_smtp_connection;
-            smtpConnectResult.style.display = 'none';
+            smtpConnectBtn.textContent = i18n.checking_smtp_connection;
+            setSmtpBadge('checking', i18n.smtp_checking);
+            showReason('');
             var fd = new FormData();
             fd.append('action', 'isxf_test_smtp_connection');
             fd.append('nonce', isxf_admin_env.smtp_connection_nonce);
             fetch(isxf_admin_env.ajax_url, { method: 'POST', body: fd })
                 .then(function (response) { return response.json(); })
                 .then(function (data) {
-                    var success = !!data.success;
-                    smtpConnectResult.hidden = false;
-                    smtpConnectResult.className = 'isxf-smtp-status ' + (success ? 'is-connected' : 'has-error');
-                    smtpConnectResult.textContent = data.data && data.data.message ? data.data.message : isxf_admin_env.i18n.conn_error;
+                    var message = data && data.data && data.data.message ? data.data.message : i18n.conn_error;
+                    if (data && data.success) {
+                        setSmtpBadge('ok', i18n.smtp_connected);
+                    } else {
+                        setSmtpBadge('error', i18n.smtp_failed);
+                        showReason(message);
+                    }
                 })
                 .catch(function () {
-                    smtpConnectResult.hidden = false;
-                    smtpConnectResult.className = 'isxf-smtp-status has-error';
-                    smtpConnectResult.textContent = isxf_admin_env.i18n.conn_error;
+                    setSmtpBadge('error', i18n.smtp_failed);
+                    showReason(i18n.conn_error);
                 })
                 .finally(function () {
                     smtpConnectBtn.disabled = false;
@@ -190,6 +207,15 @@
                 });
         });
     }
+
+    // Changing anything the connection depends on makes the old result stale.
+    document.querySelectorAll('.isxf-settings [name="isxf_smtp_enable"], .isxf-settings [name="isxf_smtp_host"], .isxf-settings [name="isxf_smtp_port"], .isxf-settings [name="isxf_smtp_user"], .isxf-settings [name="isxf_smtp_pass"], #isxf_auth_method').forEach(function (field) {
+        field.addEventListener('change', function () {
+            setSmtpBadge('idle', isxf_admin_env.i18n.smtp_not_checked);
+            var reason = document.getElementById('isxf-test-smtp-connection-result');
+            if (reason) reason.hidden = true;
+        });
+    });
 
     // === Settings Page: SMTP test email ===
     var testBtn = document.getElementById('isxf-test-email-btn');

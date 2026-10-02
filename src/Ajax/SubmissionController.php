@@ -45,6 +45,7 @@ class SubmissionController extends AbstractAjaxController {
                 ]);
                 $verify_body = json_decode( wp_remote_retrieve_body( $verify ), true );
                 if ( empty( $verify_body['success'] ) || ( isset( $verify_body['score'] ) && $verify_body['score'] < 0.5 ) ) {
+                    $this->report_captcha_failure( 'google', $verify, $verify_body );
                     wp_send_json_error( [ 'message' => __( 'reCAPTCHA verification failed. Please try again.', 'insightx-form' ) ] );
                 }
             }
@@ -65,6 +66,7 @@ class SubmissionController extends AbstractAjaxController {
                 ]);
                 $verify_body = json_decode( wp_remote_retrieve_body( $verify ), true );
                 if ( empty( $verify_body['success'] ) ) {
+                    $this->report_captcha_failure( 'cloudflare', $verify, $verify_body );
                     wp_send_json_error( [ 'message' => __( 'Turnstile verification failed. Please try again.', 'insightx-form' ) ] );
                 }
             }
@@ -112,7 +114,7 @@ class SubmissionController extends AbstractAjaxController {
         set_transient( $limit_key, true, 30 );
 
         add_action( 'wp_mail_failed', [ $this, 'capture_mail_error' ] );
-        add_action( 'phpmailer_init', [ $this, 'configure_smtp' ] );
+        $this->hook_smtp();
 
         $site_name = get_bloginfo( 'name' );
         $customer_sent = false;
@@ -164,7 +166,7 @@ class SubmissionController extends AbstractAjaxController {
             $admin_sent = wp_mail( $admin_email, $admin_subject, $admin_body, $admin_headers );
         }
 
-        remove_action( 'phpmailer_init', [ $this, 'configure_smtp' ] );
+        $this->unhook_smtp();
         remove_action( 'wp_mail_failed', [ $this, 'capture_mail_error' ] );
 
         if ( $customer_sent || $admin_sent ) {
@@ -182,5 +184,30 @@ class SubmissionController extends AbstractAjaxController {
                 wp_send_json_success( [ 'message' => __( 'Your data has been saved successfully.', 'insightx-form' ) ] );
             }
         }
+    }
+
+    /**
+     * Record why a CAPTCHA check failed. The visitor still gets the generic
+     * message; the reason (e.g. timeout-or-duplicate, invalid-input-secret,
+     * or the server not reaching the provider) goes to the debug log and the
+     * isxf_captcha_failed action.
+     *
+     * @param string         $service 'google' | 'cloudflare'.
+     * @param array|WP_Error $verify  wp_remote_post() result.
+     * @param array|null     $body    Decoded siteverify response.
+     */
+    private function report_captcha_failure( $service, $verify, $body ) {
+        if ( is_wp_error( $verify ) ) {
+            $codes = [ 'http-request-failed: ' . $verify->get_error_message() ];
+        } elseif ( ! is_array( $body ) ) {
+            $codes = [ 'bad-response: HTTP ' . wp_remote_retrieve_response_code( $verify ) ];
+        } else {
+            $codes = ! empty( $body['error-codes'] ) ? (array) $body['error-codes'] : [];
+            if ( isset( $body['score'] ) ) {
+                $codes[] = 'score: ' . $body['score'];
+            }
+        }
+        isxf_log_error( sprintf( 'CAPTCHA (%s) verification failed: %s', $service, $codes ? implode( ', ', $codes ) : 'no error code' ) );
+        do_action( 'isxf_captcha_failed', $service, $codes );
     }
 }

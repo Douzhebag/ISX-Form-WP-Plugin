@@ -151,4 +151,52 @@ class SmtpConfigTest extends WP_UnitTestCase {
 
         $this->assertFalse( $mailer->SMTPOptions['ssl']['verify_peer'] );
     }
+
+    /* ---------- wp_mail_from / wp_mail_from_name ---------- */
+
+    public function test_from_filter_uses_configured_from_email(): void {
+        $this->preset( 'smtp.resend.com', 587, 'resend', 'secret' );
+        update_option( 'isxf_smtp_from_email', 'hello@example.com' );
+
+        $this->assertSame( 'hello@example.com', ( new SettingsController() )->filter_mail_from( 'wordpress@localhost' ) );
+    }
+
+    public function test_from_filter_keeps_default_for_non_email_username(): void {
+        $this->preset( 'smtp.resend.com', 587, 'resend', 'secret' );
+
+        $this->assertSame( 'wordpress@example.org', ( new SettingsController() )->filter_mail_from( 'wordpress@example.org' ) );
+    }
+
+    public function test_from_filters_do_nothing_when_smtp_is_off(): void {
+        update_option( 'isxf_smtp_enable', '' );
+        update_option( 'isxf_smtp_from_email', 'hello@example.com' );
+        update_option( 'isxf_smtp_from_name', 'Acme' );
+        $controller = new SettingsController();
+
+        $this->assertSame( 'wordpress@example.org', $controller->filter_mail_from( 'wordpress@example.org' ) );
+        $this->assertSame( 'WordPress', $controller->filter_mail_from_name( 'WordPress' ) );
+    }
+
+    /**
+     * End to end through wp_mail(): with a default From that is not a valid
+     * address (a site on http://localhost gives wordpress@localhost) the
+     * configured From Email must still be used instead of wp_mail() failing.
+     */
+    public function test_wp_mail_uses_configured_from_even_when_default_is_invalid(): void {
+        $this->preset( 'smtp.resend.com', 587, 'resend', 'secret' );
+        update_option( 'isxf_smtp_from_email', 'hello@example.com' );
+        update_option( 'isxf_smtp_from_name', 'Acme' );
+        add_filter( 'wp_mail_from', fn() => 'wordpress@localhost', 1 ); // what WP derives on localhost
+
+        $controller = new SettingsController();
+        ( new ReflectionMethod( $controller, 'hook_smtp' ) )->invoke( $controller );
+        reset_phpmailer_instance();
+        wp_mail( 'to@example.com', 'subject', 'body' );
+        ( new ReflectionMethod( $controller, 'unhook_smtp' ) )->invoke( $controller );
+
+        $mailer = tests_retrieve_phpmailer_instance();
+        $this->assertSame( 'hello@example.com', $mailer->From );
+        $this->assertSame( 'Acme', $mailer->FromName );
+        $this->assertFalse( has_filter( 'wp_mail_from', [ $controller, 'filter_mail_from' ] ), 'unhook_smtp() removes the filter again' );
+    }
 }

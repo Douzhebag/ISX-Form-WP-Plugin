@@ -2203,3 +2203,27 @@ msgstr "ต้องเป็นอีเมลบนโดเมนที่ผ
 #: templates/admin/settings-page.php
 msgid "Leave empty to use the site name."
 msgstr "เว้นว่างไว้จะใช้ชื่อเว็บไซต์"
+
+#: src/Ajax/SettingsController.php
+msgid "Connection failed"
+msgstr "เชื่อมต่อไม่สำเร็จ"
+
+#: src/Ajax/SettingsController.php
+msgid "Not checked yet"
+msgstr "ยังไม่ได้ทดสอบ"
+
+#: src/Ajax/SettingsController.php
+msgid "Checking…"
+msgstr "กำลังตรวจสอบ…"
+
+#: src/Ajax/SettingsController.php
+msgid "The username or password / API key is incorrect."
+msgstr "Username หรือ Password / API key ไม่ถูกต้อง"
+
+#: src/Ajax/SettingsController.php
+msgid "SSL certificate problem — check the port (465 = SSL, 587 = TLS)."
+msgstr "ใบรับรอง SSL มีปัญหา — ตรวจ Port (465 = SSL, 587 = TLS)"
+
+#: src/Ajax/SettingsController.php
+msgid "Cannot reach the SMTP server — check the host and port."
+msgstr "เชื่อมต่อเซิร์ฟเวอร์ SMTP ไม่ได้ — ตรวจ Host และ Port"
