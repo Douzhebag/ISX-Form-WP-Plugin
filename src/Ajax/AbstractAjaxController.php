@@ -285,12 +285,16 @@ abstract class AbstractAjaxController {
             ];
         }
 
+        // From: the configured From Email, else the username when it is a
+        // mailbox. Resend ("resend") and Cloudflare ("api_token") usernames are
+        // not, so keep wp_mail()'s own From (wordpress@<site domain>) then.
         $from_email = get_option( 'isxf_smtp_from_email' );
-        if ( empty( $from_email ) || !is_email($from_email) ) {
+        if ( empty( $from_email ) || ! is_email( $from_email ) ) {
             $from_email = get_option( 'isxf_smtp_user' );
         }
-
-        $phpmailer->From     = $from_email;
+        if ( is_email( $from_email ) ) {
+            $phpmailer->From = $from_email;
+        }
         $phpmailer->FromName = get_option( 'isxf_smtp_from_name' ) ?: get_bloginfo('name');
     }
 }

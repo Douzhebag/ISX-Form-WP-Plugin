@@ -2187,3 +2187,19 @@ msgstr "เชื่อมต่อสำเร็จ"
 #: src/Ajax/SettingsController.php
 msgid "Connection failed: %s"
 msgstr "เชื่อมต่อไม่สำเร็จ: %s"
+
+#: templates/admin/settings-page.php
+msgid "From Email"
+msgstr "อีเมลผู้ส่ง (From Email)"
+
+#: templates/admin/settings-page.php
+msgid "From Name"
+msgstr "ชื่อผู้ส่ง (From Name)"
+
+#: templates/admin/settings-page.php
+msgid "Must be on a domain your provider has verified (required for Resend and Cloudflare). Leave empty to use the Username if it is an email address."
+msgstr "ต้องเป็นอีเมลบนโดเมนที่ผู้ให้บริการ verify แล้ว (จำเป็นสำหรับ Resend และ Cloudflare) เว้นว่างไว้จะใช้ Username แทนถ้าเป็นอีเมล"
+
+#: templates/admin/settings-page.php
+msgid "Leave empty to use the site name."
+msgstr "เว้นว่างไว้จะใช้ชื่อเว็บไซต์"

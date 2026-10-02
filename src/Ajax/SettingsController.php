@@ -52,7 +52,9 @@ class SettingsController extends AbstractAjaxController {
             $value = in_array( $option, $checkboxes, true )
                 ? ( isset( $posted[ $option ] ) && $posted[ $option ] === 'yes' ? 'yes' : '' )
                 : $posted[ $option ];
-            update_option( $option, sanitize_option( $option, $value ) );
+            // update_option() runs sanitize_option() itself — calling it here as
+            // well ran the password/secret callbacks twice (double encryption).
+            update_option( $option, $value );
             $saved = true;
         }
 

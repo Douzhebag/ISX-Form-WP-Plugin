@@ -45,6 +45,7 @@ class Admin {
             add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
             add_action( 'admin_init', [ $this, 'maybe_migrate_smtp_password' ], 5 );
             add_action( 'admin_init', [ $this, 'maybe_drop_microsoft_oauth' ], 5 );
+            add_action( 'admin_init', [ $this, 'maybe_repair_double_encrypted_secrets' ], 5 );
             add_action( 'admin_notices', [ $this, 'captcha_missing_notice' ] );
             add_action( 'admin_notices', [ $this, 'legacy_deprecation_notice' ] );
             add_action( 'admin_init', [ $this, 'maybe_dismiss_legacy_deprecation_notice' ] );
@@ -231,6 +232,8 @@ class Admin {
                     'smtp_port'           => $this->smtp_port,
                     'smtp_user'           => $this->smtp_user,
                     'smtp_pass'           => $this->smtp_pass,
+                    'smtp_from_email'     => $this->smtp_from_e,
+                    'smtp_from_name'      => $this->smtp_from_n,
                     'oauth_client_id'     => $this->oauth_client_id,
                     'oauth_client_secret' => $this->oauth_client_secret,
                     'smtp_ssl_verify_off' => $this->smtp_ssl_verify_off,
@@ -249,6 +252,8 @@ class Admin {
                     'smtp_port'           => get_option($this->smtp_port),
                     'smtp_user'           => get_option($this->smtp_user),
                     'smtp_pass'           => get_option($this->smtp_pass),
+                    'smtp_from_email'     => get_option($this->smtp_from_e),
+                    'smtp_from_name'      => get_option($this->smtp_from_n),
                     'oauth_client_id'     => get_option($this->oauth_client_id),
                     'oauth_client_secret' => get_option($this->oauth_client_secret),
                     'smtp_ssl_verify_off' => get_option($this->smtp_ssl_verify_off),
@@ -387,7 +392,12 @@ class Admin {
         }
 
         public function sanitize_smtp_password( $value ) {
-            $value = wp_strip_all_tags( trim( $value ) );
+            $value = wp_strip_all_tags( trim( (string) $value ) );
+            // Already encrypted (sanitize run twice, or a repair writing back a
+            // stored value) — keep it, never wrap ciphertext in another layer.
+            if ( Crypto::is_encrypted( $value ) ) {
+                return $value;
+            }
             if ( empty( $value ) ) {
                 // ถ้าเว้นว่าง ให้ใช้ค่าเดิม (ไม่เปลี่ยน password)
                 return get_option( $this->smtp_pass, '' );
@@ -402,7 +412,10 @@ class Admin {
         }
 
         public function sanitize_oauth_secret( $value ) {
-            $value = wp_strip_all_tags( trim( $value ) );
+            $value = wp_strip_all_tags( trim( (string) $value ) );
+            if ( Crypto::is_encrypted( $value ) ) {
+                return $value;
+            }
             if ( empty( $value ) ) {
                 // เว้นว่าง = ใช้ค่าเดิม (ไม่เปลี่ยน Client Secret)
                 return get_option( $this->oauth_client_secret, '' );
@@ -434,6 +447,28 @@ class Admin {
                 return;
             }
             update_option( $this->smtp_pass, $encrypted );
+        }
+
+        /**
+         * The v0.9.3 settings autosave encrypted the SMTP password and the OAuth
+         * client secret twice. Peel the extra layer off so those sites can send
+         * again without re-entering anything.
+         */
+        public function maybe_repair_double_encrypted_secrets() {
+            foreach ( [ $this->smtp_pass, $this->oauth_client_secret ] as $option ) {
+                $stored = get_option( $option, '' );
+                $inner  = $stored;
+                for ( $i = 0; $i < 3 && Crypto::is_encrypted( $inner ); $i++ ) {
+                    $next = Crypto::decrypt( $inner );
+                    if ( ! is_string( $next ) || ! Crypto::is_encrypted( $next ) ) {
+                        break; // $inner is the real single-layer value
+                    }
+                    $inner = $next;
+                }
+                if ( $inner !== $stored ) {
+                    update_option( $option, $inner );
+                }
+            }
         }
 
         /**

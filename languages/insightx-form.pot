@@ -1983,3 +1983,19 @@ msgstr ""
 #: templates/admin/docs-page.php
 msgid "Google Workspace → Google. Your own domain without a mail server → Resend or Cloudflare. A mail server from your host or another provider → Custom."
 msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "From Email"
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "From Name"
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "Must be on a domain your provider has verified (required for Resend and Cloudflare). Leave empty to use the Username if it is an email address."
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "Leave empty to use the site name."
+msgstr ""
