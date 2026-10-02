@@ -118,6 +118,16 @@
                                     <input type="number" name="<?php echo $opt['smtp_port']; ?>" value="<?php echo esc_attr($v['smtp_port']); ?>" placeholder="587">
                                 </div>
                                 <div class="isxf-field">
+                                    <label><?php esc_html_e( 'From Email', 'insightx-form' ); ?></label>
+                                    <input type="email" name="<?php echo $opt['smtp_from_email']; ?>" value="<?php echo esc_attr( $v['smtp_from_email'] ); ?>" placeholder="hello@example.com">
+                                    <p class="isxf-hint"><?php esc_html_e( 'Must be on a domain your provider has verified (required for Resend and Cloudflare). Leave empty to use the Username if it is an email address.', 'insightx-form' ); ?></p>
+                                </div>
+                                <div class="isxf-field">
+                                    <label><?php esc_html_e( 'From Name', 'insightx-form' ); ?></label>
+                                    <input type="text" name="<?php echo $opt['smtp_from_name']; ?>" value="<?php echo esc_attr( $v['smtp_from_name'] ); ?>" placeholder="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+                                    <p class="isxf-hint"><?php esc_html_e( 'Leave empty to use the site name.', 'insightx-form' ); ?></p>
+                                </div>
+                                <div class="isxf-field">
                                     <label>Username</label>
                                     <input type="text" name="<?php echo $opt['smtp_user']; ?>" value="<?php echo esc_attr($v['smtp_user']); ?>" placeholder="you@example.com">
                                 </div>
