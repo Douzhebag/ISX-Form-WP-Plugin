@@ -106,26 +106,21 @@ abstract class AbstractAjaxController {
     }
 
     protected function get_email_header_style() {
+        // Classes used inside custom email bodies (and the "edit from this
+        // template" copies). The layout itself is inline-styled
+        // (templates/emails/layout.php) so it survives clients that drop <style>.
         return "
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700&display=swap');
             body, table, td, p, a, li, blockquote {
                 -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;
-                font-family: 'Noto Sans Thai', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+                font-family: 'Noto Sans Thai', 'Sarabun', 'Prompt', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             }
-            .email-container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-            .header-bg { background-color: #0F1E32; padding: 40px 20px; text-align: center; }
-            .site-title { color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px; }
-            .sub-title { color: #A0AEC0; margin: 5px 0 0 0; font-size: 14px; font-weight: 300; }
-            .content-body { padding: 40px 30px; }
-            .heading-primary { color: #0F1E32; margin: 0 0 15px 0; font-size: 22px; font-weight: 700; line-height: 1.4; }
-            .text-body { color: #4A5568; line-height: 1.6; margin: 0 0 20px 0; font-size: 16px; }
-            .data-table { width: 100%; background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; border-collapse: separate; border-spacing: 0; }
-            .data-cell { padding: 15px; border-bottom: 1px solid #EDF2F7; }
-            .label-cell { width: 35%; color: #574319; font-weight: 600; font-size: 14px; vertical-align: top; }
-            .value-cell { width: 65%; color: #0F1E32; font-size: 15px; font-weight: 400; vertical-align: top; }
-            .footer { background-color: #F1F5F9; padding: 20px; text-align: center; border-top: 3px solid #574319; }
-            .footer-text { margin: 0; color: #574319; font-size: 13px; line-height: 1.5; opacity: 0.8; }
+            .heading-primary { color: #0f172a; margin: 0 0 12px 0; font-size: 20px; font-weight: 700; line-height: 1.4; }
+            .text-body { color: #5a6881; line-height: 1.6; margin: 0 0 20px 0; font-size: 15px; }
+            .data-table { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; border-collapse: separate; border-spacing: 0; }
+            .data-cell { padding: 12px 15px; border-bottom: 1px solid #e2e8f0; }
+            .label-cell { width: 35%; color: #5a6881; font-weight: 600; font-size: 14px; vertical-align: top; }
+            .value-cell { width: 65%; color: #0f172a; font-size: 15px; font-weight: 400; vertical-align: top; }
         </style>";
     }
 
@@ -167,11 +162,11 @@ abstract class AbstractAjaxController {
 
         // {all_fields} → HTML table
         if ( strpos( $text, '{all_fields}' ) !== false ) {
-            $table = '<table style="width:100%; background-color:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; border-collapse:separate; border-spacing:0;">';
+            $table = '<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation" style="width:100%; background-color:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; border-collapse:separate; border-spacing:0;">';
             foreach ( $entry_data as $label => $value ) {
                 $table .= '<tr>';
-                $table .= '<td style="padding:12px 15px; border-bottom:1px solid #EDF2F7; width:35%; color:#574319; font-weight:600; font-size:14px; vertical-align:top;">' . esc_html( $label ) . '</td>';
-                $table .= '<td style="padding:12px 15px; border-bottom:1px solid #EDF2F7; width:65%; color:#0F1E32; font-size:15px; vertical-align:top;">' . nl2br( esc_html( $value ) ) . '</td>';
+                $table .= '<td style="padding:12px 15px; border-bottom:1px solid #e2e8f0; width:35%; color:#5a6881; font-weight:600; font-size:14px; vertical-align:top;">' . esc_html( $label ) . '</td>';
+                $table .= '<td style="padding:12px 15px; border-bottom:1px solid #e2e8f0; width:65%; color:#0f172a; font-size:15px; vertical-align:top;">' . nl2br( esc_html( $value ) ) . '</td>';
                 $table .= '</tr>';
             }
             $table .= '</table>';
