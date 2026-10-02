@@ -271,6 +271,44 @@ class AdminTest extends WP_UnitTestCase {
         $this->assertStringNotContainsString( '<script>alert(1)</script>', $this->render_settings() );
     }
 
+    /* ---------- SMTP connection badge ---------- */
+
+    private function badge_state( string $html ): string {
+        $this->assertMatchesRegularExpression( '/id="isxf-smtp-badge" data-state="([a-z]+)"/', $html );
+        preg_match( '/id="isxf-smtp-badge" data-state="([a-z]+)"/', $html, $m );
+        return $m[1];
+    }
+
+    public function test_badge_is_grey_before_any_check(): void {
+        delete_option( 'isxf_smtp_last_check' );
+
+        $this->assertSame( 'idle', $this->badge_state( $this->render_settings() ) );
+    }
+
+    public function test_badge_shows_last_result_while_settings_are_unchanged(): void {
+        update_option( 'isxf_smtp_host', 'smtp.resend.com' );
+        update_option( 'isxf_smtp_last_check', [ 'ok' => true, 'message' => 'Connected successfully', 'hash' => \ISXF\Ajax\SettingsController::smtp_config_hash(), 'time' => time() ] );
+
+        $this->assertSame( 'ok', $this->badge_state( $this->render_settings() ) );
+    }
+
+    public function test_failed_result_shows_red_badge_and_reason(): void {
+        update_option( 'isxf_smtp_last_check', [ 'ok' => false, 'message' => 'Connection failed: <b>bad key</b>', 'hash' => \ISXF\Ajax\SettingsController::smtp_config_hash(), 'time' => time() ] );
+
+        $html = $this->render_settings();
+
+        $this->assertSame( 'error', $this->badge_state( $html ) );
+        $this->assertStringContainsString( 'class="isxf-smtp-reason">Connection failed: &lt;b&gt;bad key&lt;/b&gt;</p>', $html, 'Reason shown, escaped' );
+    }
+
+    public function test_badge_resets_when_smtp_settings_change(): void {
+        update_option( 'isxf_smtp_host', 'smtp.resend.com' );
+        update_option( 'isxf_smtp_last_check', [ 'ok' => true, 'message' => 'ok', 'hash' => \ISXF\Ajax\SettingsController::smtp_config_hash(), 'time' => time() ] );
+        update_option( 'isxf_smtp_host', 'smtp.mx.cloudflare.net' );
+
+        $this->assertSame( 'idle', $this->badge_state( $this->render_settings() ) );
+    }
+
     /* ---------- merge tags ---------- */
 
     public function test_merge_tags_escape_submitted_values(): void {

@@ -211,6 +211,72 @@ abstract class AbstractAjaxController {
         }
     }
 
+    /**
+     * Attach the SMTP config to the next wp_mail() calls.
+     *
+     * The From address goes through wp_mail_from — wp_mail() validates its
+     * From before phpmailer_init runs, so on a host whose default
+     * (wordpress@<host>) is not a valid address (e.g. http://localhost)
+     * setting it in configure_smtp() alone came too late.
+     */
+    protected function hook_smtp() {
+        add_action( 'phpmailer_init', [ $this, 'configure_smtp' ] );
+        add_filter( 'wp_mail_from', [ $this, 'filter_mail_from' ] );
+        add_filter( 'wp_mail_from_name', [ $this, 'filter_mail_from_name' ] );
+    }
+
+    /** Undo hook_smtp(). */
+    protected function unhook_smtp() {
+        remove_action( 'phpmailer_init', [ $this, 'configure_smtp' ] );
+        remove_filter( 'wp_mail_from', [ $this, 'filter_mail_from' ] );
+        remove_filter( 'wp_mail_from_name', [ $this, 'filter_mail_from_name' ] );
+    }
+
+    /**
+     * Sender mailbox for SMTP: the configured From Email, else the SMTP
+     * username (Basic Auth) or the connected Google account (OAuth) — but
+     * only if it is a real address ('' otherwise).
+     *
+     * @return string
+     */
+    protected function smtp_sender_email() {
+        if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) {
+            return '';
+        }
+        $from = get_option( 'isxf_smtp_from_email' );
+        if ( ! empty( $from ) && is_email( $from ) ) {
+            return $from;
+        }
+        $fallback = get_option( 'isxf_smtp_auth_method', 'password' ) === 'oauth_google' && OAuth::is_connected()
+            ? OAuth::connected_email()
+            : get_option( 'isxf_smtp_user' );
+        return is_email( $fallback ) ? $fallback : '';
+    }
+
+    /**
+     * Filter for wp_mail_from: the SMTP sender mailbox when there is one.
+     *
+     * @param string $from From address wp_mail() would use.
+     * @return string
+     */
+    public function filter_mail_from( $from ) {
+        $sender = $this->smtp_sender_email();
+        return $sender !== '' ? $sender : $from;
+    }
+
+    /**
+     * Filter for wp_mail_from_name: the configured From Name or site name.
+     *
+     * @param string $name From name wp_mail() would use.
+     * @return string
+     */
+    public function filter_mail_from_name( $name ) {
+        if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) {
+            return $name;
+        }
+        return get_option( 'isxf_smtp_from_name' ) ?: get_bloginfo( 'name' );
+    }
+
     public function configure_smtp( $phpmailer ) {
         if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) return;
 

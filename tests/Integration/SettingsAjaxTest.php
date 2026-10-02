@@ -175,4 +175,52 @@ class SettingsAjaxTest extends WP_Ajax_UnitTestCase {
 
         $this->assertFalse( $response['success'] );
     }
+
+    /* ---------- connection badge: stored result + reason ---------- */
+
+    public function test_failed_check_is_stored_for_the_badge(): void {
+        update_option( 'isxf_smtp_enable', 'yes' );
+        update_option( 'isxf_smtp_auth_method', 'password' );
+        delete_option( 'isxf_smtp_pass' );
+        $_POST = [ 'nonce' => wp_create_nonce( 'isxf_smtp_connection_nonce' ) ];
+
+        $response = $this->handle_ajax( 'isxf_test_smtp_connection' );
+
+        $last = get_option( 'isxf_smtp_last_check' );
+        $this->assertFalse( $last['ok'] );
+        $this->assertSame( $response['data']['message'], $last['message'] );
+        $this->assertSame( \ISXF\Ajax\SettingsController::smtp_config_hash(), $last['hash'] );
+    }
+
+    public function test_unreachable_server_gets_a_readable_reason(): void {
+        update_option( 'isxf_smtp_enable', 'yes' );
+        update_option( 'isxf_smtp_auth_method', 'password' );
+        update_option( 'isxf_smtp_host', '127.0.0.1' );
+        update_option( 'isxf_smtp_port', '1' ); // nothing listens here → refused at once
+        update_option( 'isxf_smtp_user', 'me@example.com' );
+        update_option( 'isxf_smtp_pass', Crypto::encrypt( 'secret' ) );
+        $_POST = [ 'nonce' => wp_create_nonce( 'isxf_smtp_connection_nonce' ) ];
+
+        $response = $this->handle_ajax( 'isxf_test_smtp_connection' );
+
+        $this->assertFalse( $response['success'] );
+        $this->assertStringContainsString( 'check the host and port', $response['data']['message'] );
+    }
+
+    /**
+     * @dataProvider smtp_errors
+     */
+    public function test_explain_smtp_error( string $raw, string $expected ): void {
+        $this->assertStringContainsString( $expected, \ISXF\Ajax\SettingsController::explain_smtp_error( $raw ) );
+        $this->assertStringContainsString( $raw, \ISXF\Ajax\SettingsController::explain_smtp_error( $raw ), 'The raw server error is kept for details' );
+    }
+
+    public function smtp_errors(): array {
+        return [
+            'bad login'   => [ 'SMTP Error: Could not authenticate.', 'API key is incorrect' ],
+            'unreachable' => [ 'SMTP Error: Failed to connect to server', 'check the host and port' ],
+            'tls'         => [ 'stream_socket_enable_crypto(): certificate verify failed', '465 = SSL' ],
+            'unknown'     => [ '554 something else', '554 something else' ],
+        ];
+    }
 }

@@ -1999,3 +1999,27 @@ msgstr ""
 #: templates/admin/settings-page.php
 msgid "Leave empty to use the site name."
 msgstr ""
+
+#: src/Ajax/SettingsController.php
+msgid "Connection failed"
+msgstr ""
+
+#: src/Ajax/SettingsController.php
+msgid "Not checked yet"
+msgstr ""
+
+#: src/Ajax/SettingsController.php
+msgid "Checking…"
+msgstr ""
+
+#: src/Ajax/SettingsController.php
+msgid "The username or password / API key is incorrect."
+msgstr ""
+
+#: src/Ajax/SettingsController.php
+msgid "SSL certificate problem — check the port (465 = SSL, 587 = TLS)."
+msgstr ""
+
+#: src/Ajax/SettingsController.php
+msgid "Cannot reach the SMTP server — check the host and port."
+msgstr ""

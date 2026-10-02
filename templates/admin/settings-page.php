@@ -19,6 +19,7 @@
  * @var bool   $is_connected       Whether an OAuth account is connected.
  * @var string $connect_url        Nonce'd OAuth connect URL.
  * @var string $disconnect_url     Nonce'd OAuth disconnect URL.
+ * @var array  $smtp_check         Last connection check: state ('ok'|'error'|'idle') + message.
  */
 ?>
             <div class="wrap isxf-settings">
@@ -63,7 +64,20 @@
                     <!-- ===== SMTP ===== -->
                     <div class="isxf-section">
                         <?php /* OAuth URLs/state are gathered in Admin::render_settings_page(). */ ?>
-                        <h2 class="isxf-section-title"><?php esc_html_e( '📧 Email Settings (SMTP)', 'insightx-form' ); ?></h2>
+                        <?php
+                        $smtp_badge_text = [
+                            'ok'    => __( 'Connected successfully', 'insightx-form' ),
+                            'error' => __( 'Connection failed', 'insightx-form' ),
+                            'idle'  => __( 'Not checked yet', 'insightx-form' ),
+                        ];
+                        ?>
+                        <div class="isxf-section-head">
+                            <h2 class="isxf-section-title"><?php esc_html_e( '📧 Email Settings (SMTP)', 'insightx-form' ); ?></h2>
+                            <span class="isxf-conn-badge" id="isxf-smtp-badge" data-state="<?php echo esc_attr( $smtp_check['state'] ); ?>" role="status" aria-live="polite">
+                                <span class="isxf-conn-dot" aria-hidden="true"></span>
+                                <span class="isxf-conn-badge-text"><?php echo esc_html( $smtp_badge_text[ $smtp_check['state'] ] ); ?></span>
+                            </span>
+                        </div>
                         <label class="isxf-check">
                             <input type="checkbox" name="<?php echo $opt['smtp_enable']; ?>" value="yes" <?php checked($v['smtp_enable'], 'yes'); ?>>
                             <span><?php esc_html_e( 'Enable SMTP', 'insightx-form' ); ?></span>
@@ -142,7 +156,7 @@
                                 <button type="button" id="isxf-test-smtp-connection-btn" class="button button-primary isxf-btn">
                                     <?php esc_html_e( 'Connect', 'insightx-form' ); ?>
                                 </button>
-                                <div id="isxf-test-smtp-connection-result" class="isxf-smtp-status" role="status" aria-live="polite" hidden></div>
+                                <p id="isxf-test-smtp-connection-result" class="isxf-smtp-reason"<?php echo $smtp_check['state'] === 'error' ? '' : ' hidden'; ?>><?php echo esc_html( $smtp_check['message'] ); ?></p>
                             </div>
 
                             <?php /* Only the note for the selected provider card is shown (isxf-admin.js toggles it). */ ?>

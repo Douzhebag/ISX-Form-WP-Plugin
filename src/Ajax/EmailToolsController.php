@@ -53,14 +53,14 @@ class EmailToolsController extends AbstractAjaxController {
 
         $this->mail_errors = [];
         add_action( 'wp_mail_failed', [ $this, 'capture_mail_error' ] );
-        add_action( 'phpmailer_init', [ $this, 'configure_smtp' ] );
+        $this->hook_smtp();
 
         /* translators: %s: original email subject. */
         $subject = sprintf( __( '🧪 %s', 'insightx-form' ), $rendered['subject'] );
         $headers = [ 'Content-Type: text/html; charset=UTF-8' ];
         $sent = wp_mail( $to, $subject, $rendered['html'], $headers );
 
-        remove_action( 'phpmailer_init', [ $this, 'configure_smtp' ] );
+        $this->unhook_smtp();
         remove_action( 'wp_mail_failed', [ $this, 'capture_mail_error' ] );
 
         if ( $sent ) {

@@ -330,6 +330,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .finally(() => {
                     isSubmitting = false;
+                    // A Turnstile token is single-use: whatever the outcome,
+                    // fetch a new one so the next submit is not rejected as
+                    // a duplicate.
+                    if (isxf_env.service === 'cloudflare' && window.turnstile) {
+                        const widget = form.querySelector('.cf-turnstile');
+                        if (widget) window.turnstile.reset(widget);
+                    }
                     resetSubmitButton();
                 });
         }
