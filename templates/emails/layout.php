@@ -13,10 +13,7 @@
  * @var string $icon        'check' (customer emails) | 'bell' (admin notification).
  * @var string $content     Body HTML — already escaped by the calling template.
  * @var array  $cta         Optional [ 'url' => ..., 'label' => ... ] button.
- * @var string $footer_note Optional plain-text line under the logo in the footer.
- *
- * Footer logo: the theme's Custom Logo (Appearance → Customize → Site Identity),
- * else the Site Icon, else the site name as text. Filter: isxf_email_logo_url.
+ * @var string $footer_note Optional plain-text line in the footer.
  * @var string $header_style Shared <style> block (classes used by custom bodies).
  */
 $subtitle    = isset( $subtitle ) ? $subtitle : '';
@@ -26,16 +23,6 @@ $header_style = isset( $header_style ) ? $header_style : '';
 $icon_char   = ( isset( $icon ) && $icon === 'bell' ) ? '&#128276;' : '&#10003;';
 $font        = "'Noto Sans Thai', 'Sarabun', 'Prompt', 'Helvetica Neue', Helvetica, Arial, sans-serif";
 
-// Footer brand: the theme's custom logo, else the site icon, else the name.
-$logo_url = '';
-$logo_id  = (int) get_theme_mod( 'custom_logo' );
-if ( $logo_id ) {
-    $logo_url = (string) wp_get_attachment_image_url( $logo_id, 'medium' );
-}
-if ( $logo_url === '' ) {
-    $logo_url = (string) get_site_icon_url( 128 );
-}
-$logo_url = apply_filters( 'isxf_email_logo_url', $logo_url );
 ?>
 <!DOCTYPE html>
 <html>
@@ -79,15 +66,10 @@ $logo_url = apply_filters( 'isxf_email_logo_url', $logo_url );
                                 <?php endif; ?>
 
                                 <div style="margin-top:36px; padding-top:24px; border-top:1px solid #eeeeee; text-align:center; font-size:14px; color:#94a3b8;">
-                                    <?php if ( $logo_url ) : ?>
-                                        <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" height="40" style="display:inline-block; height:40px; width:auto; max-width:200px; margin:0 0 6px; border:0; outline:none; text-decoration:none;">
-                                    <?php else : ?>
-                                        <p style="margin:0 0 4px; color:#5a6881; font-weight:700;"><?php echo esc_html( $site_name ); ?></p>
-                                    <?php endif; ?>
                                     <?php if ( $footer_note !== '' ) : ?>
                                         <p style="margin:0;"><?php echo esc_html( $footer_note ); ?></p>
                                     <?php endif; ?>
-                                    <p style="margin:14px 0 0; font-size:12px; color:#cbd5e1; line-height:1.5;">&copy; <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php echo esc_html( $site_name ); ?> &middot; <?php esc_html_e( 'All rights reserved.', 'insightx-form' ); ?></p>
+                                    <p style="margin:<?php echo $footer_note !== '' ? '10px 0 0' : '0'; ?>; font-size:12px; color:#cbd5e1; line-height:1.5;">&copy; <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php echo esc_html( $site_name ); ?> &middot; <?php esc_html_e( 'All rights reserved.', 'insightx-form' ); ?></p>
                                 </div>
 
                             </td>
