@@ -14,6 +14,7 @@
  * @var string $admin_email        Site admin email.
  * @var string $auth_method        SMTP auth method option value.
  * @var bool   $is_oauth           Whether an OAuth2 auth method is selected.
+ * @var string $oauth_provider     Selected OAuth provider key ('google'|'microsoft').
  * @var string $redirect_uri       OAuth redirect URI.
  * @var string $connected_email    Connected OAuth account email ('' if none).
  * @var bool   $is_connected       Whether an OAuth account is connected.
@@ -88,7 +89,7 @@
                         // match the saved host against the presets, else "Custom".
                         $smtp_host_now = strtolower( trim( (string) $v['smtp_host'] ) );
                         if ( $is_oauth ) {
-                            $provider_card = 'oauth_google';
+                            $provider_card = 'oauth_' . $oauth_provider;
                         } elseif ( $smtp_host_now === 'smtp.resend.com' ) {
                             $provider_card = 'resend';
                         } elseif ( $smtp_host_now === 'smtp.mx.cloudflare.net' ) {
@@ -99,6 +100,7 @@
                         // Static icon markup (no user input).
                         $provider_cards = [
                             'oauth_google' => [ 'label' => 'Google', 'auth' => 'oauth_google', 'icon' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.09a6.6 6.6 0 0 1 0-4.18V7.07H2.18a11 11 0 0 0 0 9.86z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15A11 11 0 0 0 2.18 7.07l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>' ],
+                            'oauth_microsoft' => [ 'label' => 'Microsoft 365', 'auth' => 'oauth_microsoft', 'icon' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#F25022" d="M2 2h9.5v9.5H2z"/><path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z"/><path fill="#00A4EF" d="M2 12.5h9.5V22H2z"/><path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z"/></svg>' ],
                             'resend'       => [ 'label' => 'Resend', 'auth' => 'password', 'icon' => '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#000"/><path fill="#fff" d="M8 6h5.2c2.4 0 4 1.4 4 3.6 0 1.7-1 2.9-2.6 3.4L18 18h-2.7l-3.1-4.7H10.4V18H8zm2.4 2.1v3.1h2.7c1.1 0 1.8-.6 1.8-1.6s-.7-1.5-1.8-1.5z"/></svg>' ],
                             'cloudflare'   => [ 'label' => 'Cloudflare', 'auth' => 'password', 'icon' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#F38020" d="M16.5 16.6l.3-.9c.3-1 .2-2-.3-2.6-.5-.6-1.2-.9-2-1l-8.5-.1a.2.2 0 0 1-.1-.3.2.2 0 0 1 .2-.1l8.6-.1c1-.1 2.1-.9 2.5-1.9l.5-1.3.1-.3A5.6 5.6 0 0 0 7 7.4a2.5 2.5 0 0 0-3.9 2.6A3.6 3.6 0 0 0 .1 13.6c0 .2 0 .4.1.5 0 .1.1.2.2.2h15.7c.1 0 .3-.1.3-.2z"/><path fill="#FAAE40" d="M19.3 10.8h-.2l-.1.2-.3 1.1c-.3 1-.2 2 .3 2.6.5.6 1.2.9 2 1l1.8.1.2.1v.3c0 .1-.1.1-.2.1l-1.9.1c-1 .1-2.1.9-2.5 1.9l-.1.4.1.1H23c.1 0 .2-.1.2-.2.2-.5.3-1 .3-1.6a4.3 4.3 0 0 0-4.2-4.2z"/></svg>' ],
                             'custom'       => [ 'label' => __( 'Custom', 'insightx-form' ), 'auth' => 'password', 'icon' => '<span class="dashicons dashicons-email-alt" aria-hidden="true"></span>' ],
@@ -118,6 +120,7 @@
                         <select name="<?php echo $opt['smtp_auth_method']; ?>" id="isxf_auth_method" class="screen-reader-text" tabindex="-1" aria-hidden="true">
                             <option value="password" <?php selected($auth_method, 'password'); ?>><?php esc_html_e( 'App Password / Password (Basic Auth)', 'insightx-form' ); ?></option>
                             <option value="oauth_google" <?php selected($auth_method, 'oauth_google'); ?>>Google OAuth2 (Gmail / Workspace)</option>
+                            <option value="oauth_microsoft" <?php selected($auth_method, 'oauth_microsoft'); ?>>Microsoft 365 OAuth2 (Exchange Online)</option>
                         </select>
 
                         <!-- ===== Basic Auth (username + password) ===== -->
@@ -197,20 +200,25 @@
                                     <input type="password" name="<?php echo $opt['oauth_client_secret']; ?>" value="" autocomplete="new-password" placeholder="<?php echo $v['oauth_client_secret'] ? '••••••••••••••••' : ''; ?>">
                                     <p class="isxf-hint"><?php esc_html_e( '🔒 Encrypted before saving — leave empty to keep it unchanged.', 'insightx-form' ); ?></p>
                                 </div>
+                                <div class="isxf-field isxf-field-wide" data-oauth-only="microsoft"<?php echo $oauth_provider === 'microsoft' ? '' : ' hidden'; ?>>
+                                    <label>Tenant ID</label>
+                                    <input type="text" name="<?php echo $opt['oauth_tenant']; ?>" value="<?php echo esc_attr( $v['oauth_tenant'] ); ?>" placeholder="organizations">
+                                    <p class="isxf-hint"><?php esc_html_e( 'Directory (tenant) ID or domain from Azure Portal. Leave empty to allow any work or school account.', 'insightx-form' ); ?></p>
+                                </div>
                                 <div class="isxf-field isxf-field-wide">
                                     <label>Redirect URI</label>
                                     <input type="text" readonly value="<?php echo esc_attr($redirect_uri); ?>" onclick="this.select();">
-                                    <p class="isxf-hint"><?php esc_html_e( 'Copy this value into Google Cloud Console', 'insightx-form' ); ?></p>
+                                    <p class="isxf-hint"><?php esc_html_e( 'Copy this value into Google Cloud Console or Azure Portal (App registrations → Authentication → Web)', 'insightx-form' ); ?></p>
                                 </div>
                             </div>
 
                             <div class="isxf-actions">
-                                <a href="<?php echo esc_url($connect_url); ?>" class="button button-primary isxf-btn"><?php echo $is_connected ? esc_html__( 'Reconnect', 'insightx-form' ) : esc_html__( 'Connect Account', 'insightx-form' ); ?></a>
+                                <a href="<?php echo esc_url($connect_url); ?>" id="isxf-oauth-connect" class="button button-primary isxf-btn"><?php echo $is_connected ? esc_html__( 'Reconnect', 'insightx-form' ) : esc_html__( 'Connect Account', 'insightx-form' ); ?></a>
                             </div>
 
                             <div class="isxf-callout">
                                 <strong><?php esc_html_e( '💡 See the "User Guide" page for OAuth2 setup instructions', 'insightx-form' ); ?></strong>
-                                <span><?php esc_html_e( 'You need to register an OAuth app in Google Cloud Console (Gmail), then configure the Redirect URI above to match.', 'insightx-form' ); ?></span>
+                                <span><?php esc_html_e( 'You need to register an OAuth app in Google Cloud Console (Gmail) or Azure Portal (Microsoft 365), then configure the Redirect URI above to match.', 'insightx-form' ); ?></span>
                             </div>
                         </div>
 

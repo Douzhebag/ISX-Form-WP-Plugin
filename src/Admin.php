@@ -31,6 +31,7 @@ class Admin {
         private $smtp_auth_method   = 'isxf_smtp_auth_method';
         private $oauth_client_id    = 'isxf_smtp_oauth_client_id';
         private $oauth_client_secret = 'isxf_smtp_oauth_client_secret';
+        private $oauth_tenant       = 'isxf_smtp_oauth_tenant';
 
 
 
@@ -44,7 +45,6 @@ class Admin {
             add_action( 'manage_isxf_form_posts_custom_column', [ $this, 'fill_form_columns' ], 10, 2 );
             add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
             add_action( 'admin_init', [ $this, 'maybe_migrate_smtp_password' ], 5 );
-            add_action( 'admin_init', [ $this, 'maybe_drop_microsoft_oauth' ], 5 );
             add_action( 'admin_init', [ $this, 'maybe_repair_double_encrypted_secrets' ], 5 );
             add_action( 'admin_notices', [ $this, 'captcha_missing_notice' ] );
             add_action( 'admin_notices', [ $this, 'legacy_deprecation_notice' ] );
@@ -168,7 +168,7 @@ class Admin {
                 $this->smtp_enable, $this->smtp_host, $this->smtp_port, $this->smtp_user, $this->smtp_pass, $this->smtp_secure, $this->smtp_from_e, $this->smtp_from_n,
                 $this->admin_notify_enable, $this->admin_notify_email,
                 $this->smtp_ssl_verify_off,
-                $this->smtp_auth_method, $this->oauth_client_id, $this->oauth_client_secret
+                $this->smtp_auth_method, $this->oauth_client_id, $this->oauth_client_secret, $this->oauth_tenant
             ];
             // Checkbox options submit nothing when unchecked → the sanitize
             // callback receives null. They get a dedicated null-safe callback
@@ -216,8 +216,8 @@ class Admin {
             $oauth_error_msg = isset( $_GET['msg'] ) ? esc_html( rawurldecode( wp_unslash( $_GET['msg'] ) ) ) : __( 'An error occurred', 'insightx-form' );
 
             $auth_method    = get_option( $this->smtp_auth_method, 'password' );
-            $is_oauth       = $auth_method === 'oauth_google';
-            $oauth_provider = 'google';
+            $oauth_provider = OAuth::current_provider();
+            $is_oauth       = $oauth_provider !== null;
 
             Template::render( 'admin/settings-page', [
                 'opt' => [
@@ -240,6 +240,7 @@ class Admin {
                     'smtp_from_name'      => $this->smtp_from_n,
                     'oauth_client_id'     => $this->oauth_client_id,
                     'oauth_client_secret' => $this->oauth_client_secret,
+                    'oauth_tenant'        => $this->oauth_tenant,
                     'smtp_ssl_verify_off' => $this->smtp_ssl_verify_off,
                 ],
                 'v' => [
@@ -260,6 +261,7 @@ class Admin {
                     'smtp_from_name'      => get_option($this->smtp_from_n),
                     'oauth_client_id'     => get_option($this->oauth_client_id),
                     'oauth_client_secret' => get_option($this->oauth_client_secret),
+                    'oauth_tenant'        => get_option($this->oauth_tenant),
                     'smtp_ssl_verify_off' => get_option($this->smtp_ssl_verify_off),
                 ],
                 'service'            => $service,
@@ -270,10 +272,11 @@ class Admin {
                 'auth_method'        => $auth_method,
                 'smtp_check'         => $this->smtp_check_state(),
                 'is_oauth'           => $is_oauth,
+                'oauth_provider'     => $oauth_provider ?: 'google',
                 'redirect_uri'       => OAuth::redirect_uri(),
                 'connected_email'    => OAuth::connected_email(),
                 'is_connected'       => OAuth::is_connected(),
-                'connect_url'        => wp_nonce_url( admin_url( 'admin-post.php?action=isxf_oauth_connect&provider=' . $oauth_provider ), 'isxf_oauth_connect' ),
+                'connect_url'        => wp_nonce_url( admin_url( 'admin-post.php?action=isxf_oauth_connect&provider=' . ( $oauth_provider ?: 'google' ) ), 'isxf_oauth_connect' ),
                 'disconnect_url'     => wp_nonce_url( admin_url( 'admin-post.php?action=isxf_oauth_disconnect' ), 'isxf_oauth_disconnect' ),
             ] );
         }
@@ -474,20 +477,6 @@ class Admin {
                     update_option( $option, $inner );
                 }
             }
-        }
-
-        /**
-         * Microsoft 365 OAuth2 was removed — fall back to Basic Auth and clear
-         * its leftover tokens so sites that used it don't send with an empty config.
-         */
-        public function maybe_drop_microsoft_oauth() {
-            if ( get_option( $this->smtp_auth_method ) !== 'oauth_microsoft' ) return;
-
-            update_option( $this->smtp_auth_method, 'password' );
-            delete_option( 'isxf_smtp_oauth_refresh_token' );
-            delete_option( 'isxf_smtp_oauth_connected' );
-            delete_option( 'isxf_smtp_oauth_tenant' );
-            delete_transient( 'isxf_oauth_access_token' );
         }
 
         public function save_form_fields( $post_id ) {

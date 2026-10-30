@@ -4,7 +4,7 @@
 
 ระบบฟอร์มและจัดการข้อมูลลูกค้าสำหรับธุรกิจ — สร้างฟอร์มง่าย ส่งอีเมลอัตโนมัติ (รองรับ OAuth2) จัดการข้อมูลครบจบในที่เดียว
 
-**Version:** 0.9.8
+**Version:** 0.10.0
 **Author:** [InsightX](https://www.insightx.in.th)
 
 ---
@@ -149,15 +149,16 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 | การ์ด          | ยืนยันตัวตนแบบ               | กดแล้วระบบเติมให้                                     | เหมาะกับ                                          |
 | -------------- | ---------------------------- | ----------------------------------------------------- | ------------------------------------------------- |
 | **Google**     | OAuth2 (XOAUTH2)             | — (กรอก Client ID / Secret แล้วกดเชื่อมต่อบัญชี)     | Gmail / Google Workspace แบบไม่เก็บรหัสผ่าน      |
+| **Microsoft 365** | OAuth2 (XOAUTH2)          | — (กรอก Client ID / Secret / Tenant ID แล้วกดเชื่อมต่อบัญชี) | Microsoft 365 / Exchange Online (บัญชีองค์กร) |
 | **Resend**     | Username / Password          | `smtp.resend.com` · `587` · user `resend`             | มีโดเมนแต่ไม่มีเมลเซิร์ฟเวอร์                    |
 | **Cloudflare** | Username / Password          | `smtp.mx.cloudflare.net` · `465` · user `api_token`   | โดเมนที่อยู่บน Cloudflare อยู่แล้ว                 |
-| **กำหนดเอง**   | Username / Password          | — (กรอก Host / Port / Username / Password เอง)       | Gmail App Password, Microsoft 365, เมลของโฮสติ้ง |
+| **กำหนดเอง**   | Username / Password          | — (กรอก Host / Port / Username / Password เอง)       | Gmail App Password, เมลของโฮสติ้ง                |
 
 3. กรอกช่องที่เหลือตามหัวข้อของแต่ละเจ้า การตั้งค่าจะบันทึกอัตโนมัติหลังหยุดพิมพ์หรือเปลี่ยนค่า และมีข้อความแจ้งเมื่อบันทึกสำเร็จ
 4. กดปุ่ม **"เชื่อมต่อ"** ในส่วน SMTP เพื่อตรวจว่าเชื่อมต่อเซิร์ฟเวอร์และยืนยันตัวตนได้หรือไม่ ปุ่มนี้ **ไม่ส่งอีเมล**
 5. หากต้องการทดสอบการส่งจริง ให้เลื่อนลงไปส่วน **"📨 ทดสอบส่งอีเมล"** แล้วส่งอีเมลไปยังที่อยู่ปลายทางที่ระบุ
 
-> 💡 เปิดหน้ามา การ์ดที่ถูกเลือกจะดูจากค่าที่บันทึกไว้ (OAuth → Google, host ของ Resend / Cloudflare → การ์ดนั้น, นอกนั้น → กำหนดเอง) และกล่องคำแนะนำจะโชว์เฉพาะของการ์ดที่เลือก
+> 💡 เปิดหน้ามา การ์ดที่ถูกเลือกจะดูจากค่าที่บันทึกไว้ (OAuth → Google / Microsoft 365 ตามที่เลือก, host ของ Resend / Cloudflare → การ์ดนั้น, นอกนั้น → กำหนดเอง) และกล่องคำแนะนำจะโชว์เฉพาะของการ์ดที่เลือก
 
 > 🔐 **Password ถูกเข้ารหัส (AES-256-CBC)** ก่อนบันทึกลงฐานข้อมูลอัตโนมัติ — เว้นว่างหากไม่ต้องการเปลี่ยนรหัสเดิม (ดูรายละเอียดใน [ความปลอดภัย](#-ความปลอดภัย))
 
@@ -204,6 +205,31 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 หลังเชื่อมต่อแล้ว ระบบใช้ **Access Token** (ต่ออายุอัตโนมัติผ่าน **Refresh Token** ที่เก็บแบบเข้ารหัส) ทุกครั้งที่ส่งอีเมล
 
 > **หมายเหตุความปลอดภัย:** ขั้นตอนเชื่อมต่อตรวจ `state` parameter (ป้องกัน CSRF) ทุกครั้งก่อนแลก authorization code เป็น token
+
+### 🟩 Microsoft 365 (OAuth2)
+
+ยืนยันตัวตนผ่าน OAuth2 (XOAUTH2) กับ `smtp.office365.com:587` — ใช้ได้กับ mailbox ของ Microsoft 365 แบบองค์กรเท่านั้น (Outlook.com ส่วนตัวใช้ไม่ได้)
+
+**ตั้งค่าฝั่ง Azure Portal**
+
+1. ไปที่ [Azure Portal → App registrations](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade) → **New registration**
+   - Supported account types: เลือก *Accounts in this organizational directory only* (ปกติ)
+   - Redirect URI: เลือก **Web** แล้วใส่ค่าจากช่อง Redirect URI ของหน้าตั้งค่า (ต้องตรงกัน 100%)
+2. **API permissions** → Add a permission → *APIs my organization uses* → **Office 365 Exchange Online** → Delegated → `SMTP.Send` และ Microsoft Graph → `offline_access`, `openid`, `email` → กด **Grant admin consent**
+3. **Certificates & secrets** → New client secret → คัดลอกช่อง **Value** (ไม่ใช่ Secret ID)
+4. จดค่า **Application (client) ID** และ **Directory (tenant) ID** จากหน้า Overview
+
+**ตั้งค่าฝั่ง Microsoft 365 admin center**
+
+- เปิด **Authenticated SMTP** ให้ mailbox ที่ใช้ส่ง: Users → Active users → เลือก user → Mail → **Manage email apps** → ติ๊ก *Authenticated SMTP*
+- ถ้าทั้ง tenant ปิด SMTP AUTH ไว้ (Security defaults) ต้องเปิดที่ระดับ mailbox ตามข้อบน
+
+**เชื่อมต่อในปลั๊กอิน**
+
+1. กดการ์ด **Microsoft 365** → กรอก Client ID, Client Secret และ **Tenant ID** (เว้นว่าง = `organizations` รับบัญชีองค์กรทุก tenant)
+2. กด **"เชื่อมต่อบัญชี"** → login ด้วย mailbox ที่จะใช้ส่ง → อนุญาตสิทธิ์ → เด้งกลับมาที่ปลั๊กอิน
+
+> Client ID / Secret ใช้ช่องเดียวกับ Google — ถ้าสลับการ์ดระหว่าง Google ↔ Microsoft ต้องกรอกค่าใหม่และกดเชื่อมต่อบัญชีอีกครั้ง (token ของเจ้าเดิมจะไม่ถูกใช้)
 
 ### ⬛ Resend
 
@@ -483,7 +509,7 @@ InsightX Form มีมาตรการความปลอดภัยหล
 advanced-secure-form.php        entry point — constants, activation/uninstall hook, DB migration, autoloader + bootstrap
 src/                            PSR-4 classes ใน namespace `ISXF\` (autoload ผ่าน spl_autoload_register ใน main file)
   Crypto.php                    เข้ารหัส/ถอดรหัส (AES-256-CBC, ENC/ENC2 format)
-  OAuth.php                     OAuth2 flow (Google)
+  OAuth.php                     OAuth2 flow (Google, Microsoft 365)
   OAuthTokenProvider.php        PHPMailer XOAUTH2 token provider
   Admin.php                     form builder CPT, meta box, global settings page (ไฟล์ใหญ่สุด)
   Frontend.php                  shortcode [isxf_form]/[advanced_form] + render ฟอร์มหน้าเว็บ
@@ -529,7 +555,7 @@ isxf_turnstile_site_key, isxf_turnstile_secret_key
 isxf_smtp_enable, isxf_smtp_host, isxf_smtp_port, isxf_smtp_user, isxf_smtp_pass
 isxf_smtp_secure, isxf_smtp_from_email, isxf_smtp_from_name, isxf_smtp_disable_ssl_verify
 isxf_smtp_auth_method, isxf_smtp_oauth_client_id, isxf_smtp_oauth_client_secret
-isxf_smtp_oauth_refresh_token, isxf_smtp_oauth_connected
+isxf_smtp_oauth_refresh_token, isxf_smtp_oauth_connected, isxf_smtp_oauth_provider, isxf_smtp_oauth_tenant
 isxf_admin_notify_enable, isxf_admin_notify_email
 ```
 

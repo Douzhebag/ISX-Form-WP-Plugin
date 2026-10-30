@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       InsightX Form
  * Plugin URI:        https://insightx.in.th/
- * Version:           0.9.8
+ * Version:           0.10.0
  * Author:            InsightX
  * Author URI:        https://www.insightx.in.th
  * Text Domain:       insightx-form
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ISXF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ISXF_PLUGIN_VERSION', '0.9.8' );
+define( 'ISXF_PLUGIN_VERSION', '0.10.0' );
 define( 'ISXF_DB_VERSION', '1.1' );
 
 /**
@@ -174,6 +174,7 @@ function isxf_plugin_uninstall() {
         'isxf_smtp_oauth_tenant',
         'isxf_smtp_last_check',
         'isxf_smtp_oauth_connected',
+        'isxf_smtp_oauth_provider',
         'isxf_captcha_service',
         'isxf_captcha_required',
         'isxf_recaptcha_site_key',
