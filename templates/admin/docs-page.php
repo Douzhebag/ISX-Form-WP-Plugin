@@ -90,7 +90,7 @@
                     <div class="isxf-docs-body">
                         <div class="step"><span class="step-num">1</span><span class="step-text"><?php echo __( 'Go to <strong>InsightX Form → ⚙️ System Settings</strong>', 'insightx-form' ); ?></span></div>
                         <div class="step"><span class="step-num">2</span><span class="step-text"><?php echo __( 'Check <strong>Enable SMTP</strong>', 'insightx-form' ); ?></span></div>
-                        <div class="step"><span class="step-num">3</span><span class="step-text"><?php echo __( 'Under <strong>Authentication Method</strong>, click the card for your email service: <strong>Google</strong>, <strong>Microsoft 365</strong>, <strong>Resend</strong>, <strong>Cloudflare</strong> or <strong>Custom</strong>', 'insightx-form' ); ?></span></div>
+                        <div class="step"><span class="step-num">3</span><span class="step-text"><?php echo __( 'Under <strong>Authentication Method</strong>, click the card for your email service: <strong>Google</strong>, <strong>Resend</strong>, <strong>Cloudflare</strong> or <strong>Custom</strong>', 'insightx-form' ); ?></span></div>
                         <div class="step"><span class="step-num">4</span><span class="step-text"><?php esc_html_e( 'Fill in the remaining fields — see "How to Connect Each Email Provider" below for the exact values', 'insightx-form' ); ?></span></div>
                         <div class="step"><span class="step-num">5</span><span class="step-text"><?php echo __( 'Click <strong>Save</strong>, then scroll down and click <strong>"📨 Send Test Email"</strong>', 'insightx-form' ); ?></span></div>
 
@@ -119,15 +119,6 @@
                         <div class="step"><span class="step-num">4</span><span class="step-text"><?php echo __( 'Copy the <strong>Client ID</strong> and <strong>Client Secret</strong> into the settings page → click <strong>Save</strong> → click <strong>Connect Account</strong>', 'insightx-form' ); ?></span></div>
                         <div class="tip-box"><?php esc_html_e( '🔒 The Client Secret and Refresh Token are encrypted with AES-256-CBC before being stored in the database', 'insightx-form' ); ?></div>
 
-                        <h4><?php esc_html_e( '🟩 Microsoft 365 (Exchange Online)', 'insightx-form' ); ?></h4>
-                        <p><?php esc_html_e( 'Connects with OAuth2, so no email password is stored on the site. Works with Microsoft 365 work or school mailboxes only (not personal Outlook.com accounts).', 'insightx-form' ); ?></p>
-                        <div class="step"><span class="step-num">1</span><span class="step-text"><?php echo __( 'Go to <a href="https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" target="_blank">Azure Portal → App registrations</a> → <strong>New registration</strong>. Under Redirect URI choose <em>Web</em> and enter the <strong>Redirect URI</strong> from the settings page', 'insightx-form' ); ?></span></div>
-                        <div class="step"><span class="step-num">2</span><span class="step-text"><?php echo __( 'In <strong>API permissions</strong> add <em>Office 365 Exchange Online</em> (or search <em>APIs my organization uses</em>) → Delegated → <code>SMTP.Send</code>, plus Microsoft Graph <code>offline_access</code>, <code>openid</code>, <code>email</code> — then click <strong>Grant admin consent</strong>', 'insightx-form' ); ?></span></div>
-                        <div class="step"><span class="step-num">3</span><span class="step-text"><?php echo __( 'In <strong>Certificates &amp; secrets</strong> create a client secret and copy its <strong>Value</strong> (not the Secret ID)', 'insightx-form' ); ?></span></div>
-                        <div class="step"><span class="step-num">4</span><span class="step-text"><?php echo __( 'Click the <strong>Microsoft 365</strong> card, enter the <strong>Application (client) ID</strong>, the client secret and the <strong>Directory (tenant) ID</strong> → click <strong>Connect Account</strong> and sign in with the mailbox that will send', 'insightx-form' ); ?></span></div>
-                        <div class="tip-box"><?php echo __( '💡 To send as another address such as <code>no-reply@</code>, create it as a <strong>shared mailbox</strong>, give the connected account <strong>Send as</strong> permission on it, then enter it in <strong>From Email</strong>', 'insightx-form' ); ?></div>
-                        <div class="warn-box"><?php echo __( '⚠️ <strong>Authenticated SMTP</strong> must be enabled for the sending mailbox: Microsoft 365 admin center → Users → the user → Mail → Manage email apps', 'insightx-form' ); ?></div>
-
                         <h4><?php esc_html_e( '⬛ Resend', 'insightx-form' ); ?></h4>
                         <div class="step"><span class="step-num">1</span><span class="step-text"><?php echo __( 'Sign up at <a href="https://resend.com" target="_blank">resend.com</a>, add your domain under <strong>Domains</strong> and add the DNS records it shows until the domain is <strong>Verified</strong>', 'insightx-form' ); ?></span></div>
                         <div class="step"><span class="step-num">2</span><span class="step-text"><?php echo __( 'Create an API key at <a href="https://resend.com/api-keys" target="_blank">resend.com/api-keys</a> (Sending access is enough)', 'insightx-form' ); ?></span></div>
@@ -155,7 +146,7 @@
                         <div class="warn-box"><?php esc_html_e( '⚠️ Cloudflare only accepts port 465 (SSL). The From Email domain must be onboarded in Email Sending, and each email can go to at most 50 recipients', 'insightx-form' ); ?></div>
 
                         <h4><?php esc_html_e( '⚙️ Custom (any SMTP server)', 'insightx-form' ); ?></h4>
-                        <p><?php echo __( 'For any other service (Gmail with an App Password, your hosting mail server, etc.), click <strong>Custom</strong> and enter the Host, Port, Username and Password from that provider. Port 465 uses SSL; other ports use TLS automatically.', 'insightx-form' ); ?></p>
+                        <p><?php echo __( 'For any other service (Gmail with an App Password, Microsoft 365, your hosting mail server, etc.), click <strong>Custom</strong> and enter the Host, Port, Username and Password from that provider. Port 465 uses SSL; other ports use TLS automatically.', 'insightx-form' ); ?></p>
                         <h4><?php esc_html_e( 'Example Values for Gmail', 'insightx-form' ); ?></h4>
                         <table>
                             <tr><th><?php esc_html_e( 'Field', 'insightx-form' ); ?></th><th><?php esc_html_e( 'Value', 'insightx-form' ); ?></th></tr>
@@ -282,7 +273,7 @@
                         <p><?php esc_html_e( 'Check your SMTP settings → use the "Send Test Email" button to see the error message', 'insightx-form' ); ?></p>
 
                         <h4><?php esc_html_e( 'Which email provider should I choose?', 'insightx-form' ); ?></h4>
-                        <p><?php esc_html_e( 'Google Workspace → Google. Microsoft 365 → Microsoft 365. Your own domain without a mail server → Resend or Cloudflare. A mail server from your host or another provider → Custom.', 'insightx-form' ); ?></p>
+                        <p><?php esc_html_e( 'Google Workspace → Google. Your own domain without a mail server → Resend or Cloudflare. A mail server from your host or another provider → Custom.', 'insightx-form' ); ?></p>
 
                         <h4><?php esc_html_e( 'Customer entered an email but did not receive the confirmation email?', 'insightx-form' ); ?></h4>
                         <p><?php echo __( 'Make sure the form has an <code>Email</code> field — the system automatically sends the confirmation email to that address', 'insightx-form' ); ?></p>

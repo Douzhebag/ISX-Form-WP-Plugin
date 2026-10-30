@@ -36,7 +36,7 @@ class SettingsController extends AbstractAjaxController {
             'isxf_admin_notify_enable', 'isxf_admin_notify_email',
             'isxf_smtp_enable', 'isxf_smtp_host', 'isxf_smtp_port', 'isxf_smtp_user', 'isxf_smtp_pass',
             'isxf_smtp_secure', 'isxf_smtp_from_email', 'isxf_smtp_from_name', 'isxf_smtp_disable_ssl_verify',
-            'isxf_smtp_auth_method', 'isxf_smtp_oauth_client_id', 'isxf_smtp_oauth_client_secret', 'isxf_smtp_oauth_tenant',
+            'isxf_smtp_auth_method', 'isxf_smtp_oauth_client_id', 'isxf_smtp_oauth_client_secret',
             'isxf_captcha_service', 'isxf_recaptcha_site_key', 'isxf_recaptcha_secret_key',
             'isxf_turnstile_site_key', 'isxf_turnstile_secret_key', 'isxf_captcha_required',
             'isxf_trusted_proxies',
@@ -74,12 +74,10 @@ class SettingsController extends AbstractAjaxController {
         if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) {
             $this->finish_smtp_check( false, __( 'SMTP is disabled. Enable it and save the settings first.', 'insightx-form' ) );
         }
-        $oauth_provider = OAuth::current_provider();
-        if ( $oauth_provider !== null && ! OAuth::is_connected() ) {
-            /* translators: %s: OAuth provider name, e.g. "Microsoft 365". */
-            $this->finish_smtp_check( false, sprintf( __( '%s is not connected. Connect the account and save the settings first.', 'insightx-form' ), OAuth::label( $oauth_provider ) ) );
+        if ( get_option( 'isxf_smtp_auth_method', 'password' ) === 'oauth_google' && ! OAuth::is_connected() ) {
+            $this->finish_smtp_check( false, __( 'Google is not connected. Connect the account and save the settings first.', 'insightx-form' ) );
         }
-        if ( $oauth_provider === null && empty( Crypto::decrypt( get_option( 'isxf_smtp_pass', '' ) ) ) ) {
+        if ( get_option( 'isxf_smtp_auth_method', 'password' ) !== 'oauth_google' && empty( Crypto::decrypt( get_option( 'isxf_smtp_pass', '' ) ) ) ) {
             $this->finish_smtp_check( false, __( 'SMTP password or API key is missing. Enter it and save the settings first.', 'insightx-form' ) );
         }
 
@@ -104,6 +102,7 @@ class SettingsController extends AbstractAjaxController {
             $result = [ 'success' => true, 'message' => __( 'Connected successfully', 'insightx-form' ) ];
         } catch ( Throwable $error ) {
             $message = $mailer && $mailer->ErrorInfo ? $mailer->ErrorInfo : $error->getMessage();
+            $message = trim( $message . ' ' . $this->smtp_failure_detail() );
             $secret = Crypto::decrypt( get_option( 'isxf_smtp_pass', '' ) );
             if ( is_string( $secret ) && $secret !== '' ) {
                 $message = str_replace( $secret, '[hidden]', $message );
@@ -149,31 +148,8 @@ class SettingsController extends AbstractAjaxController {
      * @return string
      */
     public static function smtp_config_hash() {
-        $keys = [ 'isxf_smtp_enable', 'isxf_smtp_auth_method', 'isxf_smtp_host', 'isxf_smtp_port', 'isxf_smtp_user', 'isxf_smtp_pass', 'isxf_smtp_oauth_connected', 'isxf_smtp_oauth_provider' ];
+        $keys = [ 'isxf_smtp_enable', 'isxf_smtp_auth_method', 'isxf_smtp_host', 'isxf_smtp_port', 'isxf_smtp_user', 'isxf_smtp_pass', 'isxf_smtp_oauth_connected' ];
         return md5( (string) wp_json_encode( array_map( 'get_option', $keys ) ) );
-    }
-
-    /**
-     * Put the usual cause in front of PHPMailer's raw error.
-     *
-     * @param string $raw Error text from PHPMailer / the SMTP server.
-     * @return string
-     */
-    public static function explain_smtp_error( $raw ) {
-        $checks = [
-            'authenticat'        => __( 'The username or password / API key is incorrect.', 'insightx-form' ),
-            'certificate'        => __( 'SSL certificate problem — check the port (465 = SSL, 587 = TLS).', 'insightx-form' ),
-            'failed to connect'  => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
-            'connection refused' => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
-            'timed out'          => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
-            'getaddrinfo'        => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
-        ];
-        foreach ( $checks as $needle => $reason ) {
-            if ( stripos( $raw, $needle ) !== false ) {
-                return $reason . ' (' . $raw . ')';
-            }
-        }
-        return $raw;
     }
 
     public function handle_test_email() {
@@ -188,6 +164,7 @@ class SettingsController extends AbstractAjaxController {
         }
 
         $this->mail_errors = [];
+        $this->mail_error_details = [];
         add_action( 'wp_mail_failed', [ $this, 'capture_mail_error' ] );
         $this->hook_smtp();
 
@@ -216,7 +193,7 @@ class SettingsController extends AbstractAjaxController {
             /* translators: %s: destination email address. */
             wp_send_json_success( [ 'message' => sprintf( __( 'Test email sent to %s successfully!', 'insightx-form' ), $to ) ] );
         } else {
-            $err = ! empty( $this->mail_errors ) ? implode( '; ', $this->mail_errors ) : __( 'Unknown reason', 'insightx-form' );
+            $err = ! empty( $this->mail_error_details ) ? implode( '; ', $this->mail_error_details ) : __( 'Unknown reason', 'insightx-form' );
             /* translators: %s: error details. */
             wp_send_json_error( [ 'message' => sprintf( __( 'Sending failed: %s', 'insightx-form' ), $err ) ] );
         }

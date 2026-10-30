@@ -925,10 +925,6 @@
     color: var(--isxf-ink);
 }
 
-.isxf-settings [data-oauth-only][hidden] {
-    display: none;
-}
-
 .isxf-settings .isxf-provider-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));

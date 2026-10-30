@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: InsightX Form 0.10.2\n"
+"Project-Id-Version: InsightX Form 0.11.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ISX-Form-WP-Plugin\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-30T03:47:36+00:00\n"
+"POT-Creation-Date: 2026-10-30T06:44:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: insightx-form\n"
@@ -48,7 +48,7 @@ msgid "❌ Connection error"
 msgstr ""
 
 #: src/Admin.php:96
-#: templates/admin/settings-page.php:315
+#: templates/admin/settings-page.php:302
 msgid "📨 Send Test Email"
 msgstr ""
 
@@ -61,18 +61,18 @@ msgid "Checking…"
 msgstr ""
 
 #: src/Admin.php:99
-#: src/Ajax/SettingsController.php:104
-#: templates/admin/settings-page.php:70
+#: src/Ajax/SettingsController.php:102
+#: templates/admin/settings-page.php:69
 msgid "Connected successfully"
 msgstr ""
 
 #: src/Admin.php:100
-#: templates/admin/settings-page.php:71
+#: templates/admin/settings-page.php:70
 msgid "Connection failed"
 msgstr ""
 
 #: src/Admin.php:101
-#: templates/admin/settings-page.php:72
+#: templates/admin/settings-page.php:71
 msgid "Not checked yet"
 msgstr ""
 
@@ -224,36 +224,36 @@ msgid "An error occurred"
 msgstr ""
 
 #. translators: %s: URL of the plugin settings page.
-#: src/Admin.php:305
+#: src/Admin.php:302
 #, php-format
 msgid "CAPTCHA is not configured yet — form submissions may be blocked or have no bot protection. <a href=\"%s\">Go to the settings page</a>"
 msgstr ""
 
 #. translators: %s: URL of the plugin changelog.
-#: src/Admin.php:344
+#: src/Admin.php:341
 #, php-format
 msgid "This site still relies on legacy compatibility layers (the [advanced_form] shortcode alias, the acf→isxf auto-migration, and the legacy ENC: encryption format). These will be removed in v1.0 — upgrading to v1.0 requires passing through v0.8.x first. <a href=\"%s\">See the changelog</a>"
 msgstr ""
 
-#: src/Admin.php:346
+#: src/Admin.php:343
 msgid "Dismiss"
 msgstr ""
 
-#: src/Admin.php:364
+#: src/Admin.php:361
 msgid "📝 Form Builder"
 msgstr ""
 
-#: src/Admin.php:383
+#: src/Admin.php:380
 msgid "Your Name"
 msgstr ""
 
-#: src/Admin.php:386
-#: src/Ajax/EmailToolsController.php:217
+#: src/Admin.php:383
+#: src/Ajax/EmailToolsController.php:218
 #: src/Ajax/SubmissionController.php:134
 msgid "Thank you for contacting us - {site_name}"
 msgstr ""
 
-#: src/Admin.php:387
+#: src/Admin.php:384
 msgid ""
 "Hello,\n"
 "\n"
@@ -265,12 +265,39 @@ msgid ""
 "{site_name}"
 msgstr ""
 
-#: src/Admin.php:416
+#: src/Admin.php:413
 msgid "❌ Failed to encrypt the SMTP password — the new value was not saved (the previous value is kept). Please check your server's OpenSSL."
 msgstr ""
 
-#: src/Admin.php:434
+#: src/Admin.php:431
 msgid "❌ Failed to encrypt the Client Secret — the new value was not saved (the previous value is kept). Please check your server's OpenSSL."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:267
+msgid "Google rejected the OAuth login — click Reconnect to connect the account again."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:268
+msgid "The username or password / API key is incorrect."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:270
+msgid "The OAuth Client ID or Client Secret is wrong — copy them again from Google Cloud Console and save."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:271
+msgid "The OAuth connection has expired or was revoked — click Reconnect."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:273
+msgid "SSL certificate problem — check the port (465 = SSL, 587 = TLS)."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:274
+#: src/Ajax/AbstractAjaxController.php:275
+#: src/Ajax/AbstractAjaxController.php:276
+#: src/Ajax/AbstractAjaxController.php:277
+msgid "Cannot reach the SMTP server — check the host and port."
 msgstr ""
 
 #. translators: %s: human-readable time difference, e.g. "5 mins".
@@ -286,66 +313,66 @@ msgid "Your user account has no valid email address to send the test to."
 msgstr ""
 
 #. translators: %s: original email subject.
-#: src/Ajax/EmailToolsController.php:59
+#: src/Ajax/EmailToolsController.php:60
 #, php-format
 msgid "🧪 %s"
 msgstr ""
 
 #. translators: %s: destination email address.
-#: src/Ajax/EmailToolsController.php:68
-#: src/Ajax/SettingsController.php:217
+#: src/Ajax/EmailToolsController.php:69
+#: src/Ajax/SettingsController.php:194
 #, php-format
 msgid "Test email sent to %s successfully!"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:70
-#: src/Ajax/SettingsController.php:219
+#: src/Ajax/EmailToolsController.php:71
+#: src/Ajax/SettingsController.php:196
 msgid "Unknown reason"
 msgstr ""
 
 #. translators: %s: error details.
-#: src/Ajax/EmailToolsController.php:72
-#: src/Ajax/SettingsController.php:221
+#: src/Ajax/EmailToolsController.php:73
+#: src/Ajax/SettingsController.php:198
 #, php-format
 msgid "Sending failed: %s"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:82
-#: src/Ajax/SettingsController.php:182
+#: src/Ajax/EmailToolsController.php:83
+#: src/Ajax/SettingsController.php:158
 msgid "You do not have permission to perform this action"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:180
+#: src/Ajax/EmailToolsController.php:181
 msgid "This is a sample message so you can preview the email content."
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:182
+#: src/Ajax/EmailToolsController.php:183
 msgid "Somchai Jaidee"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:194
+#: src/Ajax/EmailToolsController.php:195
 msgid "Option 1"
 msgstr ""
 
 #. translators: %s: site name.
-#: src/Ajax/EmailToolsController.php:223
+#: src/Ajax/EmailToolsController.php:224
 #: src/Ajax/SubmissionController.php:129
 #, php-format
 msgid "We have received your message - %s"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:226
+#: src/Ajax/EmailToolsController.php:227
 msgid "We have received your message - {site_name}"
 msgstr ""
 
 #. translators: %s: site name.
-#: src/Ajax/EmailToolsController.php:230
+#: src/Ajax/EmailToolsController.php:231
 #: src/Ajax/SubmissionController.php:139
 #, php-format
 msgid "Room booking confirmation - %s"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:232
+#: src/Ajax/EmailToolsController.php:233
 msgid "Room booking confirmation - {site_name}"
 msgstr ""
 
@@ -397,9 +424,9 @@ msgstr ""
 
 #: src/Ajax/SettingsController.php:32
 #: src/Ajax/SettingsController.php:72
-#: src/OAuth.php:161
-#: src/OAuth.php:202
-#: src/OAuth.php:275
+#: src/OAuth.php:109
+#: src/OAuth.php:150
+#: src/OAuth.php:220
 msgid "You do not have permission to perform this action."
 msgstr ""
 
@@ -411,67 +438,50 @@ msgstr ""
 msgid "SMTP is disabled. Enable it and save the settings first."
 msgstr ""
 
-#. translators: %s: OAuth provider name, e.g. "Microsoft 365".
-#: src/Ajax/SettingsController.php:80
-#, php-format
-msgid "%s is not connected. Connect the account and save the settings first."
+#: src/Ajax/SettingsController.php:78
+msgid "Google is not connected. Connect the account and save the settings first."
 msgstr ""
 
-#: src/Ajax/SettingsController.php:83
+#: src/Ajax/SettingsController.php:81
 msgid "SMTP password or API key is missing. Enter it and save the settings first."
 msgstr ""
 
-#: src/Ajax/SettingsController.php:99
+#: src/Ajax/SettingsController.php:97
 msgid "SMTP host or port is missing."
 msgstr ""
 
-#: src/Ajax/SettingsController.php:102
+#: src/Ajax/SettingsController.php:100
 msgid "Could not connect to the SMTP server."
 msgstr ""
 
 #. translators: %s: SMTP connection error details returned by the mail server.
-#: src/Ajax/SettingsController.php:112
+#: src/Ajax/SettingsController.php:111
 #, php-format
 msgid "Connection failed: %s"
 msgstr ""
 
-#: src/Ajax/SettingsController.php:164
-msgid "The username or password / API key is incorrect."
-msgstr ""
-
-#: src/Ajax/SettingsController.php:165
-msgid "SSL certificate problem — check the port (465 = SSL, 587 = TLS)."
-msgstr ""
-
-#: src/Ajax/SettingsController.php:166
-#: src/Ajax/SettingsController.php:167
-#: src/Ajax/SettingsController.php:168
-#: src/Ajax/SettingsController.php:169
-msgid "Cannot reach the SMTP server — check the host and port."
-msgstr ""
-
-#: src/Ajax/SettingsController.php:187
+#: src/Ajax/SettingsController.php:163
 msgid "Please enter a valid destination email address"
 msgstr ""
 
 #. translators: %s: site name.
-#: src/Ajax/SettingsController.php:196
+#: src/Ajax/SettingsController.php:173
 #, php-format
 msgid "🧪 SMTP Test - %s"
 msgstr ""
 
-#: src/Ajax/SettingsController.php:201
+#: src/Ajax/SettingsController.php:178
 msgid "SMTP is working!"
 msgstr ""
 
 #. translators: %s: site name.
-#: src/Ajax/SettingsController.php:203
+#: src/Ajax/SettingsController.php:180
 #, php-format
 msgid "This email was sent from <strong>%s</strong><br>to test the SMTP settings"
 msgstr ""
 
 #. translators: %s: date and time the test email was sent.
-#: src/Ajax/SettingsController.php:206
+#: src/Ajax/SettingsController.php:183
 #, php-format
 msgid "Sent at: %s"
 msgstr ""
@@ -620,13 +630,13 @@ msgid "Date"
 msgstr ""
 
 #: src/Entries.php:272
-#: templates/admin/docs-page.php:225
+#: templates/admin/docs-page.php:216
 msgctxt "table column header"
 msgid "Form"
 msgstr ""
 
 #: src/Entries.php:272
-#: templates/admin/docs-page.php:233
+#: templates/admin/docs-page.php:224
 #: templates/admin/entries-page.php:149
 msgid "Status"
 msgstr ""
@@ -700,45 +710,45 @@ msgstr ""
 msgid "No fields found in this form"
 msgstr ""
 
-#: src/OAuth.php:166
+#: src/OAuth.php:114
 msgid "Invalid provider."
 msgstr ""
 
-#: src/OAuth.php:170
+#: src/OAuth.php:118
 msgid "Please enter and save your Client ID / Client Secret before connecting."
 msgstr ""
 
-#: src/OAuth.php:209
+#: src/OAuth.php:157
 msgid "State verification failed. Please try connecting again."
 msgstr ""
 
 #. translators: %s: error description returned by the OAuth provider.
-#: src/OAuth.php:215
+#: src/OAuth.php:163
 #, php-format
 msgid "The provider denied the request: %s"
 msgstr ""
 
-#: src/OAuth.php:220
+#: src/OAuth.php:168
 msgid "Authorization code not received."
 msgstr ""
 
 #. translators: %s: connection error message.
-#: src/OAuth.php:237
+#: src/OAuth.php:185
 #, php-format
 msgid "Could not connect to the token endpoint: %s"
 msgstr ""
 
-#: src/OAuth.php:242
+#: src/OAuth.php:190
 msgid "Refresh token not received."
 msgstr ""
 
 #. translators: %s: error message returned by the OAuth provider.
-#: src/OAuth.php:245
+#: src/OAuth.php:193
 #, php-format
 msgid "Token exchange failed: %s"
 msgstr ""
 
-#: src/OAuth.php:254
+#: src/OAuth.php:202
 msgid "Encryption failed; the connection was not saved. Please check the server's OpenSSL."
 msgstr ""
 
@@ -1015,7 +1025,7 @@ msgid "Type"
 msgstr ""
 
 #: templates/admin/docs-page.php:54
-#: templates/admin/docs-page.php:224
+#: templates/admin/docs-page.php:215
 msgid "Description"
 msgstr ""
 
@@ -1112,7 +1122,7 @@ msgid "Check <strong>Enable SMTP</strong>"
 msgstr ""
 
 #: templates/admin/docs-page.php:93
-msgid "Under <strong>Authentication Method</strong>, click the card for your email service: <strong>Google</strong>, <strong>Microsoft 365</strong>, <strong>Resend</strong>, <strong>Cloudflare</strong> or <strong>Custom</strong>"
+msgid "Under <strong>Authentication Method</strong>, click the card for your email service: <strong>Google</strong>, <strong>Resend</strong>, <strong>Cloudflare</strong> or <strong>Custom</strong>"
 msgstr ""
 
 #: templates/admin/docs-page.php:94
@@ -1184,443 +1194,411 @@ msgid "🔒 The Client Secret and Refresh Token are encrypted with AES-256-CBC b
 msgstr ""
 
 #: templates/admin/docs-page.php:122
-msgid "🟩 Microsoft 365 (Exchange Online)"
-msgstr ""
-
-#: templates/admin/docs-page.php:123
-msgid "Connects with OAuth2, so no email password is stored on the site. Works with Microsoft 365 work or school mailboxes only (not personal Outlook.com accounts)."
-msgstr ""
-
-#: templates/admin/docs-page.php:124
-msgid "Go to <a href=\"https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade\" target=\"_blank\">Azure Portal → App registrations</a> → <strong>New registration</strong>. Under Redirect URI choose <em>Web</em> and enter the <strong>Redirect URI</strong> from the settings page"
-msgstr ""
-
-#: templates/admin/docs-page.php:125
-msgid "In <strong>API permissions</strong> add <em>Office 365 Exchange Online</em> (or search <em>APIs my organization uses</em>) → Delegated → <code>SMTP.Send</code>, plus Microsoft Graph <code>offline_access</code>, <code>openid</code>, <code>email</code> — then click <strong>Grant admin consent</strong>"
-msgstr ""
-
-#: templates/admin/docs-page.php:126
-msgid "In <strong>Certificates &amp; secrets</strong> create a client secret and copy its <strong>Value</strong> (not the Secret ID)"
-msgstr ""
-
-#: templates/admin/docs-page.php:127
-msgid "Click the <strong>Microsoft 365</strong> card, enter the <strong>Application (client) ID</strong>, the client secret and the <strong>Directory (tenant) ID</strong> → click <strong>Connect Account</strong> and sign in with the mailbox that will send"
-msgstr ""
-
-#: templates/admin/docs-page.php:128
-msgid "💡 To send as another address such as <code>no-reply@</code>, create it as a <strong>shared mailbox</strong>, give the connected account <strong>Send as</strong> permission on it, then enter it in <strong>From Email</strong>"
-msgstr ""
-
-#: templates/admin/docs-page.php:129
-msgid "⚠️ <strong>Authenticated SMTP</strong> must be enabled for the sending mailbox: Microsoft 365 admin center → Users → the user → Mail → Manage email apps"
-msgstr ""
-
-#: templates/admin/docs-page.php:131
 msgid "⬛ Resend"
 msgstr ""
 
-#: templates/admin/docs-page.php:132
+#: templates/admin/docs-page.php:123
 msgid "Sign up at <a href=\"https://resend.com\" target=\"_blank\">resend.com</a>, add your domain under <strong>Domains</strong> and add the DNS records it shows until the domain is <strong>Verified</strong>"
 msgstr ""
 
-#: templates/admin/docs-page.php:133
+#: templates/admin/docs-page.php:124
 msgid "Create an API key at <a href=\"https://resend.com/api-keys\" target=\"_blank\">resend.com/api-keys</a> (Sending access is enough)"
 msgstr ""
 
-#: templates/admin/docs-page.php:134
+#: templates/admin/docs-page.php:125
 msgid "Click the <strong>Resend</strong> card — Host, Port and Username are filled in for you — then paste the API key into <strong>Password</strong>"
 msgstr ""
 
-#: templates/admin/docs-page.php:136
-#: templates/admin/docs-page.php:149
-#: templates/admin/docs-page.php:161
+#: templates/admin/docs-page.php:127
+#: templates/admin/docs-page.php:140
+#: templates/admin/docs-page.php:152
 msgid "Field"
 msgstr ""
 
-#: templates/admin/docs-page.php:136
-#: templates/admin/docs-page.php:149
-#: templates/admin/docs-page.php:161
+#: templates/admin/docs-page.php:127
+#: templates/admin/docs-page.php:140
+#: templates/admin/docs-page.php:152
 msgid "Value"
 msgstr ""
 
-#: templates/admin/docs-page.php:140
+#: templates/admin/docs-page.php:131
 msgid "API key from <a href=\"https://resend.com/api-keys\" target=\"_blank\">resend.com/api-keys</a>"
 msgstr ""
 
-#: templates/admin/docs-page.php:142
+#: templates/admin/docs-page.php:133
 msgid "⚠️ The From Email domain must be verified in Resend (Domains) before emails can be sent"
 msgstr ""
 
-#: templates/admin/docs-page.php:144
+#: templates/admin/docs-page.php:135
 msgid "🟧 Cloudflare"
 msgstr ""
 
-#: templates/admin/docs-page.php:145
+#: templates/admin/docs-page.php:136
 msgid "In the <a href=\"https://dash.cloudflare.com\" target=\"_blank\">Cloudflare Dashboard</a>, go to <strong>Email Service → Email Sending</strong> and onboard your domain"
 msgstr ""
 
-#: templates/admin/docs-page.php:146
+#: templates/admin/docs-page.php:137
 msgid "Create an API token (<strong>My Profile → API Tokens</strong>) with the <code>Email Sending: Edit</code> permission"
 msgstr ""
 
-#: templates/admin/docs-page.php:147
+#: templates/admin/docs-page.php:138
 msgid "Click the <strong>Cloudflare</strong> card — Host, Port and Username are filled in for you — then paste the API token into <strong>Password</strong>"
 msgstr ""
 
-#: templates/admin/docs-page.php:153
+#: templates/admin/docs-page.php:144
 msgid "API token with the <code>Email Sending: Edit</code> permission"
 msgstr ""
 
-#: templates/admin/docs-page.php:155
+#: templates/admin/docs-page.php:146
 msgid "⚠️ Cloudflare only accepts port 465 (SSL). The From Email domain must be onboarded in Email Sending, and each email can go to at most 50 recipients"
 msgstr ""
 
-#: templates/admin/docs-page.php:157
+#: templates/admin/docs-page.php:148
 msgid "⚙️ Custom (any SMTP server)"
 msgstr ""
 
-#: templates/admin/docs-page.php:158
-msgid "For any other service (Gmail with an App Password, your hosting mail server, etc.), click <strong>Custom</strong> and enter the Host, Port, Username and Password from that provider. Port 465 uses SSL; other ports use TLS automatically."
+#: templates/admin/docs-page.php:149
+msgid "For any other service (Gmail with an App Password, Microsoft 365, your hosting mail server, etc.), click <strong>Custom</strong> and enter the Host, Port, Username and Password from that provider. Port 465 uses SSL; other ports use TLS automatically."
 msgstr ""
 
-#: templates/admin/docs-page.php:159
+#: templates/admin/docs-page.php:150
 msgid "Example Values for Gmail"
 msgstr ""
 
-#: templates/admin/docs-page.php:164
+#: templates/admin/docs-page.php:155
 msgid "Your Gmail address"
 msgstr ""
 
-#: templates/admin/docs-page.php:165
+#: templates/admin/docs-page.php:156
 msgid "16-character App Password"
 msgstr ""
 
-#: templates/admin/docs-page.php:167
+#: templates/admin/docs-page.php:158
 msgid "⚠️ You must enable 2-Step Verification in your Google Account and create an App Password before it will work"
 msgstr ""
 
-#: templates/admin/docs-page.php:172
+#: templates/admin/docs-page.php:163
 msgid "🛡️ Captcha Settings"
 msgstr ""
 
-#: templates/admin/docs-page.php:174
+#: templates/admin/docs-page.php:165
 msgid "Two services are supported:"
 msgstr ""
 
-#: templates/admin/docs-page.php:176
+#: templates/admin/docs-page.php:167
 msgid "Service"
 msgstr ""
 
-#: templates/admin/docs-page.php:176
+#: templates/admin/docs-page.php:167
 msgid "How to Get a Key"
 msgstr ""
 
-#: templates/admin/docs-page.php:177
+#: templates/admin/docs-page.php:168
 msgid "Create one at <a href=\"https://www.google.com/recaptcha/admin\" target=\"_blank\">Google reCAPTCHA Admin</a>"
 msgstr ""
 
-#: templates/admin/docs-page.php:178
+#: templates/admin/docs-page.php:169
 msgid "Create one at <a href=\"https://dash.cloudflare.com/?to=/:account/turnstile\" target=\"_blank\">Cloudflare Dashboard</a>"
 msgstr ""
 
-#: templates/admin/docs-page.php:180
+#: templates/admin/docs-page.php:171
 msgid "Select a service from the dropdown → enter the Site Key + Secret Key → save"
 msgstr ""
 
-#: templates/admin/docs-page.php:181
+#: templates/admin/docs-page.php:172
 msgid "💡 The system automatically verifies the token on both the frontend and the server side"
 msgstr ""
 
-#: templates/admin/docs-page.php:182
+#: templates/admin/docs-page.php:173
 msgid "⚠️ Keep <strong>\"Block form submissions when CAPTCHA is not configured\"</strong> enabled — if the Secret Key is missing, submissions are rejected instead of letting bots through"
 msgstr ""
 
-#: templates/admin/docs-page.php:187
+#: templates/admin/docs-page.php:178
 msgid "🌐 Trusted Proxies (Cloudflare / CDN)"
 msgstr ""
 
-#: templates/admin/docs-page.php:189
+#: templates/admin/docs-page.php:180
 msgid "If your site sits behind Cloudflare, a CDN or a reverse proxy, every visitor appears to come from the proxy's IP, so the per-IP rate limit would block everyone at once."
 msgstr ""
 
-#: templates/admin/docs-page.php:190
+#: templates/admin/docs-page.php:181
 msgid "Enter the proxy IP ranges (one CIDR per line) under <strong>Trusted Proxies</strong> on the settings page. The real visitor IP is then read from the <code>CF-Connecting-IP</code> / <code>X-Forwarded-For</code> header, but only for requests that come from those ranges."
 msgstr ""
 
-#: templates/admin/docs-page.php:191
+#: templates/admin/docs-page.php:182
 msgid "💡 Cloudflare lists its IP ranges at <a href=\"https://www.cloudflare.com/ips/\" target=\"_blank\">cloudflare.com/ips</a>. Leave the box empty if the site is not behind a proxy"
 msgstr ""
 
-#: templates/admin/docs-page.php:196
+#: templates/admin/docs-page.php:187
 msgid "✉️ Custom Email Template"
 msgstr ""
 
-#: templates/admin/docs-page.php:198
+#: templates/admin/docs-page.php:189
 msgid "Write your own subject and body for the customer auto-reply email in the form editor"
 msgstr ""
 
-#: templates/admin/docs-page.php:200
+#: templates/admin/docs-page.php:191
 msgid "How to Use"
 msgstr ""
 
-#: templates/admin/docs-page.php:201
+#: templates/admin/docs-page.php:192
 msgid "Edit a form → choose <strong>\"✏️ Custom (Custom Template)\"</strong>"
 msgstr ""
 
-#: templates/admin/docs-page.php:202
+#: templates/admin/docs-page.php:193
 msgid "Fill in the <strong>email subject</strong> and <strong>body</strong>"
 msgstr ""
 
-#: templates/admin/docs-page.php:203
+#: templates/admin/docs-page.php:194
 msgid "Use <strong>Merge Tags</strong> to insert data automatically (click a tag to insert it)"
 msgstr ""
 
-#: templates/admin/docs-page.php:205
+#: templates/admin/docs-page.php:196
 msgid "Supported Merge Tags"
 msgstr ""
 
-#: templates/admin/docs-page.php:207
+#: templates/admin/docs-page.php:198
 msgid "Output"
 msgstr ""
 
-#: templates/admin/docs-page.php:208
+#: templates/admin/docs-page.php:199
 msgid "Site name"
 msgstr ""
 
-#: templates/admin/docs-page.php:209
+#: templates/admin/docs-page.php:200
 msgid "Form title"
 msgstr ""
 
-#: templates/admin/docs-page.php:210
+#: templates/admin/docs-page.php:201
 msgid "HTML table of all submitted data"
 msgstr ""
 
-#: templates/admin/docs-page.php:211
+#: templates/admin/docs-page.php:202
 msgid "Value of the specified field, e.g."
 msgstr ""
 
-#: templates/admin/docs-page.php:213
+#: templates/admin/docs-page.php:204
 msgid "💡 The system automatically wraps your content in a nice layout (header + footer)"
 msgstr ""
 
-#: templates/admin/docs-page.php:218
+#: templates/admin/docs-page.php:209
 msgid "📥 Managing Entries"
 msgstr ""
 
-#: templates/admin/docs-page.php:220
+#: templates/admin/docs-page.php:211
 msgid "Go to <strong>InsightX Form → 📥 Entries</strong>"
 msgstr ""
 
-#: templates/admin/docs-page.php:222
+#: templates/admin/docs-page.php:213
 msgid "Filters"
 msgstr ""
 
-#: templates/admin/docs-page.php:224
+#: templates/admin/docs-page.php:215
 msgid "Filter"
 msgstr ""
 
-#: templates/admin/docs-page.php:225
+#: templates/admin/docs-page.php:216
 msgid "View only the selected form (data shown in separate columns)"
 msgstr ""
 
-#: templates/admin/docs-page.php:226
+#: templates/admin/docs-page.php:217
 msgid "Date range"
 msgstr ""
 
-#: templates/admin/docs-page.php:226
+#: templates/admin/docs-page.php:217
 msgid "Filter by submission date (from - to)"
 msgstr ""
 
-#: templates/admin/docs-page.php:227
+#: templates/admin/docs-page.php:218
 #: templates/admin/entries-page.php:99
 msgid "Search"
 msgstr ""
 
-#: templates/admin/docs-page.php:227
+#: templates/admin/docs-page.php:218
 msgid "Type a name / phone / email / IP"
 msgstr ""
 
-#: templates/admin/docs-page.php:228
+#: templates/admin/docs-page.php:219
 msgid "Status bar"
 msgstr ""
 
-#: templates/admin/docs-page.php:228
+#: templates/admin/docs-page.php:219
 msgid "Click the bar at the top to filter by status"
 msgstr ""
 
-#: templates/admin/docs-page.php:231
+#: templates/admin/docs-page.php:222
 msgid "Status System"
 msgstr ""
 
-#: templates/admin/docs-page.php:233
+#: templates/admin/docs-page.php:224
 msgid "Meaning"
 msgstr ""
 
-#: templates/admin/docs-page.php:234
+#: templates/admin/docs-page.php:225
 msgid "🔵 New"
 msgstr ""
 
-#: templates/admin/docs-page.php:234
+#: templates/admin/docs-page.php:225
 msgid "New submission, not yet handled"
 msgstr ""
 
-#: templates/admin/docs-page.php:235
+#: templates/admin/docs-page.php:226
 msgid "🟡 In Progress"
 msgstr ""
 
-#: templates/admin/docs-page.php:235
+#: templates/admin/docs-page.php:226
 msgid "Being contacted / handled"
 msgstr ""
 
-#: templates/admin/docs-page.php:236
+#: templates/admin/docs-page.php:227
 msgid "✅ Completed"
 msgstr ""
 
-#: templates/admin/docs-page.php:236
+#: templates/admin/docs-page.php:227
 msgid "Handled completely"
 msgstr ""
 
-#: templates/admin/docs-page.php:237
+#: templates/admin/docs-page.php:228
 msgid "🔴 Trash"
 msgstr ""
 
-#: templates/admin/docs-page.php:237
+#: templates/admin/docs-page.php:228
 msgid "Spam or irrelevant data"
 msgstr ""
 
-#: templates/admin/docs-page.php:239
+#: templates/admin/docs-page.php:230
 msgid "Change the status from the dropdown in each row, or select multiple entries and use Bulk Actions"
 msgstr ""
 
-#: templates/admin/docs-page.php:241
+#: templates/admin/docs-page.php:232
 msgid "Admin Notes"
 msgstr ""
 
-#: templates/admin/docs-page.php:242
+#: templates/admin/docs-page.php:233
 msgid "Click <strong>\"✏️ + Add Note\"</strong> to save a message, e.g. \"Called the customer\" — saved instantly without reloading"
 msgstr ""
 
-#: templates/admin/docs-page.php:247
+#: templates/admin/docs-page.php:238
 msgid "📊 CSV Export & Dashboard"
 msgstr ""
 
-#: templates/admin/docs-page.php:249
+#: templates/admin/docs-page.php:240
 msgid "CSV Export"
 msgstr ""
 
-#: templates/admin/docs-page.php:250
+#: templates/admin/docs-page.php:241
 msgid "Set the filters you want (form / date / status)"
 msgstr ""
 
-#: templates/admin/docs-page.php:251
+#: templates/admin/docs-page.php:242
 msgid "Click the <strong>\"📊 Export CSV\"</strong> button at the top right"
 msgstr ""
 
-#: templates/admin/docs-page.php:252
+#: templates/admin/docs-page.php:243
 msgid "The CSV file downloads automatically (Thai language supported)"
 msgstr ""
 
-#: templates/admin/docs-page.php:255
+#: templates/admin/docs-page.php:246
 msgid "When you open <strong>WP-Admin → Dashboard</strong> you will see the \"📊 InsightX Form\" widget showing:"
 msgstr ""
 
-#: templates/admin/docs-page.php:257
+#: templates/admin/docs-page.php:248
 msgid "Statistics: Today / 7 days / 30 days / All time"
 msgstr ""
 
-#: templates/admin/docs-page.php:258
+#: templates/admin/docs-page.php:249
 msgid "Bar chart of status proportions"
 msgstr ""
 
-#: templates/admin/docs-page.php:259
+#: templates/admin/docs-page.php:250
 msgid "The 5 latest entries with a \"View all\" link"
 msgstr ""
 
-#: templates/admin/docs-page.php:265
+#: templates/admin/docs-page.php:256
 msgid "📈 Analytics"
 msgstr ""
 
-#: templates/admin/docs-page.php:267
+#: templates/admin/docs-page.php:258
 msgid "Go to <strong>InsightX Form → 📊 Analytics</strong>"
 msgstr ""
 
-#: templates/admin/docs-page.php:269
+#: templates/admin/docs-page.php:260
 msgid "Stat cards: all entries, entries in the selected range (compared with the previous period), today and average per day"
 msgstr ""
 
-#: templates/admin/docs-page.php:270
+#: templates/admin/docs-page.php:261
 msgid "Daily submissions line chart"
 msgstr ""
 
-#: templates/admin/docs-page.php:271
+#: templates/admin/docs-page.php:262
 msgid "Status breakdown (doughnut chart)"
 msgstr ""
 
-#: templates/admin/docs-page.php:272
+#: templates/admin/docs-page.php:263
 msgid "Top forms and the latest entries"
 msgstr ""
 
-#: templates/admin/docs-page.php:274
+#: templates/admin/docs-page.php:265
 msgid "Choose a range at the top right: 7 / 30 / 90 days, 1 year or a custom date range"
 msgstr ""
 
-#: templates/admin/docs-page.php:279
+#: templates/admin/docs-page.php:270
 msgid "❓ Frequently Asked Questions (FAQ)"
 msgstr ""
 
-#: templates/admin/docs-page.php:281
+#: templates/admin/docs-page.php:272
 msgid "The form is not sending email — what should I do?"
 msgstr ""
 
-#: templates/admin/docs-page.php:282
+#: templates/admin/docs-page.php:273
 msgid "Check your SMTP settings → use the \"Send Test Email\" button to see the error message"
 msgstr ""
 
-#: templates/admin/docs-page.php:284
+#: templates/admin/docs-page.php:275
 msgid "Which email provider should I choose?"
 msgstr ""
 
-#: templates/admin/docs-page.php:285
-msgid "Google Workspace → Google. Microsoft 365 → Microsoft 365. Your own domain without a mail server → Resend or Cloudflare. A mail server from your host or another provider → Custom."
+#: templates/admin/docs-page.php:276
+msgid "Google Workspace → Google. Your own domain without a mail server → Resend or Cloudflare. A mail server from your host or another provider → Custom."
 msgstr ""
 
-#: templates/admin/docs-page.php:287
+#: templates/admin/docs-page.php:278
 msgid "Customer entered an email but did not receive the confirmation email?"
 msgstr ""
 
-#: templates/admin/docs-page.php:288
+#: templates/admin/docs-page.php:279
 msgid "Make sure the form has an <code>Email</code> field — the system automatically sends the confirmation email to that address"
 msgstr ""
 
-#: templates/admin/docs-page.php:290
+#: templates/admin/docs-page.php:281
 msgid "Can I use the same form on multiple pages?"
 msgstr ""
 
-#: templates/admin/docs-page.php:291
+#: templates/admin/docs-page.php:282
 msgid "Yes — copy the same shortcode and paste it on as many pages as you like"
 msgstr ""
 
-#: templates/admin/docs-page.php:293
+#: templates/admin/docs-page.php:284
 msgid "Will my data be lost after updating the plugin?"
 msgstr ""
 
-#: templates/admin/docs-page.php:294
+#: templates/admin/docs-page.php:285
 msgid "No — data is stored in the WordPress database, separate from the plugin files"
 msgstr ""
 
-#: templates/admin/docs-page.php:296
+#: templates/admin/docs-page.php:287
 msgid "Is the SMTP password secure?"
 msgstr ""
 
-#: templates/admin/docs-page.php:297
+#: templates/admin/docs-page.php:288
 msgid "Yes — the password is encrypted with AES-256-CBC using WordPress authentication salts as the key before being saved to the database"
 msgstr ""
 
-#: templates/admin/docs-page.php:299
+#: templates/admin/docs-page.php:290
 msgid "Will data be deleted when the plugin is uninstalled?"
 msgstr ""
 
-#: templates/admin/docs-page.php:300
+#: templates/admin/docs-page.php:291
 msgid "Yes — uninstalling the plugin deletes all data tables and settings. If you want to keep your data, export a CSV first"
 msgstr ""
 
@@ -1736,207 +1714,199 @@ msgstr ""
 msgid "No matching entries found, or no form submissions yet."
 msgstr ""
 
-#: templates/admin/settings-page.php:28
+#: templates/admin/settings-page.php:27
 msgid "⚙️ Global System Settings"
 msgstr ""
 
-#: templates/admin/settings-page.php:31
+#: templates/admin/settings-page.php:30
 msgid "✅ OAuth account connected successfully"
 msgstr ""
 
-#: templates/admin/settings-page.php:33
+#: templates/admin/settings-page.php:32
 msgid "ℹ️ OAuth account disconnected"
 msgstr ""
 
-#: templates/admin/settings-page.php:35
+#: templates/admin/settings-page.php:34
 msgid "OAuth connection failed:"
 msgstr ""
 
-#: templates/admin/settings-page.php:39
+#: templates/admin/settings-page.php:38
 msgid "CAPTCHA is not configured"
 msgstr ""
 
-#: templates/admin/settings-page.php:39
+#: templates/admin/settings-page.php:38
 msgid "All forms will have no bot protection. Please configure the Site Key and Secret Key below to enable it."
 msgstr ""
 
-#: templates/admin/settings-page.php:49
+#: templates/admin/settings-page.php:48
 msgid "🔔 Admin Notification"
 msgstr ""
 
-#: templates/admin/settings-page.php:52
+#: templates/admin/settings-page.php:51
 msgid "Enable admin email notifications"
 msgstr ""
 
-#: templates/admin/settings-page.php:56
+#: templates/admin/settings-page.php:55
 msgid "e.g. admin@example.com"
 msgstr ""
 
 #. translators: %s: fallback admin email address wrapped in <code> tags.
-#: templates/admin/settings-page.php:59
+#: templates/admin/settings-page.php:58
 #, php-format
 msgid "Recipient email (if left empty, emails will be sent to: %s)"
 msgstr ""
 
-#: templates/admin/settings-page.php:76
+#: templates/admin/settings-page.php:75
 msgid "📧 Email Settings (SMTP)"
 msgstr ""
 
-#: templates/admin/settings-page.php:84
+#: templates/admin/settings-page.php:83
 msgid "Enable SMTP"
 msgstr ""
 
-#: templates/admin/settings-page.php:106
+#: templates/admin/settings-page.php:104
 msgid "Custom"
 msgstr ""
 
-#: templates/admin/settings-page.php:109
-#: templates/admin/settings-page.php:110
+#: templates/admin/settings-page.php:107
+#: templates/admin/settings-page.php:108
 msgid "Authentication Method"
 msgstr ""
 
-#: templates/admin/settings-page.php:121
+#: templates/admin/settings-page.php:119
 msgid "App Password / Password (Basic Auth)"
 msgstr ""
 
-#: templates/admin/settings-page.php:144
+#: templates/admin/settings-page.php:141
 msgid "🔒 Password is encrypted before saving — leave empty to keep it unchanged."
 msgstr ""
 
-#: templates/admin/settings-page.php:150
+#: templates/admin/settings-page.php:147
 msgid "Connect"
 msgstr ""
 
 #. translators: 1: username "resend" in <code> tags, 2: link to the Resend API keys page.
-#: templates/admin/settings-page.php:159
+#: templates/admin/settings-page.php:156
 #, php-format
 msgid "Username is %1$s and Password is your API key from %2$s. The From Email domain must be verified in Resend."
 msgstr ""
 
 #. translators: 1: username "api_token" in <code> tags, 2: "Email Sending: Edit" permission name in <code> tags.
-#: templates/admin/settings-page.php:163
+#: templates/admin/settings-page.php:160
 #, php-format
 msgid "Username is %1$s and Password is a Cloudflare API token with the %2$s permission. The From Email domain must be onboarded under Email Service → Email Sending in Cloudflare."
 msgstr ""
 
-#: templates/admin/settings-page.php:172
+#: templates/admin/settings-page.php:169
 msgid "Connected"
 msgstr ""
 
-#: templates/admin/settings-page.php:173
+#: templates/admin/settings-page.php:170
 msgid "Disconnect"
 msgstr ""
 
-#: templates/admin/settings-page.php:177
+#: templates/admin/settings-page.php:174
 msgid "Not connected"
 msgstr ""
 
-#: templates/admin/settings-page.php:178
+#: templates/admin/settings-page.php:175
 msgid "Enter your Client ID / Secret. Changes are saved automatically before you connect."
 msgstr ""
 
-#: templates/admin/settings-page.php:191
+#: templates/admin/settings-page.php:188
 msgid "🔒 Encrypted before saving — leave empty to keep it unchanged."
 msgstr ""
 
-#: templates/admin/settings-page.php:196
-msgid "Directory (tenant) ID or domain from Azure Portal. Leave empty to allow any work or school account."
-msgstr ""
-
-#: templates/admin/settings-page.php:201
+#: templates/admin/settings-page.php:193
 msgid "Copy this value into Google Cloud Console"
 msgstr ""
 
-#: templates/admin/settings-page.php:206
-msgid "Copy this value into Azure Portal (App registrations → Authentication → Web)"
-msgstr ""
-
-#: templates/admin/settings-page.php:211
+#: templates/admin/settings-page.php:198
 msgid "Reconnect"
 msgstr ""
 
-#: templates/admin/settings-page.php:211
+#: templates/admin/settings-page.php:198
 msgid "Connect Account"
 msgstr ""
 
-#: templates/admin/settings-page.php:215
+#: templates/admin/settings-page.php:202
 msgid "💡 See the \"User Guide\" page for OAuth2 setup instructions"
 msgstr ""
 
-#: templates/admin/settings-page.php:216
-msgid "You need to register an OAuth app in Google Cloud Console (Gmail) or Azure Portal (Microsoft 365), then configure the Redirect URI above to match."
+#: templates/admin/settings-page.php:203
+msgid "You need to register an OAuth app in Google Cloud Console (Gmail), then configure the Redirect URI above to match."
 msgstr ""
 
-#: templates/admin/settings-page.php:223
+#: templates/admin/settings-page.php:210
 msgid "From Email"
 msgstr ""
 
-#: templates/admin/settings-page.php:225
-msgid "Leave empty to send as the SMTP Username or the connected account. Resend and Cloudflare need a verified domain; Google and Microsoft 365 need an address the connected account may send as (e.g. a Microsoft 365 shared mailbox with Send As permission)."
+#: templates/admin/settings-page.php:212
+msgid "Must be on a domain your provider has verified (required for Resend and Cloudflare). Leave empty to use the Username if it is an email address."
 msgstr ""
 
-#: templates/admin/settings-page.php:228
+#: templates/admin/settings-page.php:215
 msgid "From Name"
 msgstr ""
 
-#: templates/admin/settings-page.php:230
+#: templates/admin/settings-page.php:217
 msgid "Leave empty to use the site name."
 msgstr ""
 
-#: templates/admin/settings-page.php:238
+#: templates/admin/settings-page.php:225
 msgid "⚠️ Disable SSL Certificate Verification"
 msgstr ""
 
-#: templates/admin/settings-page.php:238
+#: templates/admin/settings-page.php:225
 msgid "(Development only)"
 msgstr ""
 
 #. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:242
+#: templates/admin/settings-page.php:229
 #, php-format
 msgid "Enable only when the server does not have a valid SSL certificate — %s"
 msgstr ""
 
 #. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:242
+#: templates/admin/settings-page.php:229
 msgid "Not recommended for Production"
 msgstr ""
 
-#: templates/admin/settings-page.php:249
+#: templates/admin/settings-page.php:236
 msgid "🛡️ Security Settings (Captcha)"
 msgstr ""
 
-#: templates/admin/settings-page.php:284
+#: templates/admin/settings-page.php:271
 msgid "Block form submissions when CAPTCHA is not configured (recommended)"
 msgstr ""
 
-#: templates/admin/settings-page.php:286
+#: templates/admin/settings-page.php:273
 msgid "When enabled, if the selected CAPTCHA service has no Secret Key, all form submissions will be rejected instead of allowed through — disable this only if you intentionally use forms without CAPTCHA."
 msgstr ""
 
-#: templates/admin/settings-page.php:291
+#: templates/admin/settings-page.php:278
 msgid "🌐 Trusted Proxies (for sites behind a Reverse Proxy / CDN)"
 msgstr ""
 
 #. translators: %1$s: CF-Connecting-IP header name wrapped in <code> tags, %2$s: X-Forwarded-For header name wrapped in <code> tags.
-#: templates/admin/settings-page.php:297
+#: templates/admin/settings-page.php:284
 #, php-format
 msgid "Enter the IPs or CIDRs of trusted proxies (e.g. Cloudflare, Nginx reverse proxy), one per line — the real user IP is only read from the %1$s / %2$s header when the request comes from these proxies."
 msgstr ""
 
-#: templates/admin/settings-page.php:298
+#: templates/admin/settings-page.php:285
 msgid "Leave empty = trust REMOTE_ADDR only (default, safest)"
 msgstr ""
 
-#: templates/admin/settings-page.php:307
+#: templates/admin/settings-page.php:294
 msgid "📨 Test Email Sending (SMTP Test)"
 msgstr ""
 
-#: templates/admin/settings-page.php:308
+#: templates/admin/settings-page.php:295
 msgid "Send a test email to the specified address to verify that your SMTP settings are correct."
 msgstr ""
 
-#: templates/admin/settings-page.php:311
+#: templates/admin/settings-page.php:298
 msgid "Recipient email:"
 msgstr ""
 

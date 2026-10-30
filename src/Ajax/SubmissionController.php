@@ -177,7 +177,7 @@ class SubmissionController extends AbstractAjaxController {
         } else {
             if ( ! empty( $this->mail_errors ) ) {
                 $error_message = implode( '; ', $this->mail_errors );
-                isxf_log_error( 'Email failed for form #' . $form_id . ': ' . $error_message );
+                isxf_log_error( 'Email failed for form #' . $form_id . ': ' . implode( '; ', $this->mail_error_details ) );
                 /* translators: %s: email error details. */
                 wp_send_json_error( [ 'message' => sprintf( __( 'Your data has been saved, but the email could not be sent: %s', 'insightx-form' ), esc_html( $error_message ) ) ] );
             } else {

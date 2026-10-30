@@ -165,19 +165,7 @@ class SettingsAjaxTest extends WP_Ajax_UnitTestCase {
         $response = $this->handle_ajax( 'isxf_test_smtp_connection' );
 
         $this->assertFalse( $response['success'] );
-        $this->assertStringContainsString( 'Google / Gmail is not connected', $response['data']['message'] );
-    }
-
-    public function test_smtp_test_reports_unconnected_microsoft(): void {
-        update_option( 'isxf_smtp_enable', 'yes' );
-        update_option( 'isxf_smtp_auth_method', 'oauth_microsoft' );
-        delete_option( 'isxf_smtp_oauth_refresh_token' );
-        $_POST = [ 'nonce' => wp_create_nonce( 'isxf_smtp_connection_nonce' ) ];
-
-        $response = $this->handle_ajax( 'isxf_test_smtp_connection' );
-
-        $this->assertFalse( $response['success'] );
-        $this->assertStringContainsString( 'Microsoft 365 is not connected', $response['data']['message'] );
+        $this->assertStringContainsString( 'Google is not connected', $response['data']['message'] );
     }
 
     public function test_test_email_rejects_invalid_address(): void {
@@ -233,6 +221,58 @@ class SettingsAjaxTest extends WP_Ajax_UnitTestCase {
             'unreachable' => [ 'SMTP Error: Failed to connect to server', 'check the host and port' ],
             'tls'         => [ 'stream_socket_enable_crypto(): certificate verify failed', '465 = SSL' ],
             'unknown'     => [ '554 something else', '554 something else' ],
+            'bad oauth client' => [ 'SMTP Error: Could not authenticate. OAuth: invalid_client — The OAuth client was not found.', 'Client Secret is wrong' ],
+            'expired grant'    => [ 'SMTP Error: Could not authenticate. OAuth: invalid_grant — Token has been expired or revoked.', 'click Reconnect' ],
         ];
+    }
+
+    /* ---------- failure details: server reply + OAuth error ---------- */
+
+    private function mail_error_details( \ISXF\Ajax\SettingsController $controller ): array {
+        $prop = new ReflectionProperty( $controller, 'mail_error_details' );
+        $prop->setAccessible( true );
+        return $prop->getValue( $controller );
+    }
+
+    public function test_failure_detail_keeps_server_errors_but_never_client_lines(): void {
+        update_option( 'isxf_smtp_auth_method', 'password' );
+        $controller = new \ISXF\Ajax\SettingsController();
+        $controller->capture_smtp_debug( "CLIENT -> SERVER: AUTH LOGIN dXNlcj1zZWNyZXQtdG9rZW4=\r\n", 2 );
+        $controller->capture_smtp_debug( "SERVER -> CLIENT: 334 \r\n", 2 );
+        $controller->capture_smtp_debug( "SERVER -> CLIENT: 535 5.7.8 Username and Password not accepted.\r\n", 2 );
+        $controller->capture_smtp_debug( "SERVER -> CLIENT: 221 2.0.0 closing connection\r\n", 2 );
+
+        $controller->capture_mail_error( new WP_Error( 'wp_mail_failed', 'SMTP Error: Could not authenticate.' ) );
+        $controller->capture_mail_error( new WP_Error( 'wp_mail_failed', 'SMTP Error: Could not authenticate.' ) );
+
+        $details = $this->mail_error_details( $controller );
+        $this->assertCount( 2, $details, 'Second failure has no server reply of its own' );
+        $this->assertStringContainsString( 'API key is incorrect', $details[0] );
+        $this->assertStringContainsString( '535 5.7.8', $details[0] );
+        $this->assertStringNotContainsString( 'dXNlcj1zZWNyZXQtdG9rZW4', implode( ' ', $details ) );
+        $this->assertStringNotContainsString( '221 2.0.0', implode( ' ', $details ) );
+    }
+
+    public function test_oauth_refresh_error_is_reported(): void {
+        update_option( 'isxf_smtp_auth_method', 'oauth_google' );
+        update_option( 'isxf_smtp_oauth_refresh_token', \ISXF\Crypto::encrypt( 'refresh' ) );
+        delete_transient( \ISXF\OAuth::TOKEN_TRANSIENT );
+        $fake = function () {
+            return [
+                'headers'  => [],
+                'body'     => wp_json_encode( [ 'error' => 'invalid_grant', 'error_description' => "Token has been expired or revoked.\nmore detail" ] ),
+                'response' => [ 'code' => 400, 'message' => 'Bad Request' ],
+                'cookies'  => [],
+                'filename' => null,
+            ];
+        };
+        add_filter( 'pre_http_request', $fake );
+
+        $token = \ISXF\OAuth::get_access_token( 'google' );
+        remove_filter( 'pre_http_request', $fake );
+
+        $this->assertSame( '', $token );
+        $this->assertSame( 'OAuth: invalid_grant — Token has been expired or revoked.', \ISXF\OAuth::last_error() );
+        $this->assertStringContainsString( 'click Reconnect', \ISXF\Ajax\SettingsController::explain_smtp_error( \ISXF\OAuth::last_error() ) );
     }
 }
