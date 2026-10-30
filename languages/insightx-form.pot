@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: InsightX Form 0.10.2\n"
+"Project-Id-Version: InsightX Form 0.10.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ISX-Form-WP-Plugin\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-30T03:47:36+00:00\n"
+"POT-Creation-Date: 2026-10-30T04:09:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: insightx-form\n"
@@ -248,7 +248,7 @@ msgid "Your Name"
 msgstr ""
 
 #: src/Admin.php:386
-#: src/Ajax/EmailToolsController.php:217
+#: src/Ajax/EmailToolsController.php:218
 #: src/Ajax/SubmissionController.php:134
 msgid "Thank you for contacting us - {site_name}"
 msgstr ""
@@ -273,6 +273,42 @@ msgstr ""
 msgid "❌ Failed to encrypt the Client Secret — the new value was not saved (the previous value is kept). Please check your server's OpenSSL."
 msgstr ""
 
+#: src/Ajax/AbstractAjaxController.php:267
+msgid "The provider rejected the OAuth login — check that SMTP.Send has admin consent and Authenticated SMTP is enabled for the mailbox, then click Reconnect."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:268
+msgid "The username or password / API key is incorrect."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:270
+msgid "SMTP AUTH is turned off for this mailbox or tenant — enable Authenticated SMTP for the mailbox (Microsoft 365 admin center → Users → Mail → Manage email apps), wait up to an hour, then try again."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:271
+msgid "The connected account may not send as the From Email — give it Send As permission on that mailbox, or leave From Email empty."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:272
+#: src/Ajax/AbstractAjaxController.php:273
+msgid "The OAuth Client Secret is wrong or expired — create a new one (copy its Value, not the Secret ID), save it, then click Reconnect."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:274
+msgid "The OAuth connection has expired or was revoked — click Reconnect."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:276
+msgid "SSL certificate problem — check the port (465 = SSL, 587 = TLS)."
+msgstr ""
+
+#: src/Ajax/AbstractAjaxController.php:277
+#: src/Ajax/AbstractAjaxController.php:278
+#: src/Ajax/AbstractAjaxController.php:279
+#: src/Ajax/AbstractAjaxController.php:280
+msgid "Cannot reach the SMTP server — check the host and port."
+msgstr ""
+
 #. translators: %s: human-readable time difference, e.g. "5 mins".
 #. translators: %s: human-readable time difference (e.g. "2 hours").
 #: src/Ajax/AnalyticsController.php:110
@@ -286,66 +322,66 @@ msgid "Your user account has no valid email address to send the test to."
 msgstr ""
 
 #. translators: %s: original email subject.
-#: src/Ajax/EmailToolsController.php:59
+#: src/Ajax/EmailToolsController.php:60
 #, php-format
 msgid "🧪 %s"
 msgstr ""
 
 #. translators: %s: destination email address.
-#: src/Ajax/EmailToolsController.php:68
-#: src/Ajax/SettingsController.php:217
+#: src/Ajax/EmailToolsController.php:69
+#: src/Ajax/SettingsController.php:196
 #, php-format
 msgid "Test email sent to %s successfully!"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:70
-#: src/Ajax/SettingsController.php:219
+#: src/Ajax/EmailToolsController.php:71
+#: src/Ajax/SettingsController.php:198
 msgid "Unknown reason"
 msgstr ""
 
 #. translators: %s: error details.
-#: src/Ajax/EmailToolsController.php:72
-#: src/Ajax/SettingsController.php:221
+#: src/Ajax/EmailToolsController.php:73
+#: src/Ajax/SettingsController.php:200
 #, php-format
 msgid "Sending failed: %s"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:82
-#: src/Ajax/SettingsController.php:182
+#: src/Ajax/EmailToolsController.php:83
+#: src/Ajax/SettingsController.php:160
 msgid "You do not have permission to perform this action"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:180
+#: src/Ajax/EmailToolsController.php:181
 msgid "This is a sample message so you can preview the email content."
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:182
+#: src/Ajax/EmailToolsController.php:183
 msgid "Somchai Jaidee"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:194
+#: src/Ajax/EmailToolsController.php:195
 msgid "Option 1"
 msgstr ""
 
 #. translators: %s: site name.
-#: src/Ajax/EmailToolsController.php:223
+#: src/Ajax/EmailToolsController.php:224
 #: src/Ajax/SubmissionController.php:129
 #, php-format
 msgid "We have received your message - %s"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:226
+#: src/Ajax/EmailToolsController.php:227
 msgid "We have received your message - {site_name}"
 msgstr ""
 
 #. translators: %s: site name.
-#: src/Ajax/EmailToolsController.php:230
+#: src/Ajax/EmailToolsController.php:231
 #: src/Ajax/SubmissionController.php:139
 #, php-format
 msgid "Room booking confirmation - %s"
 msgstr ""
 
-#: src/Ajax/EmailToolsController.php:232
+#: src/Ajax/EmailToolsController.php:233
 msgid "Room booking confirmation - {site_name}"
 msgstr ""
 
@@ -397,9 +433,9 @@ msgstr ""
 
 #: src/Ajax/SettingsController.php:32
 #: src/Ajax/SettingsController.php:72
-#: src/OAuth.php:161
-#: src/OAuth.php:202
-#: src/OAuth.php:275
+#: src/OAuth.php:164
+#: src/OAuth.php:205
+#: src/OAuth.php:278
 msgid "You do not have permission to perform this action."
 msgstr ""
 
@@ -430,48 +466,33 @@ msgid "Could not connect to the SMTP server."
 msgstr ""
 
 #. translators: %s: SMTP connection error details returned by the mail server.
-#: src/Ajax/SettingsController.php:112
+#: src/Ajax/SettingsController.php:113
 #, php-format
 msgid "Connection failed: %s"
 msgstr ""
 
-#: src/Ajax/SettingsController.php:164
-msgid "The username or password / API key is incorrect."
-msgstr ""
-
 #: src/Ajax/SettingsController.php:165
-msgid "SSL certificate problem — check the port (465 = SSL, 587 = TLS)."
-msgstr ""
-
-#: src/Ajax/SettingsController.php:166
-#: src/Ajax/SettingsController.php:167
-#: src/Ajax/SettingsController.php:168
-#: src/Ajax/SettingsController.php:169
-msgid "Cannot reach the SMTP server — check the host and port."
-msgstr ""
-
-#: src/Ajax/SettingsController.php:187
 msgid "Please enter a valid destination email address"
 msgstr ""
 
 #. translators: %s: site name.
-#: src/Ajax/SettingsController.php:196
+#: src/Ajax/SettingsController.php:175
 #, php-format
 msgid "🧪 SMTP Test - %s"
 msgstr ""
 
-#: src/Ajax/SettingsController.php:201
+#: src/Ajax/SettingsController.php:180
 msgid "SMTP is working!"
 msgstr ""
 
 #. translators: %s: site name.
-#: src/Ajax/SettingsController.php:203
+#: src/Ajax/SettingsController.php:182
 #, php-format
 msgid "This email was sent from <strong>%s</strong><br>to test the SMTP settings"
 msgstr ""
 
 #. translators: %s: date and time the test email was sent.
-#: src/Ajax/SettingsController.php:206
+#: src/Ajax/SettingsController.php:185
 #, php-format
 msgid "Sent at: %s"
 msgstr ""
@@ -700,45 +721,45 @@ msgstr ""
 msgid "No fields found in this form"
 msgstr ""
 
-#: src/OAuth.php:166
+#: src/OAuth.php:169
 msgid "Invalid provider."
 msgstr ""
 
-#: src/OAuth.php:170
+#: src/OAuth.php:173
 msgid "Please enter and save your Client ID / Client Secret before connecting."
 msgstr ""
 
-#: src/OAuth.php:209
+#: src/OAuth.php:212
 msgid "State verification failed. Please try connecting again."
 msgstr ""
 
 #. translators: %s: error description returned by the OAuth provider.
-#: src/OAuth.php:215
+#: src/OAuth.php:218
 #, php-format
 msgid "The provider denied the request: %s"
 msgstr ""
 
-#: src/OAuth.php:220
+#: src/OAuth.php:223
 msgid "Authorization code not received."
 msgstr ""
 
 #. translators: %s: connection error message.
-#: src/OAuth.php:237
+#: src/OAuth.php:240
 #, php-format
 msgid "Could not connect to the token endpoint: %s"
 msgstr ""
 
-#: src/OAuth.php:242
+#: src/OAuth.php:245
 msgid "Refresh token not received."
 msgstr ""
 
 #. translators: %s: error message returned by the OAuth provider.
-#: src/OAuth.php:245
+#: src/OAuth.php:248
 #, php-format
 msgid "Token exchange failed: %s"
 msgstr ""
 
-#: src/OAuth.php:254
+#: src/OAuth.php:257
 msgid "Encryption failed; the connection was not saved. Please check the server's OpenSSL."
 msgstr ""
 

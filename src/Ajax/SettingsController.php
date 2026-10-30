@@ -104,6 +104,7 @@ class SettingsController extends AbstractAjaxController {
             $result = [ 'success' => true, 'message' => __( 'Connected successfully', 'insightx-form' ) ];
         } catch ( Throwable $error ) {
             $message = $mailer && $mailer->ErrorInfo ? $mailer->ErrorInfo : $error->getMessage();
+            $message = trim( $message . ' ' . $this->smtp_failure_detail() );
             $secret = Crypto::decrypt( get_option( 'isxf_smtp_pass', '' ) );
             if ( is_string( $secret ) && $secret !== '' ) {
                 $message = str_replace( $secret, '[hidden]', $message );
@@ -153,29 +154,6 @@ class SettingsController extends AbstractAjaxController {
         return md5( (string) wp_json_encode( array_map( 'get_option', $keys ) ) );
     }
 
-    /**
-     * Put the usual cause in front of PHPMailer's raw error.
-     *
-     * @param string $raw Error text from PHPMailer / the SMTP server.
-     * @return string
-     */
-    public static function explain_smtp_error( $raw ) {
-        $checks = [
-            'authenticat'        => __( 'The username or password / API key is incorrect.', 'insightx-form' ),
-            'certificate'        => __( 'SSL certificate problem — check the port (465 = SSL, 587 = TLS).', 'insightx-form' ),
-            'failed to connect'  => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
-            'connection refused' => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
-            'timed out'          => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
-            'getaddrinfo'        => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
-        ];
-        foreach ( $checks as $needle => $reason ) {
-            if ( stripos( $raw, $needle ) !== false ) {
-                return $reason . ' (' . $raw . ')';
-            }
-        }
-        return $raw;
-    }
-
     public function handle_test_email() {
         check_ajax_referer( 'isxf_test_email_nonce', 'nonce' );
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -188,6 +166,7 @@ class SettingsController extends AbstractAjaxController {
         }
 
         $this->mail_errors = [];
+        $this->mail_error_details = [];
         add_action( 'wp_mail_failed', [ $this, 'capture_mail_error' ] );
         $this->hook_smtp();
 
@@ -216,7 +195,7 @@ class SettingsController extends AbstractAjaxController {
             /* translators: %s: destination email address. */
             wp_send_json_success( [ 'message' => sprintf( __( 'Test email sent to %s successfully!', 'insightx-form' ), $to ) ] );
         } else {
-            $err = ! empty( $this->mail_errors ) ? implode( '; ', $this->mail_errors ) : __( 'Unknown reason', 'insightx-form' );
+            $err = ! empty( $this->mail_error_details ) ? implode( '; ', $this->mail_error_details ) : __( 'Unknown reason', 'insightx-form' );
             /* translators: %s: error details. */
             wp_send_json_error( [ 'message' => sprintf( __( 'Sending failed: %s', 'insightx-form' ), $err ) ] );
         }

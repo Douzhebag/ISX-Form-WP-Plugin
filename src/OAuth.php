@@ -27,6 +27,9 @@ class OAuth {
         const OPT_TENANT        = 'isxf_smtp_oauth_tenant';         // Microsoft tenant (ID, domain, or "organizations")
 
         const TOKEN_TRANSIENT   = 'isxf_oauth_access_token';
+
+        /** Why the last access-token refresh failed in this request ('' if it didn't). */
+        private static $last_error = '';
         const STATE_TRANSIENT   = 'isxf_oauth_state_';
 
         public function __construct() {
@@ -308,16 +311,29 @@ class OAuth {
         }
 
         /**
+         * Why the last access-token refresh failed ('' if it didn't).
+         *
+         * @return string
+         */
+        public static function last_error() {
+            return self::$last_error;
+        }
+
+        /**
          * Return a valid access token for the given provider, refreshing if needed.
          *
          * @return string Access token, or '' on failure.
          */
         public static function get_access_token( $provider ) {
+            self::$last_error = '';
             $cached = get_transient( self::TOKEN_TRANSIENT );
             if ( ! empty( $cached ) ) return $cached;
 
             $refresh = Crypto::decrypt( get_option( self::OPT_REFRESH_TOKEN, '' ) );
-            if ( empty( $refresh ) ) return '';
+            if ( empty( $refresh ) ) {
+                self::$last_error = 'OAuth: no refresh token stored — click Reconnect.';
+                return '';
+            }
 
             $providers = self::providers();
             if ( ! isset( $providers[ $provider ] ) ) return '';
@@ -335,12 +351,17 @@ class OAuth {
 
             if ( is_wp_error( $response ) ) {
                 isxf_log_error( 'OAuth refresh failed: ' . $response->get_error_message() );
+                self::$last_error = 'OAuth: ' . $response->get_error_message();
                 return '';
             }
 
             $body = json_decode( wp_remote_retrieve_body( $response ), true );
             if ( empty( $body['access_token'] ) ) {
                 isxf_log_error( 'OAuth refresh response error: ' . wp_remote_retrieve_body( $response ) );
+                // First line only — Microsoft appends Trace / Correlation IDs.
+                $desc = isset( $body['error_description'] ) ? strtok( (string) $body['error_description'], "\r\n" ) : '';
+                $code = isset( $body['error'] ) ? (string) $body['error'] : 'unknown_error';
+                self::$last_error = trim( 'OAuth: ' . $code . ( $desc ? ' — ' . $desc : '' ) );
                 return '';
             }
 

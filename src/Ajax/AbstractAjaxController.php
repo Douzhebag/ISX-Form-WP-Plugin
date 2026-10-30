@@ -21,6 +21,12 @@ abstract class AbstractAjaxController {
 
     protected $mail_errors = [];
 
+    /** Same failures plus the mail server's reply and a likely cause — admin screens only. */
+    protected $mail_error_details = [];
+
+    /** 4xx/5xx replies from the SMTP server since the last failure was recorded. */
+    protected $smtp_replies = [];
+
     protected function get_client_ip() {
         $remote_addr = ! empty( $_SERVER['REMOTE_ADDR'] ) ? trim( $_SERVER['REMOTE_ADDR'] ) : '';
         if ( ! filter_var( $remote_addr, FILTER_VALIDATE_IP ) ) {
@@ -201,9 +207,84 @@ abstract class AbstractAjaxController {
     }
 
     public function capture_mail_error( $wp_error ) {
-        if ( is_wp_error( $wp_error ) ) {
-            $this->mail_errors[] = $wp_error->get_error_message();
+        if ( ! is_wp_error( $wp_error ) ) {
+            return;
         }
+        $message = $wp_error->get_error_message();
+        $detail  = self::explain_smtp_error( trim( $message . ' ' . $this->smtp_failure_detail() ) );
+        if ( ! in_array( $message, $this->mail_errors, true ) ) {
+            $this->mail_errors[] = $message;
+        }
+        if ( ! in_array( $detail, $this->mail_error_details, true ) ) {
+            $this->mail_error_details[] = $detail;
+        }
+        isxf_log_error( 'SMTP failure: ' . $detail );
+    }
+
+    /**
+     * PHPMailer Debugoutput: keep only the server's 4xx/5xx replies. Client
+     * lines are never kept — they carry the password / OAuth token.
+     *
+     * @param string $str   Debug line.
+     * @param int    $level Debug level.
+     */
+    public function capture_smtp_debug( $str, $level ) {
+        if ( strpos( $str, 'SERVER -> CLIENT:' ) !== 0 ) {
+            return;
+        }
+        foreach ( preg_split( '/\R/', substr( $str, 17 ) ) as $line ) {
+            $line = trim( $line );
+            if ( preg_match( '/^[45]\d\d[ -]/', $line ) ) {
+                $this->smtp_replies[] = $line;
+            }
+        }
+        $this->smtp_replies = array_slice( $this->smtp_replies, -3 );
+    }
+
+    /**
+     * Why the last send failed, as far as we know: the OAuth token error (if
+     * any) and the server's error replies. Clears the collected replies.
+     *
+     * @return string
+     */
+    protected function smtp_failure_detail() {
+        $parts = $this->smtp_replies;
+        $this->smtp_replies = [];
+        if ( OAuth::last_error() !== '' ) {
+            array_unshift( $parts, OAuth::last_error() );
+        }
+        return implode( ' ', array_unique( $parts ) );
+    }
+
+    /**
+     * Put the usual cause in front of the raw SMTP / OAuth error.
+     *
+     * @param string $raw Error text from PHPMailer / the SMTP server / the OAuth provider.
+     * @return string
+     */
+    public static function explain_smtp_error( $raw ) {
+        $bad_login = OAuth::current_provider() !== null
+            ? __( 'The provider rejected the OAuth login — check that SMTP.Send has admin consent and Authenticated SMTP is enabled for the mailbox, then click Reconnect.', 'insightx-form' )
+            : __( 'The username or password / API key is incorrect.', 'insightx-form' );
+        $checks = [
+            '5.7.139'            => __( 'SMTP AUTH is turned off for this mailbox or tenant — enable Authenticated SMTP for the mailbox (Microsoft 365 admin center → Users → Mail → Manage email apps), wait up to an hour, then try again.', 'insightx-form' ),
+            'SendAsDenied'       => __( 'The connected account may not send as the From Email — give it Send As permission on that mailbox, or leave From Email empty.', 'insightx-form' ),
+            'AADSTS7000215'      => __( 'The OAuth Client Secret is wrong or expired — create a new one (copy its Value, not the Secret ID), save it, then click Reconnect.', 'insightx-form' ),
+            'invalid_client'     => __( 'The OAuth Client Secret is wrong or expired — create a new one (copy its Value, not the Secret ID), save it, then click Reconnect.', 'insightx-form' ),
+            'invalid_grant'      => __( 'The OAuth connection has expired or was revoked — click Reconnect.', 'insightx-form' ),
+            'authenticat'        => $bad_login,
+            'certificate'        => __( 'SSL certificate problem — check the port (465 = SSL, 587 = TLS).', 'insightx-form' ),
+            'failed to connect'  => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
+            'connection refused' => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
+            'timed out'          => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
+            'getaddrinfo'        => __( 'Cannot reach the SMTP server — check the host and port.', 'insightx-form' ),
+        ];
+        foreach ( $checks as $needle => $reason ) {
+            if ( stripos( $raw, $needle ) !== false ) {
+                return $reason . ' (' . $raw . ')';
+            }
+        }
+        return $raw;
     }
 
     /**
@@ -274,6 +355,10 @@ abstract class AbstractAjaxController {
 
     public function configure_smtp( $phpmailer ) {
         if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) return;
+
+        // Keep the server's error replies for the failure message (capture_smtp_debug()).
+        $phpmailer->SMTPDebug   = 2; // SMTP::DEBUG_SERVER — client lines are dropped in the callback.
+        $phpmailer->Debugoutput = [ $this, 'capture_smtp_debug' ];
 
         // === OAuth2 (XOAUTH2) — Google / Microsoft 365 ===
         $provider = OAuth::current_provider();

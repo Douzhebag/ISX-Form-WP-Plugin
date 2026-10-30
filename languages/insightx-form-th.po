@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: InsightX Form 0.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ISX-Form-WP-"
 "Plugin\n"
-"POT-Creation-Date: 2026-10-30T03:47:36+00:00\n"
+"POT-Creation-Date: 2026-10-30T04:09:08+00:00\n"
 "PO-Revision-Date: 2026-07-23 00:00+0000\n"
 "Last-Translator: InsightX <dev@insightx.in.th>\n"
 "Language-Team: Thai\n"
@@ -245,7 +245,7 @@ msgstr "📝 จัดการโครงสร้างแบบฟอร์�
 msgid "Your Name"
 msgstr "ชื่อของคุณ"
 
-#: src/Admin.php:386 src/Ajax/EmailToolsController.php:217
+#: src/Admin.php:386 src/Ajax/EmailToolsController.php:218
 #: src/Ajax/SubmissionController.php:134
 msgid "Thank you for contacting us - {site_name}"
 msgstr "ขอบคุณที่ติดต่อ - {site_name}"
@@ -286,6 +286,61 @@ msgstr ""
 "❌ เข้ารหัส Client Secret ไม่สำเร็จ — ไม่ได้บันทึกค่าใหม่ (ใช้ค่าเดิม) กรุณาตรวจสอบ "
 "OpenSSL ของเซิร์ฟเวอร์"
 
+#: src/Ajax/AbstractAjaxController.php:267
+msgid ""
+"The provider rejected the OAuth login — check that SMTP.Send has admin "
+"consent and Authenticated SMTP is enabled for the mailbox, then click "
+"Reconnect."
+msgstr ""
+"ผู้ให้บริการไม่ยอมรับการ login แบบ OAuth — ตรวจว่า SMTP.Send ได้ admin consent แล้ว "
+"และเปิด Authenticated SMTP ให้ mailbox แล้ว จากนั้นกดเชื่อมต่อใหม่"
+
+#: src/Ajax/AbstractAjaxController.php:268
+msgid "The username or password / API key is incorrect."
+msgstr "Username หรือ Password / API key ไม่ถูกต้อง"
+
+#: src/Ajax/AbstractAjaxController.php:270
+msgid ""
+"SMTP AUTH is turned off for this mailbox or tenant — enable Authenticated "
+"SMTP for the mailbox (Microsoft 365 admin center → Users → Mail → Manage "
+"email apps), wait up to an hour, then try again."
+msgstr ""
+"ปิด SMTP AUTH ไว้ที่ mailbox หรือ tenant นี้ — เปิด Authenticated SMTP ให้ mailbox "
+"(Microsoft 365 admin center → Users → Mail → Manage email apps) รอไม่เกิน 1 "
+"ชั่วโมงแล้วลองใหม่"
+
+#: src/Ajax/AbstractAjaxController.php:271
+msgid ""
+"The connected account may not send as the From Email — give it Send As "
+"permission on that mailbox, or leave From Email empty."
+msgstr ""
+"บัญชีที่เชื่อมไว้ไม่มีสิทธิ์ส่งในนาม From Email — ให้สิทธิ์ Send As กับ mailbox นั้น หรือเว้น From "
+"Email ว่างไว้"
+
+#: src/Ajax/AbstractAjaxController.php:272
+#: src/Ajax/AbstractAjaxController.php:273
+msgid ""
+"The OAuth Client Secret is wrong or expired — create a new one (copy its "
+"Value, not the Secret ID), save it, then click Reconnect."
+msgstr ""
+"Client Secret ของ OAuth ผิดหรือหมดอายุ — สร้างใหม่ (คัดลอกช่อง Value ไม่ใช่ Secret "
+"ID) บันทึก แล้วกดเชื่อมต่อใหม่"
+
+#: src/Ajax/AbstractAjaxController.php:274
+msgid "The OAuth connection has expired or was revoked — click Reconnect."
+msgstr "การเชื่อมต่อ OAuth หมดอายุหรือถูกยกเลิก — กดเชื่อมต่อใหม่"
+
+#: src/Ajax/AbstractAjaxController.php:276
+msgid "SSL certificate problem — check the port (465 = SSL, 587 = TLS)."
+msgstr "ใบรับรอง SSL มีปัญหา — ตรวจ Port (465 = SSL, 587 = TLS)"
+
+#: src/Ajax/AbstractAjaxController.php:277
+#: src/Ajax/AbstractAjaxController.php:278
+#: src/Ajax/AbstractAjaxController.php:279
+#: src/Ajax/AbstractAjaxController.php:280
+msgid "Cannot reach the SMTP server — check the host and port."
+msgstr "เชื่อมต่อเซิร์ฟเวอร์ SMTP ไม่ได้ — ตรวจ Host และ Port"
+
 #. translators: %s: human-readable time difference, e.g. "5 mins".
 #. translators: %s: human-readable time difference (e.g. "2 hours").
 #: src/Ajax/AnalyticsController.php:110 templates/admin/dashboard-widget.php:73
@@ -298,60 +353,60 @@ msgid "Your user account has no valid email address to send the test to."
 msgstr "บัญชีผู้ใช้ของคุณไม่มีอีเมลที่ถูกต้องสำหรับส่งอีเมลทดสอบ"
 
 #. translators: %s: original email subject.
-#: src/Ajax/EmailToolsController.php:59
+#: src/Ajax/EmailToolsController.php:60
 #, php-format
 msgid "🧪 %s"
 msgstr "🧪 %s"
 
 #. translators: %s: destination email address.
-#: src/Ajax/EmailToolsController.php:68 src/Ajax/SettingsController.php:217
+#: src/Ajax/EmailToolsController.php:69 src/Ajax/SettingsController.php:196
 #, php-format
 msgid "Test email sent to %s successfully!"
 msgstr "ส่งอีเมลทดสอบไปที่ %s สำเร็จ!"
 
-#: src/Ajax/EmailToolsController.php:70 src/Ajax/SettingsController.php:219
+#: src/Ajax/EmailToolsController.php:71 src/Ajax/SettingsController.php:198
 msgid "Unknown reason"
 msgstr "ไม่ทราบสาเหตุ"
 
 #. translators: %s: error details.
-#: src/Ajax/EmailToolsController.php:72 src/Ajax/SettingsController.php:221
+#: src/Ajax/EmailToolsController.php:73 src/Ajax/SettingsController.php:200
 #, php-format
 msgid "Sending failed: %s"
 msgstr "ส่งไม่สำเร็จ: %s"
 
-#: src/Ajax/EmailToolsController.php:82 src/Ajax/SettingsController.php:182
+#: src/Ajax/EmailToolsController.php:83 src/Ajax/SettingsController.php:160
 msgid "You do not have permission to perform this action"
 msgstr "คุณไม่มีสิทธิ์ดำเนินการนี้"
 
-#: src/Ajax/EmailToolsController.php:180
+#: src/Ajax/EmailToolsController.php:181
 msgid "This is a sample message so you can preview the email content."
 msgstr "นี่คือข้อความตัวอย่างสำหรับแสดงในตัวอย่างอีเมล"
 
-#: src/Ajax/EmailToolsController.php:182
+#: src/Ajax/EmailToolsController.php:183
 msgid "Somchai Jaidee"
 msgstr "สมชาย ใจดี"
 
-#: src/Ajax/EmailToolsController.php:194
+#: src/Ajax/EmailToolsController.php:195
 msgid "Option 1"
 msgstr "ตัวเลือกที่ 1"
 
 #. translators: %s: site name.
-#: src/Ajax/EmailToolsController.php:223 src/Ajax/SubmissionController.php:129
+#: src/Ajax/EmailToolsController.php:224 src/Ajax/SubmissionController.php:129
 #, php-format
 msgid "We have received your message - %s"
 msgstr "เราได้รับข้อความของคุณแล้ว - %s"
 
-#: src/Ajax/EmailToolsController.php:226
+#: src/Ajax/EmailToolsController.php:227
 msgid "We have received your message - {site_name}"
 msgstr "เราได้รับข้อความของคุณแล้ว - {site_name}"
 
 #. translators: %s: site name.
-#: src/Ajax/EmailToolsController.php:230 src/Ajax/SubmissionController.php:139
+#: src/Ajax/EmailToolsController.php:231 src/Ajax/SubmissionController.php:139
 #, php-format
 msgid "Room booking confirmation - %s"
 msgstr "ยืนยันการจองห้องพัก - %s"
 
-#: src/Ajax/EmailToolsController.php:232
+#: src/Ajax/EmailToolsController.php:233
 msgid "Room booking confirmation - {site_name}"
 msgstr "ยืนยันการจองห้องพัก - {site_name}"
 
@@ -393,7 +448,7 @@ msgid "Note saved"
 msgstr "บันทึกโน้ตเรียบร้อย"
 
 #: src/Ajax/SettingsController.php:32 src/Ajax/SettingsController.php:72
-#: src/OAuth.php:161 src/OAuth.php:202 src/OAuth.php:275
+#: src/OAuth.php:164 src/OAuth.php:205 src/OAuth.php:278
 msgid "You do not have permission to perform this action."
 msgstr "ไม่มีสิทธิ์ดำเนินการ"
 
@@ -425,47 +480,34 @@ msgid "Could not connect to the SMTP server."
 msgstr "เชื่อมต่อเซิร์ฟเวอร์ SMTP ไม่ได้"
 
 #. translators: %s: SMTP connection error details returned by the mail server.
-#: src/Ajax/SettingsController.php:112
+#: src/Ajax/SettingsController.php:113
 #, php-format
 msgid "Connection failed: %s"
 msgstr "เชื่อมต่อไม่สำเร็จ: %s"
 
-#: src/Ajax/SettingsController.php:164
-msgid "The username or password / API key is incorrect."
-msgstr "Username หรือ Password / API key ไม่ถูกต้อง"
-
 #: src/Ajax/SettingsController.php:165
-msgid "SSL certificate problem — check the port (465 = SSL, 587 = TLS)."
-msgstr "ใบรับรอง SSL มีปัญหา — ตรวจ Port (465 = SSL, 587 = TLS)"
-
-#: src/Ajax/SettingsController.php:166 src/Ajax/SettingsController.php:167
-#: src/Ajax/SettingsController.php:168 src/Ajax/SettingsController.php:169
-msgid "Cannot reach the SMTP server — check the host and port."
-msgstr "เชื่อมต่อเซิร์ฟเวอร์ SMTP ไม่ได้ — ตรวจ Host และ Port"
-
-#: src/Ajax/SettingsController.php:187
 msgid "Please enter a valid destination email address"
 msgstr "กรุณาระบุอีเมลปลายทางที่ถูกต้อง"
 
 #. translators: %s: site name.
-#: src/Ajax/SettingsController.php:196
+#: src/Ajax/SettingsController.php:175
 #, php-format
 msgid "🧪 SMTP Test - %s"
 msgstr "🧪 SMTP Test - %s"
 
-#: src/Ajax/SettingsController.php:201
+#: src/Ajax/SettingsController.php:180
 msgid "SMTP is working!"
 msgstr "SMTP ทำงานปกติ!"
 
 #. translators: %s: site name.
-#: src/Ajax/SettingsController.php:203
+#: src/Ajax/SettingsController.php:182
 #, php-format
 msgid ""
 "This email was sent from <strong>%s</strong><br>to test the SMTP settings"
 msgstr "อีเมลนี้ถูกส่งจากระบบ <strong>%s</strong><br>เพื่อทดสอบการตั้งค่า SMTP"
 
 #. translators: %s: date and time the test email was sent.
-#: src/Ajax/SettingsController.php:206
+#: src/Ajax/SettingsController.php:185
 #, php-format
 msgid "Sent at: %s"
 msgstr "ส่งเมื่อ: %s"
@@ -686,45 +728,45 @@ msgstr "ปิด"
 msgid "No fields found in this form"
 msgstr "ไม่พบฟิลด์ในแบบฟอร์มนี้"
 
-#: src/OAuth.php:166
+#: src/OAuth.php:169
 msgid "Invalid provider."
 msgstr "ผู้ให้บริการไม่ถูกต้อง"
 
-#: src/OAuth.php:170
+#: src/OAuth.php:173
 msgid "Please enter and save your Client ID / Client Secret before connecting."
 msgstr "กรุณากรอกและบันทึก Client ID / Client Secret ก่อนเชื่อมต่อ"
 
-#: src/OAuth.php:209
+#: src/OAuth.php:212
 msgid "State verification failed. Please try connecting again."
 msgstr "การยืนยัน state ไม่ถูกต้อง กรุณาลองเชื่อมต่อใหม่"
 
 #. translators: %s: error description returned by the OAuth provider.
-#: src/OAuth.php:215
+#: src/OAuth.php:218
 #, php-format
 msgid "The provider denied the request: %s"
 msgstr "ผู้ให้บริการปฏิเสธ: %s"
 
-#: src/OAuth.php:220
+#: src/OAuth.php:223
 msgid "Authorization code not received."
 msgstr "ไม่ได้รับ authorization code"
 
 #. translators: %s: connection error message.
-#: src/OAuth.php:237
+#: src/OAuth.php:240
 #, php-format
 msgid "Could not connect to the token endpoint: %s"
 msgstr "เชื่อมต่อ token endpoint ไม่ได้: %s"
 
-#: src/OAuth.php:242
+#: src/OAuth.php:245
 msgid "Refresh token not received."
 msgstr "ไม่ได้รับ refresh token"
 
 #. translators: %s: error message returned by the OAuth provider.
-#: src/OAuth.php:245
+#: src/OAuth.php:248
 #, php-format
 msgid "Token exchange failed: %s"
 msgstr "แลก token ไม่สำเร็จ: %s"
 
-#: src/OAuth.php:254
+#: src/OAuth.php:257
 msgid ""
 "Encryption failed; the connection was not saved. Please check the server's "
 "OpenSSL."

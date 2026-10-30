@@ -52,6 +52,7 @@ class EmailToolsController extends AbstractAjaxController {
         $rendered = $this->render_template( $request );
 
         $this->mail_errors = [];
+        $this->mail_error_details = [];
         add_action( 'wp_mail_failed', [ $this, 'capture_mail_error' ] );
         $this->hook_smtp();
 
@@ -67,7 +68,7 @@ class EmailToolsController extends AbstractAjaxController {
             /* translators: %s: destination email address. */
             wp_send_json_success( [ 'message' => sprintf( __( 'Test email sent to %s successfully!', 'insightx-form' ), $to ) ] );
         } else {
-            $err = ! empty( $this->mail_errors ) ? implode( '; ', $this->mail_errors ) : __( 'Unknown reason', 'insightx-form' );
+            $err = ! empty( $this->mail_error_details ) ? implode( '; ', $this->mail_error_details ) : __( 'Unknown reason', 'insightx-form' );
             /* translators: %s: error details. */
             wp_send_json_error( [ 'message' => sprintf( __( 'Sending failed: %s', 'insightx-form' ), $err ) ] );
         }
