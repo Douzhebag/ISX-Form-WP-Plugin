@@ -186,6 +186,18 @@ class AdminTest extends WP_UnitTestCase {
         $this->assertStringContainsString( 'name="isxf_smtp_from_name" value="Acme"', $html );
     }
 
+    public function test_from_fields_stay_visible_with_oauth(): void {
+        update_option( 'isxf_smtp_auth_method', 'oauth_microsoft' );
+
+        $html = $this->render_settings();
+
+        // After the OAuth block's closing callout, i.e. outside the per-card blocks that get hidden.
+        $oauth_end = strpos( $html, 'configure the Redirect URI above to match.' );
+        $this->assertNotFalse( $oauth_end );
+        $this->assertGreaterThan( $oauth_end, strpos( $html, 'name="isxf_smtp_from_email"' ) );
+        $this->assertGreaterThan( $oauth_end, strpos( $html, 'name="isxf_smtp_from_name"' ) );
+    }
+
     /* ---------- settings page: provider cards ---------- */
 
     private function render_settings(): string {

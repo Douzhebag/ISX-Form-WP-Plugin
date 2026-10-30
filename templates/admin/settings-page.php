@@ -135,16 +135,6 @@
                                     <input type="number" name="<?php echo $opt['smtp_port']; ?>" value="<?php echo esc_attr($v['smtp_port']); ?>" placeholder="587">
                                 </div>
                                 <div class="isxf-field">
-                                    <label><?php esc_html_e( 'From Email', 'insightx-form' ); ?></label>
-                                    <input type="email" name="<?php echo $opt['smtp_from_email']; ?>" value="<?php echo esc_attr( $v['smtp_from_email'] ); ?>" placeholder="hello@example.com">
-                                    <p class="isxf-hint"><?php esc_html_e( 'Must be on a domain your provider has verified (required for Resend and Cloudflare). Leave empty to use the Username if it is an email address.', 'insightx-form' ); ?></p>
-                                </div>
-                                <div class="isxf-field">
-                                    <label><?php esc_html_e( 'From Name', 'insightx-form' ); ?></label>
-                                    <input type="text" name="<?php echo $opt['smtp_from_name']; ?>" value="<?php echo esc_attr( $v['smtp_from_name'] ); ?>" placeholder="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
-                                    <p class="isxf-hint"><?php esc_html_e( 'Leave empty to use the site name.', 'insightx-form' ); ?></p>
-                                </div>
-                                <div class="isxf-field">
                                     <label>Username</label>
                                     <input type="text" name="<?php echo $opt['smtp_user']; ?>" value="<?php echo esc_attr($v['smtp_user']); ?>" placeholder="you@example.com">
                                 </div>
@@ -219,6 +209,20 @@
                             <div class="isxf-callout">
                                 <strong><?php esc_html_e( '💡 See the "User Guide" page for OAuth2 setup instructions', 'insightx-form' ); ?></strong>
                                 <span><?php esc_html_e( 'You need to register an OAuth app in Google Cloud Console (Gmail) or Azure Portal (Microsoft 365), then configure the Redirect URI above to match.', 'insightx-form' ); ?></span>
+                            </div>
+                        </div>
+
+                        <!-- ===== Shared: sender (every card, OAuth included) ===== -->
+                        <div class="isxf-grid isxf-grid-gap">
+                            <div class="isxf-field">
+                                <label><?php esc_html_e( 'From Email', 'insightx-form' ); ?></label>
+                                <input type="email" name="<?php echo $opt['smtp_from_email']; ?>" value="<?php echo esc_attr( $v['smtp_from_email'] ); ?>" placeholder="hello@example.com">
+                                <p class="isxf-hint"><?php esc_html_e( 'Leave empty to send as the SMTP Username or the connected account. Resend and Cloudflare need a verified domain; Google and Microsoft 365 need an address the connected account may send as (e.g. a Microsoft 365 shared mailbox with Send As permission).', 'insightx-form' ); ?></p>
+                            </div>
+                            <div class="isxf-field">
+                                <label><?php esc_html_e( 'From Name', 'insightx-form' ); ?></label>
+                                <input type="text" name="<?php echo $opt['smtp_from_name']; ?>" value="<?php echo esc_attr( $v['smtp_from_name'] ); ?>" placeholder="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+                                <p class="isxf-hint"><?php esc_html_e( 'Leave empty to use the site name.', 'insightx-form' ); ?></p>
                             </div>
                         </div>
 

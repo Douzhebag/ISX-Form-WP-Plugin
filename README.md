@@ -4,7 +4,7 @@
 
 ระบบฟอร์มและจัดการข้อมูลลูกค้าสำหรับธุรกิจ — สร้างฟอร์มง่าย ส่งอีเมลอัตโนมัติ (รองรับ OAuth2) จัดการข้อมูลครบจบในที่เดียว
 
-**Version:** 0.10.0
+**Version:** 0.10.1
 **Author:** [InsightX](https://www.insightx.in.th)
 
 ---
@@ -228,6 +228,14 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 
 1. กดการ์ด **Microsoft 365** → กรอก Client ID, Client Secret และ **Tenant ID** (เว้นว่าง = `organizations` รับบัญชีองค์กรทุก tenant)
 2. กด **"เชื่อมต่อบัญชี"** → login ด้วย mailbox ที่จะใช้ส่ง → อนุญาตสิทธิ์ → เด้งกลับมาที่ปลั๊กอิน
+
+**ส่งในนามอีเมลอื่น (เช่น `no-reply@โดเมน`)**
+
+1. Microsoft 365 admin center → **Teams & groups → Shared mailboxes** → สร้าง `no-reply@โดเมน` (shared mailbox ไม่ต้องใช้ license)
+2. เปิด mailbox นั้น → **Send as** → เพิ่มบัญชีที่เชื่อมไว้กับปลั๊กอิน แล้วรอสิทธิ์มีผล (ประมาณ 15–60 นาที)
+3. ใส่ `no-reply@โดเมน` ในช่อง **From Email** ของหน้าตั้งค่า (ช่องนี้แสดงทุกการ์ด)
+
+ถ้ายังไม่ได้สิทธิ์ Send As การส่งจะ error `SendAsDenied`
 
 > Client ID / Secret ใช้ช่องเดียวกับ Google — ถ้าสลับการ์ดระหว่าง Google ↔ Microsoft ต้องกรอกค่าใหม่และกดเชื่อมต่อบัญชีอีกครั้ง (token ของเจ้าเดิมจะไม่ถูกใช้)
 
