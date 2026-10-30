@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: InsightX Form 0.10.1\n"
+"Project-Id-Version: InsightX Form 0.10.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ISX-Form-WP-Plugin\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-30T03:37:16+00:00\n"
+"POT-Creation-Date: 2026-10-30T03:47:36+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: insightx-form\n"
@@ -48,7 +48,7 @@ msgid "❌ Connection error"
 msgstr ""
 
 #: src/Admin.php:96
-#: templates/admin/settings-page.php:310
+#: templates/admin/settings-page.php:315
 msgid "📨 Send Test Email"
 msgstr ""
 
@@ -397,9 +397,9 @@ msgstr ""
 
 #: src/Ajax/SettingsController.php:32
 #: src/Ajax/SettingsController.php:72
-#: src/OAuth.php:140
-#: src/OAuth.php:181
-#: src/OAuth.php:254
+#: src/OAuth.php:161
+#: src/OAuth.php:202
+#: src/OAuth.php:275
 msgid "You do not have permission to perform this action."
 msgstr ""
 
@@ -700,45 +700,45 @@ msgstr ""
 msgid "No fields found in this form"
 msgstr ""
 
-#: src/OAuth.php:145
+#: src/OAuth.php:166
 msgid "Invalid provider."
 msgstr ""
 
-#: src/OAuth.php:149
+#: src/OAuth.php:170
 msgid "Please enter and save your Client ID / Client Secret before connecting."
 msgstr ""
 
-#: src/OAuth.php:188
+#: src/OAuth.php:209
 msgid "State verification failed. Please try connecting again."
 msgstr ""
 
 #. translators: %s: error description returned by the OAuth provider.
-#: src/OAuth.php:194
+#: src/OAuth.php:215
 #, php-format
 msgid "The provider denied the request: %s"
 msgstr ""
 
-#: src/OAuth.php:199
+#: src/OAuth.php:220
 msgid "Authorization code not received."
 msgstr ""
 
 #. translators: %s: connection error message.
-#: src/OAuth.php:216
+#: src/OAuth.php:237
 #, php-format
 msgid "Could not connect to the token endpoint: %s"
 msgstr ""
 
-#: src/OAuth.php:221
+#: src/OAuth.php:242
 msgid "Refresh token not received."
 msgstr ""
 
 #. translators: %s: error message returned by the OAuth provider.
-#: src/OAuth.php:224
+#: src/OAuth.php:245
 #, php-format
 msgid "Token exchange failed: %s"
 msgstr ""
 
-#: src/OAuth.php:233
+#: src/OAuth.php:254
 msgid "Encryption failed; the connection was not saved. Please check the server's OpenSSL."
 msgstr ""
 
@@ -1844,95 +1844,99 @@ msgid "Directory (tenant) ID or domain from Azure Portal. Leave empty to allow a
 msgstr ""
 
 #: templates/admin/settings-page.php:201
-msgid "Copy this value into Google Cloud Console or Azure Portal (App registrations → Authentication → Web)"
+msgid "Copy this value into Google Cloud Console"
 msgstr ""
 
 #: templates/admin/settings-page.php:206
-msgid "Reconnect"
-msgstr ""
-
-#: templates/admin/settings-page.php:206
-msgid "Connect Account"
-msgstr ""
-
-#: templates/admin/settings-page.php:210
-msgid "💡 See the \"User Guide\" page for OAuth2 setup instructions"
+msgid "Copy this value into Azure Portal (App registrations → Authentication → Web)"
 msgstr ""
 
 #: templates/admin/settings-page.php:211
+msgid "Reconnect"
+msgstr ""
+
+#: templates/admin/settings-page.php:211
+msgid "Connect Account"
+msgstr ""
+
+#: templates/admin/settings-page.php:215
+msgid "💡 See the \"User Guide\" page for OAuth2 setup instructions"
+msgstr ""
+
+#: templates/admin/settings-page.php:216
 msgid "You need to register an OAuth app in Google Cloud Console (Gmail) or Azure Portal (Microsoft 365), then configure the Redirect URI above to match."
 msgstr ""
 
-#: templates/admin/settings-page.php:218
+#: templates/admin/settings-page.php:223
 msgid "From Email"
 msgstr ""
 
-#: templates/admin/settings-page.php:220
+#: templates/admin/settings-page.php:225
 msgid "Leave empty to send as the SMTP Username or the connected account. Resend and Cloudflare need a verified domain; Google and Microsoft 365 need an address the connected account may send as (e.g. a Microsoft 365 shared mailbox with Send As permission)."
 msgstr ""
 
-#: templates/admin/settings-page.php:223
+#: templates/admin/settings-page.php:228
 msgid "From Name"
 msgstr ""
 
-#: templates/admin/settings-page.php:225
+#: templates/admin/settings-page.php:230
 msgid "Leave empty to use the site name."
 msgstr ""
 
-#: templates/admin/settings-page.php:233
+#: templates/admin/settings-page.php:238
 msgid "⚠️ Disable SSL Certificate Verification"
 msgstr ""
 
-#: templates/admin/settings-page.php:233
+#: templates/admin/settings-page.php:238
 msgid "(Development only)"
 msgstr ""
 
 #. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:237
+#: templates/admin/settings-page.php:242
 #, php-format
 msgid "Enable only when the server does not have a valid SSL certificate — %s"
 msgstr ""
 
 #. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:237
+#: templates/admin/settings-page.php:242
 msgid "Not recommended for Production"
 msgstr ""
 
-#: templates/admin/settings-page.php:244
+#: templates/admin/settings-page.php:249
 msgid "🛡️ Security Settings (Captcha)"
 msgstr ""
 
-#: templates/admin/settings-page.php:279
+#: templates/admin/settings-page.php:284
 msgid "Block form submissions when CAPTCHA is not configured (recommended)"
 msgstr ""
 
-#: templates/admin/settings-page.php:281
+#: templates/admin/settings-page.php:286
 msgid "When enabled, if the selected CAPTCHA service has no Secret Key, all form submissions will be rejected instead of allowed through — disable this only if you intentionally use forms without CAPTCHA."
 msgstr ""
 
-#: templates/admin/settings-page.php:286
+#: templates/admin/settings-page.php:291
 msgid "🌐 Trusted Proxies (for sites behind a Reverse Proxy / CDN)"
 msgstr ""
 
 #. translators: %1$s: CF-Connecting-IP header name wrapped in <code> tags, %2$s: X-Forwarded-For header name wrapped in <code> tags.
-#: templates/admin/settings-page.php:292
+#: templates/admin/settings-page.php:297
 #, php-format
 msgid "Enter the IPs or CIDRs of trusted proxies (e.g. Cloudflare, Nginx reverse proxy), one per line — the real user IP is only read from the %1$s / %2$s header when the request comes from these proxies."
 msgstr ""
 
-#: templates/admin/settings-page.php:293
+#: templates/admin/settings-page.php:298
 msgid "Leave empty = trust REMOTE_ADDR only (default, safest)"
 msgstr ""
 
-#: templates/admin/settings-page.php:302
+#: templates/admin/settings-page.php:307
 msgid "📨 Test Email Sending (SMTP Test)"
 msgstr ""
 
-#: templates/admin/settings-page.php:303
+#: templates/admin/settings-page.php:308
 msgid "Send a test email to the specified address to verify that your SMTP settings are correct."
 msgstr ""
 
-#: templates/admin/settings-page.php:306
+#: templates/admin/settings-page.php:311
 msgid "Recipient email:"
 msgstr ""
 

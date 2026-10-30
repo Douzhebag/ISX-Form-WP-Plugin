@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: InsightX Form 0.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ISX-Form-WP-"
 "Plugin\n"
-"POT-Creation-Date: 2026-10-30T03:37:16+00:00\n"
+"POT-Creation-Date: 2026-10-30T03:47:36+00:00\n"
 "PO-Revision-Date: 2026-07-23 00:00+0000\n"
 "Last-Translator: InsightX <dev@insightx.in.th>\n"
 "Language-Team: Thai\n"
@@ -49,7 +49,7 @@ msgstr "⏳ กำลังส่ง..."
 msgid "❌ Connection error"
 msgstr "❌ เกิดข้อผิดพลาดในการเชื่อมต่อ"
 
-#: src/Admin.php:96 templates/admin/settings-page.php:310
+#: src/Admin.php:96 templates/admin/settings-page.php:315
 msgid "📨 Send Test Email"
 msgstr "📨 ส่งอีเมลทดสอบ"
 
@@ -393,7 +393,7 @@ msgid "Note saved"
 msgstr "บันทึกโน้ตเรียบร้อย"
 
 #: src/Ajax/SettingsController.php:32 src/Ajax/SettingsController.php:72
-#: src/OAuth.php:140 src/OAuth.php:181 src/OAuth.php:254
+#: src/OAuth.php:161 src/OAuth.php:202 src/OAuth.php:275
 msgid "You do not have permission to perform this action."
 msgstr "ไม่มีสิทธิ์ดำเนินการ"
 
@@ -686,45 +686,45 @@ msgstr "ปิด"
 msgid "No fields found in this form"
 msgstr "ไม่พบฟิลด์ในแบบฟอร์มนี้"
 
-#: src/OAuth.php:145
+#: src/OAuth.php:166
 msgid "Invalid provider."
 msgstr "ผู้ให้บริการไม่ถูกต้อง"
 
-#: src/OAuth.php:149
+#: src/OAuth.php:170
 msgid "Please enter and save your Client ID / Client Secret before connecting."
 msgstr "กรุณากรอกและบันทึก Client ID / Client Secret ก่อนเชื่อมต่อ"
 
-#: src/OAuth.php:188
+#: src/OAuth.php:209
 msgid "State verification failed. Please try connecting again."
 msgstr "การยืนยัน state ไม่ถูกต้อง กรุณาลองเชื่อมต่อใหม่"
 
 #. translators: %s: error description returned by the OAuth provider.
-#: src/OAuth.php:194
+#: src/OAuth.php:215
 #, php-format
 msgid "The provider denied the request: %s"
 msgstr "ผู้ให้บริการปฏิเสธ: %s"
 
-#: src/OAuth.php:199
+#: src/OAuth.php:220
 msgid "Authorization code not received."
 msgstr "ไม่ได้รับ authorization code"
 
 #. translators: %s: connection error message.
-#: src/OAuth.php:216
+#: src/OAuth.php:237
 #, php-format
 msgid "Could not connect to the token endpoint: %s"
 msgstr "เชื่อมต่อ token endpoint ไม่ได้: %s"
 
-#: src/OAuth.php:221
+#: src/OAuth.php:242
 msgid "Refresh token not received."
 msgstr "ไม่ได้รับ refresh token"
 
 #. translators: %s: error message returned by the OAuth provider.
-#: src/OAuth.php:224
+#: src/OAuth.php:245
 #, php-format
 msgid "Token exchange failed: %s"
 msgstr "แลก token ไม่สำเร็จ: %s"
 
-#: src/OAuth.php:233
+#: src/OAuth.php:254
 msgid ""
 "Encryption failed; the connection was not saved. Please check the server's "
 "OpenSSL."
@@ -2101,26 +2101,27 @@ msgstr ""
 "สถานศึกษาได้ทุก tenant"
 
 #: templates/admin/settings-page.php:201
-msgid ""
-"Copy this value into Google Cloud Console or Azure Portal (App registrations "
-"→ Authentication → Web)"
-msgstr ""
-"คัดลอกค่านี้ไปใส่ใน Google Cloud Console หรือ Azure Portal (App registrations → "
-"Authentication → Web)"
+msgid "Copy this value into Google Cloud Console"
+msgstr "คัดลอกค่านี้ไปใส่ใน Google Cloud Console"
 
 #: templates/admin/settings-page.php:206
+msgid ""
+"Copy this value into Azure Portal (App registrations → Authentication → Web)"
+msgstr "คัดลอกค่านี้ไปใส่ใน Azure Portal (App registrations → Authentication → Web)"
+
+#: templates/admin/settings-page.php:211
 msgid "Reconnect"
 msgstr "เชื่อมต่อใหม่"
 
-#: templates/admin/settings-page.php:206
+#: templates/admin/settings-page.php:211
 msgid "Connect Account"
 msgstr "เชื่อมต่อบัญชี"
 
-#: templates/admin/settings-page.php:210
+#: templates/admin/settings-page.php:215
 msgid "💡 See the \"User Guide\" page for OAuth2 setup instructions"
 msgstr "💡 ดูวิธีตั้งค่า OAuth2 ได้ที่หน้า \"คู่มือการใช้งาน\""
 
-#: templates/admin/settings-page.php:211
+#: templates/admin/settings-page.php:216
 msgid ""
 "You need to register an OAuth app in Google Cloud Console (Gmail) or Azure "
 "Portal (Microsoft 365), then configure the Redirect URI above to match."
@@ -2128,11 +2129,11 @@ msgstr ""
 "ต้องลงทะเบียน OAuth App ที่ Google Cloud Console (Gmail) หรือ Azure Portal "
 "(Microsoft 365) แล้วนำ Redirect URI ด้านบนไปตั้งค่าให้ตรงกัน"
 
-#: templates/admin/settings-page.php:218
+#: templates/admin/settings-page.php:223
 msgid "From Email"
 msgstr "อีเมลผู้ส่ง (From Email)"
 
-#: templates/admin/settings-page.php:220
+#: templates/admin/settings-page.php:225
 msgid ""
 "Leave empty to send as the SMTP Username or the connected account. Resend "
 "and Cloudflare need a verified domain; Google and Microsoft 365 need an "
@@ -2144,42 +2145,42 @@ msgstr ""
 "ต้องเป็นอีเมลที่บัญชีที่เชื่อมไว้มีสิทธิ์ส่งในนามได้ (เช่น shared mailbox ของ Microsoft 365 "
 "ที่ให้สิทธิ์ Send As)"
 
-#: templates/admin/settings-page.php:223
+#: templates/admin/settings-page.php:228
 msgid "From Name"
 msgstr "ชื่อผู้ส่ง (From Name)"
 
-#: templates/admin/settings-page.php:225
+#: templates/admin/settings-page.php:230
 msgid "Leave empty to use the site name."
 msgstr "เว้นว่างไว้จะใช้ชื่อเว็บไซต์"
 
-#: templates/admin/settings-page.php:233
+#: templates/admin/settings-page.php:238
 msgid "⚠️ Disable SSL Certificate Verification"
 msgstr "⚠️ ปิดการตรวจสอบ SSL Certificate"
 
-#: templates/admin/settings-page.php:233
+#: templates/admin/settings-page.php:238
 msgid "(Development only)"
 msgstr "(สำหรับ Development เท่านั้น)"
 
 #. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:237
+#: templates/admin/settings-page.php:242
 #, php-format
 msgid "Enable only when the server does not have a valid SSL certificate — %s"
 msgstr "เปิดใช้เฉพาะเมื่อเซิร์ฟเวอร์ไม่มี SSL certificate ที่ถูกต้อง — %s"
 
 #. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:237
+#: templates/admin/settings-page.php:242
 msgid "Not recommended for Production"
 msgstr "ไม่แนะนำสำหรับ Production"
 
-#: templates/admin/settings-page.php:244
+#: templates/admin/settings-page.php:249
 msgid "🛡️ Security Settings (Captcha)"
 msgstr "🛡️ ตั้งค่าระบบความปลอดภัย (Captcha)"
 
-#: templates/admin/settings-page.php:279
+#: templates/admin/settings-page.php:284
 msgid "Block form submissions when CAPTCHA is not configured (recommended)"
 msgstr "บล็อกการส่งฟอร์มเมื่อยังไม่ได้ตั้งค่า CAPTCHA (แนะนำ)"
 
-#: templates/admin/settings-page.php:281
+#: templates/admin/settings-page.php:286
 msgid ""
 "When enabled, if the selected CAPTCHA service has no Secret Key, all form "
 "submissions will be rejected instead of allowed through — disable this only "
@@ -2188,12 +2189,12 @@ msgstr ""
 "เมื่อเปิดไว้ หากบริการ CAPTCHA ที่เลือกยังไม่มี Secret Key "
 "ระบบจะปฏิเสธการส่งฟอร์มทั้งหมดแทนที่จะปล่อยผ่าน — ปิดเฉพาะเมื่อตั้งใจใช้ฟอร์มโดยไม่มี CAPTCHA"
 
-#: templates/admin/settings-page.php:286
+#: templates/admin/settings-page.php:291
 msgid "🌐 Trusted Proxies (for sites behind a Reverse Proxy / CDN)"
 msgstr "🌐 Trusted Proxies (สำหรับเว็บหลัง Reverse Proxy / CDN)"
 
 #. translators: %1$s: CF-Connecting-IP header name wrapped in <code> tags, %2$s: X-Forwarded-For header name wrapped in <code> tags.
-#: templates/admin/settings-page.php:292
+#: templates/admin/settings-page.php:297
 #, php-format
 msgid ""
 "Enter the IPs or CIDRs of trusted proxies (e.g. Cloudflare, Nginx reverse "
@@ -2204,21 +2205,21 @@ msgstr ""
 "บรรทัดละ 1 ค่า — ระบบจะอ่าน IP ผู้ใช้จริงจาก header %1$s / %2$s เฉพาะเมื่อ request "
 "มาจาก proxy เหล่านี้เท่านั้น"
 
-#: templates/admin/settings-page.php:293
+#: templates/admin/settings-page.php:298
 msgid "Leave empty = trust REMOTE_ADDR only (default, safest)"
 msgstr "เว้นว่าง = เชื่อ REMOTE_ADDR อย่างเดียว (ค่าเริ่มต้น ปลอดภัยสุด)"
 
-#: templates/admin/settings-page.php:302
+#: templates/admin/settings-page.php:307
 msgid "📨 Test Email Sending (SMTP Test)"
 msgstr "📨 ทดสอบส่งอีเมล (SMTP Test)"
 
-#: templates/admin/settings-page.php:303
+#: templates/admin/settings-page.php:308
 msgid ""
 "Send a test email to the specified address to verify that your SMTP settings "
 "are correct."
 msgstr "ทดสอบว่าการตั้งค่า SMTP ถูกต้องหรือไม่ โดยส่งอีเมลทดสอบไปยังอีเมลที่ระบุ"
 
-#: templates/admin/settings-page.php:306
+#: templates/admin/settings-page.php:311
 msgid "Recipient email:"
 msgstr "อีเมลปลายทาง:"
 
@@ -2423,9 +2424,6 @@ msgstr "กรุณากรอกข้อมูลในช่องที่
 #, php-format
 #~ msgid "Enter your Azure Tenant ID (Directory ID) or leave it as %s"
 #~ msgstr "ใส่ Tenant ID (Directory ID) ของ Azure หรือเว้นไว้เป็น %s"
-
-#~ msgid "Copy this value into Google Cloud Console"
-#~ msgstr "คัดลอกค่านี้ไปใส่ใน Google Cloud Console"
 
 #~ msgid "Save All Settings"
 #~ msgstr "บันทึกการตั้งค่าทั้งหมด"
