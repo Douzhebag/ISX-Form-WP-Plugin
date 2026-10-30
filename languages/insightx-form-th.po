@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: InsightX Form 0.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ISX-Form-WP-"
 "Plugin\n"
-"POT-Creation-Date: 2026-10-30T03:19:06+00:00\n"
+"POT-Creation-Date: 2026-10-30T03:37:16+00:00\n"
 "PO-Revision-Date: 2026-07-23 00:00+0000\n"
 "Last-Translator: InsightX <dev@insightx.in.th>\n"
 "Language-Team: Thai\n"
@@ -49,7 +49,7 @@ msgstr "⏳ กำลังส่ง..."
 msgid "❌ Connection error"
 msgstr "❌ เกิดข้อผิดพลาดในการเชื่อมต่อ"
 
-#: src/Admin.php:96 templates/admin/settings-page.php:306
+#: src/Admin.php:96 templates/admin/settings-page.php:310
 msgid "📨 Send Test Email"
 msgstr "📨 ส่งอีเมลทดสอบ"
 
@@ -608,12 +608,12 @@ msgstr "ข้อมูลทั้งหมด (JSON)"
 msgid "Date"
 msgstr "วันที่"
 
-#: src/Entries.php:272 templates/admin/docs-page.php:224
+#: src/Entries.php:272 templates/admin/docs-page.php:225
 msgctxt "table column header"
 msgid "Form"
 msgstr "ฟอร์ม"
 
-#: src/Entries.php:272 templates/admin/docs-page.php:232
+#: src/Entries.php:272 templates/admin/docs-page.php:233
 #: templates/admin/entries-page.php:149
 msgid "Status"
 msgstr "สถานะ"
@@ -1012,7 +1012,7 @@ msgstr "ประเภทฟิลด์ที่รองรับ"
 msgid "Type"
 msgstr "ประเภท"
 
-#: templates/admin/docs-page.php:54 templates/admin/docs-page.php:223
+#: templates/admin/docs-page.php:54 templates/admin/docs-page.php:224
 msgid "Description"
 msgstr "คำอธิบาย"
 
@@ -1315,6 +1315,16 @@ msgstr ""
 
 #: templates/admin/docs-page.php:128
 msgid ""
+"💡 To send as another address such as <code>no-reply@</code>, create it as a "
+"<strong>shared mailbox</strong>, give the connected account <strong>Send as</"
+"strong> permission on it, then enter it in <strong>From Email</strong>"
+msgstr ""
+"💡 ถ้าต้องการส่งในนามอีเมลอื่น เช่น <code>no-reply@</code> ให้สร้างเป็น <strong>shared "
+"mailbox</strong> แล้วให้สิทธิ์ <strong>Send as</strong> กับบัญชีที่เชื่อมไว้ "
+"จากนั้นใส่อีเมลนั้นในช่อง <strong>From Email</strong>"
+
+#: templates/admin/docs-page.php:129
+msgid ""
 "⚠️ <strong>Authenticated SMTP</strong> must be enabled for the sending "
 "mailbox: Microsoft 365 admin center → Users → the user → Mail → Manage email "
 "apps"
@@ -1322,11 +1332,11 @@ msgstr ""
 "⚠️ ต้องเปิด <strong>Authenticated SMTP</strong> ให้ mailbox ที่ใช้ส่ง: Microsoft 365 "
 "admin center → Users → เลือก user → Mail → Manage email apps"
 
-#: templates/admin/docs-page.php:130
+#: templates/admin/docs-page.php:131
 msgid "⬛ Resend"
 msgstr "⬛ Resend"
 
-#: templates/admin/docs-page.php:131
+#: templates/admin/docs-page.php:132
 msgid ""
 "Sign up at <a href=\"https://resend.com\" target=\"_blank\">resend.com</a>, "
 "add your domain under <strong>Domains</strong> and add the DNS records it "
@@ -1336,7 +1346,7 @@ msgstr ""
 "เพิ่มโดเมนในเมนู <strong>Domains</strong> แล้วใส่ DNS record ตามที่บอกจนโดเมนขึ้นว่า "
 "<strong>Verified</strong>"
 
-#: templates/admin/docs-page.php:132
+#: templates/admin/docs-page.php:133
 msgid ""
 "Create an API key at <a href=\"https://resend.com/api-keys\" "
 "target=\"_blank\">resend.com/api-keys</a> (Sending access is enough)"
@@ -1344,7 +1354,7 @@ msgstr ""
 "สร้าง API key ที่ <a href=\"https://resend.com/api-keys\" "
 "target=\"_blank\">resend.com/api-keys</a> (สิทธิ์ Sending access ก็พอ)"
 
-#: templates/admin/docs-page.php:133
+#: templates/admin/docs-page.php:134
 msgid ""
 "Click the <strong>Resend</strong> card — Host, Port and Username are filled "
 "in for you — then paste the API key into <strong>Password</strong>"
@@ -1352,17 +1362,17 @@ msgstr ""
 "กดการ์ด <strong>Resend</strong> ระบบจะเติม Host, Port และ Username ให้ แล้ววาง "
 "API key ในช่อง <strong>Password</strong>"
 
-#: templates/admin/docs-page.php:135 templates/admin/docs-page.php:148
-#: templates/admin/docs-page.php:160
+#: templates/admin/docs-page.php:136 templates/admin/docs-page.php:149
+#: templates/admin/docs-page.php:161
 msgid "Field"
 msgstr "ช่อง"
 
-#: templates/admin/docs-page.php:135 templates/admin/docs-page.php:148
-#: templates/admin/docs-page.php:160
+#: templates/admin/docs-page.php:136 templates/admin/docs-page.php:149
+#: templates/admin/docs-page.php:161
 msgid "Value"
 msgstr "ค่า"
 
-#: templates/admin/docs-page.php:139
+#: templates/admin/docs-page.php:140
 msgid ""
 "API key from <a href=\"https://resend.com/api-keys\" "
 "target=\"_blank\">resend.com/api-keys</a>"
@@ -1370,7 +1380,7 @@ msgstr ""
 "API key จาก <a href=\"https://resend.com/api-keys\" "
 "target=\"_blank\">resend.com/api-keys</a>"
 
-#: templates/admin/docs-page.php:141
+#: templates/admin/docs-page.php:142
 msgid ""
 "⚠️ The From Email domain must be verified in Resend (Domains) before emails "
 "can be sent"
@@ -1378,11 +1388,11 @@ msgstr ""
 "⚠️ โดเมนของ From Email ต้อง verify ในเมนู Domains ของ Resend ก่อน "
 "ไม่งั้นจะส่งอีเมลไม่ได้"
 
-#: templates/admin/docs-page.php:143
+#: templates/admin/docs-page.php:144
 msgid "🟧 Cloudflare"
 msgstr "🟧 Cloudflare"
 
-#: templates/admin/docs-page.php:144
+#: templates/admin/docs-page.php:145
 msgid ""
 "In the <a href=\"https://dash.cloudflare.com\" target=\"_blank\">Cloudflare "
 "Dashboard</a>, go to <strong>Email Service → Email Sending</strong> and "
@@ -1392,7 +1402,7 @@ msgstr ""
 "Dashboard</a> ไปที่ <strong>Email Service → Email Sending</strong> "
 "แล้วเพิ่มโดเมนของคุณ"
 
-#: templates/admin/docs-page.php:145
+#: templates/admin/docs-page.php:146
 msgid ""
 "Create an API token (<strong>My Profile → API Tokens</strong>) with the "
 "<code>Email Sending: Edit</code> permission"
@@ -1400,7 +1410,7 @@ msgstr ""
 "สร้าง API token (<strong>My Profile → API Tokens</strong>) ที่มีสิทธิ์ <code>Email "
 "Sending: Edit</code>"
 
-#: templates/admin/docs-page.php:146
+#: templates/admin/docs-page.php:147
 msgid ""
 "Click the <strong>Cloudflare</strong> card — Host, Port and Username are "
 "filled in for you — then paste the API token into <strong>Password</strong>"
@@ -1408,11 +1418,11 @@ msgstr ""
 "กดการ์ด <strong>Cloudflare</strong> ระบบจะเติม Host, Port และ Username ให้ "
 "แล้ววาง API token ในช่อง <strong>Password</strong>"
 
-#: templates/admin/docs-page.php:152
+#: templates/admin/docs-page.php:153
 msgid "API token with the <code>Email Sending: Edit</code> permission"
 msgstr "API token ที่มีสิทธิ์ <code>Email Sending: Edit</code>"
 
-#: templates/admin/docs-page.php:154
+#: templates/admin/docs-page.php:155
 msgid ""
 "⚠️ Cloudflare only accepts port 465 (SSL). The From Email domain must be "
 "onboarded in Email Sending, and each email can go to at most 50 recipients"
@@ -1420,11 +1430,11 @@ msgstr ""
 "⚠️ Cloudflare รับแค่ port 465 (SSL) โดเมนของ From Email ต้องเพิ่มไว้ใน Email "
 "Sending แล้ว และอีเมลแต่ละฉบับส่งได้ไม่เกิน 50 ผู้รับ"
 
-#: templates/admin/docs-page.php:156
+#: templates/admin/docs-page.php:157
 msgid "⚙️ Custom (any SMTP server)"
 msgstr "⚙️ กำหนดเอง (SMTP เจ้าอื่น)"
 
-#: templates/admin/docs-page.php:157
+#: templates/admin/docs-page.php:158
 msgid ""
 "For any other service (Gmail with an App Password, your hosting mail server, "
 "etc.), click <strong>Custom</strong> and enter the Host, Port, Username and "
@@ -1435,19 +1445,19 @@ msgstr ""
 "<strong>กำหนดเอง</strong> แล้วกรอก Host, Port, Username และ Password "
 "ตามที่ผู้ให้บริการกำหนด port 465 ใช้ SSL ส่วน port อื่นใช้ TLS ให้อัตโนมัติ"
 
-#: templates/admin/docs-page.php:158
+#: templates/admin/docs-page.php:159
 msgid "Example Values for Gmail"
 msgstr "ค่าตัวอย่างสำหรับ Gmail"
 
-#: templates/admin/docs-page.php:163
+#: templates/admin/docs-page.php:164
 msgid "Your Gmail address"
 msgstr "อีเมล Gmail ของคุณ"
 
-#: templates/admin/docs-page.php:164
+#: templates/admin/docs-page.php:165
 msgid "16-character App Password"
 msgstr "App Password 16 หลัก"
 
-#: templates/admin/docs-page.php:166
+#: templates/admin/docs-page.php:167
 msgid ""
 "⚠️ You must enable 2-Step Verification in your Google Account and create an "
 "App Password before it will work"
@@ -1455,23 +1465,23 @@ msgstr ""
 "⚠️ ต้องเปิด 2-Step Verification ใน Google Account แล้วสร้าง App Password "
 "จึงจะใช้งานได้"
 
-#: templates/admin/docs-page.php:171
+#: templates/admin/docs-page.php:172
 msgid "🛡️ Captcha Settings"
 msgstr "🛡️ ตั้งค่า Captcha"
 
-#: templates/admin/docs-page.php:173
+#: templates/admin/docs-page.php:174
 msgid "Two services are supported:"
 msgstr "รองรับ 2 บริการ:"
 
-#: templates/admin/docs-page.php:175
+#: templates/admin/docs-page.php:176
 msgid "Service"
 msgstr "บริการ"
 
-#: templates/admin/docs-page.php:175
+#: templates/admin/docs-page.php:176
 msgid "How to Get a Key"
 msgstr "วิธีขอ Key"
 
-#: templates/admin/docs-page.php:176
+#: templates/admin/docs-page.php:177
 msgid ""
 "Create one at <a href=\"https://www.google.com/recaptcha/admin\" "
 "target=\"_blank\">Google reCAPTCHA Admin</a>"
@@ -1479,7 +1489,7 @@ msgstr ""
 "สร้างที่ <a href=\"https://www.google.com/recaptcha/admin\" "
 "target=\"_blank\">Google reCAPTCHA Admin</a>"
 
-#: templates/admin/docs-page.php:177
+#: templates/admin/docs-page.php:178
 msgid ""
 "Create one at <a href=\"https://dash.cloudflare.com/?to=/:account/"
 "turnstile\" target=\"_blank\">Cloudflare Dashboard</a>"
@@ -1487,18 +1497,18 @@ msgstr ""
 "สร้างที่ <a href=\"https://dash.cloudflare.com/?to=/:account/turnstile\" "
 "target=\"_blank\">Cloudflare Dashboard</a>"
 
-#: templates/admin/docs-page.php:179
+#: templates/admin/docs-page.php:180
 msgid ""
 "Select a service from the dropdown → enter the Site Key + Secret Key → save"
 msgstr "เลือกบริการจาก Dropdown → กรอก Site Key + Secret Key → บันทึก"
 
-#: templates/admin/docs-page.php:180
+#: templates/admin/docs-page.php:181
 msgid ""
 "💡 The system automatically verifies the token on both the frontend and the "
 "server side"
 msgstr "💡 ระบบจะตรวจสอบ Token ทั้งฝั่ง Frontend และ Server-side อัตโนมัติ"
 
-#: templates/admin/docs-page.php:181
+#: templates/admin/docs-page.php:182
 msgid ""
 "⚠️ Keep <strong>\"Block form submissions when CAPTCHA is not configured\"</"
 "strong> enabled — if the Secret Key is missing, submissions are rejected "
@@ -1507,11 +1517,11 @@ msgstr ""
 "⚠️ ควรเปิด <strong>\"บล็อกการส่งฟอร์มเมื่อยังไม่ได้ตั้งค่า CAPTCHA\"</strong> ไว้ "
 "ถ้ายังไม่ได้ใส่ Secret Key ระบบจะปฏิเสธการส่งฟอร์ม แทนที่จะปล่อยให้บอทส่งผ่านได้"
 
-#: templates/admin/docs-page.php:186
+#: templates/admin/docs-page.php:187
 msgid "🌐 Trusted Proxies (Cloudflare / CDN)"
 msgstr "🌐 Trusted Proxies (Cloudflare / CDN)"
 
-#: templates/admin/docs-page.php:188
+#: templates/admin/docs-page.php:189
 msgid ""
 "If your site sits behind Cloudflare, a CDN or a reverse proxy, every visitor "
 "appears to come from the proxy's IP, so the per-IP rate limit would block "
@@ -1520,7 +1530,7 @@ msgstr ""
 "ถ้าเว็บอยู่หลัง Cloudflare, CDN หรือ reverse proxy ผู้เข้าชมทุกคนจะดูเหมือนมาจาก IP ของ "
 "proxy ตัวจำกัดจำนวนการส่งต่อ IP จึงบล็อกทุกคนพร้อมกัน"
 
-#: templates/admin/docs-page.php:189
+#: templates/admin/docs-page.php:190
 msgid ""
 "Enter the proxy IP ranges (one CIDR per line) under <strong>Trusted Proxies</"
 "strong> on the settings page. The real visitor IP is then read from the "
@@ -1531,7 +1541,7 @@ msgstr ""
 "ของหน้าตั้งค่าระบบ ระบบจะอ่าน IP จริงของผู้เข้าชมจาก header <code>CF-Connecting-IP</"
 "code> / <code>X-Forwarded-For</code> เฉพาะ request ที่มาจากช่วง IP เหล่านั้น"
 
-#: templates/admin/docs-page.php:190
+#: templates/admin/docs-page.php:191
 msgid ""
 "💡 Cloudflare lists its IP ranges at <a href=\"https://www.cloudflare.com/"
 "ips/\" target=\"_blank\">cloudflare.com/ips</a>. Leave the box empty if the "
@@ -1540,160 +1550,160 @@ msgstr ""
 "💡 ช่วง IP ของ Cloudflare ดูได้ที่ <a href=\"https://www.cloudflare.com/ips/\" "
 "target=\"_blank\">cloudflare.com/ips</a> ถ้าเว็บไม่ได้อยู่หลัง proxy ให้เว้นว่างไว้"
 
-#: templates/admin/docs-page.php:195
+#: templates/admin/docs-page.php:196
 msgid "✉️ Custom Email Template"
 msgstr "✉️ Custom Email Template"
 
-#: templates/admin/docs-page.php:197
+#: templates/admin/docs-page.php:198
 msgid ""
 "Write your own subject and body for the customer auto-reply email in the "
 "form editor"
 msgstr "เขียนหัวเรื่องและเนื้อหาอีเมลตอบกลับลูกค้าเองได้ในหน้าแก้ไขฟอร์ม"
 
-#: templates/admin/docs-page.php:199
+#: templates/admin/docs-page.php:200
 msgid "How to Use"
 msgstr "วิธีใช้"
 
-#: templates/admin/docs-page.php:200
+#: templates/admin/docs-page.php:201
 msgid "Edit a form → choose <strong>\"✏️ Custom (Custom Template)\"</strong>"
 msgstr "แก้ไขฟอร์ม → เลือก <strong>\"✏️ กำหนดเอง (Custom Template)\"</strong>"
 
-#: templates/admin/docs-page.php:201
+#: templates/admin/docs-page.php:202
 msgid "Fill in the <strong>email subject</strong> and <strong>body</strong>"
 msgstr ""
 "กรอก <strong>หัวข้ออีเมล (Subject)</strong> และ <strong>เนื้อหา (Body)</strong>"
 
-#: templates/admin/docs-page.php:202
+#: templates/admin/docs-page.php:203
 msgid ""
 "Use <strong>Merge Tags</strong> to insert data automatically (click a tag to "
 "insert it)"
 msgstr "ใช้ <strong>Merge Tags</strong> เพื่อแทรกข้อมูลอัตโนมัติ (คลิกที่ tag เพื่อแทรก)"
 
-#: templates/admin/docs-page.php:204
+#: templates/admin/docs-page.php:205
 msgid "Supported Merge Tags"
 msgstr "Merge Tags ที่รองรับ"
 
-#: templates/admin/docs-page.php:206
+#: templates/admin/docs-page.php:207
 msgid "Output"
 msgstr "ผลลัพธ์"
 
-#: templates/admin/docs-page.php:207
+#: templates/admin/docs-page.php:208
 msgid "Site name"
 msgstr "ชื่อเว็บไซต์"
 
-#: templates/admin/docs-page.php:208
+#: templates/admin/docs-page.php:209
 msgid "Form title"
 msgstr "ชื่อฟอร์ม"
 
-#: templates/admin/docs-page.php:209
+#: templates/admin/docs-page.php:210
 msgid "HTML table of all submitted data"
 msgstr "ตาราง HTML ของข้อมูลทั้งหมด"
 
-#: templates/admin/docs-page.php:210
+#: templates/admin/docs-page.php:211
 msgid "Value of the specified field, e.g."
 msgstr "ค่าของฟิลด์ที่ระบุ เช่น"
 
-#: templates/admin/docs-page.php:212
+#: templates/admin/docs-page.php:213
 msgid ""
 "💡 The system automatically wraps your content in a nice layout (header + "
 "footer)"
 msgstr "💡 ระบบจะครอบเนื้อหาด้วย layout สวยงาม (header + footer) อัตโนมัติ"
 
-#: templates/admin/docs-page.php:217
+#: templates/admin/docs-page.php:218
 msgid "📥 Managing Entries"
 msgstr "📥 จัดการรายการข้อมูล (Entries)"
 
-#: templates/admin/docs-page.php:219
+#: templates/admin/docs-page.php:220
 msgid "Go to <strong>InsightX Form → 📥 Entries</strong>"
 msgstr "ไปที่ <strong>InsightX Form → 📥 รายการข้อมูล</strong>"
 
-#: templates/admin/docs-page.php:221
+#: templates/admin/docs-page.php:222
 msgid "Filters"
 msgstr "ตัวกรอง"
 
-#: templates/admin/docs-page.php:223
+#: templates/admin/docs-page.php:224
 msgid "Filter"
 msgstr "ตัวกรอง"
 
-#: templates/admin/docs-page.php:224
+#: templates/admin/docs-page.php:225
 msgid "View only the selected form (data shown in separate columns)"
 msgstr "เลือกดูเฉพาะฟอร์มที่ต้องการ (แสดงข้อมูลแยกคอลัมน์)"
 
-#: templates/admin/docs-page.php:225
+#: templates/admin/docs-page.php:226
 msgid "Date range"
 msgstr "ช่วงวันที่"
 
-#: templates/admin/docs-page.php:225
+#: templates/admin/docs-page.php:226
 msgid "Filter by submission date (from - to)"
 msgstr "กรองตามวันที่ส่ง (ตั้งแต่ - ถึง)"
 
-#: templates/admin/docs-page.php:226 templates/admin/entries-page.php:99
+#: templates/admin/docs-page.php:227 templates/admin/entries-page.php:99
 msgid "Search"
 msgstr "ค้นหา"
 
-#: templates/admin/docs-page.php:226
+#: templates/admin/docs-page.php:227
 msgid "Type a name / phone / email / IP"
 msgstr "พิมพ์ชื่อ / เบอร์ / อีเมล / IP"
 
-#: templates/admin/docs-page.php:227
+#: templates/admin/docs-page.php:228
 msgid "Status bar"
 msgstr "แถบสถานะ"
 
-#: templates/admin/docs-page.php:227
+#: templates/admin/docs-page.php:228
 msgid "Click the bar at the top to filter by status"
 msgstr "คลิกแถบด้านบนเพื่อกรองตามสถานะ"
 
-#: templates/admin/docs-page.php:230
+#: templates/admin/docs-page.php:231
 msgid "Status System"
 msgstr "ระบบสถานะ"
 
-#: templates/admin/docs-page.php:232
+#: templates/admin/docs-page.php:233
 msgid "Meaning"
 msgstr "ความหมาย"
 
-#: templates/admin/docs-page.php:233
+#: templates/admin/docs-page.php:234
 msgid "🔵 New"
 msgstr "🔵 ใหม่"
 
-#: templates/admin/docs-page.php:233
+#: templates/admin/docs-page.php:234
 msgid "New submission, not yet handled"
 msgstr "ข้อมูลเข้ามาใหม่ ยังไม่ได้ดำเนินการ"
 
-#: templates/admin/docs-page.php:234
+#: templates/admin/docs-page.php:235
 msgid "🟡 In Progress"
 msgstr "🟡 กำลังดำเนินการ"
 
-#: templates/admin/docs-page.php:234
+#: templates/admin/docs-page.php:235
 msgid "Being contacted / handled"
 msgstr "อยู่ระหว่างติดต่อ/จัดการ"
 
-#: templates/admin/docs-page.php:235
+#: templates/admin/docs-page.php:236
 msgid "✅ Completed"
 msgstr "✅ เสร็จสิ้น"
 
-#: templates/admin/docs-page.php:235
+#: templates/admin/docs-page.php:236
 msgid "Handled completely"
 msgstr "จัดการเสร็จเรียบร้อยแล้ว"
 
-#: templates/admin/docs-page.php:236
+#: templates/admin/docs-page.php:237
 msgid "🔴 Trash"
 msgstr "🔴 ขยะ"
 
-#: templates/admin/docs-page.php:236
+#: templates/admin/docs-page.php:237
 msgid "Spam or irrelevant data"
 msgstr "Spam หรือข้อมูลไม่เกี่ยวข้อง"
 
-#: templates/admin/docs-page.php:238
+#: templates/admin/docs-page.php:239
 msgid ""
 "Change the status from the dropdown in each row, or select multiple entries "
 "and use Bulk Actions"
 msgstr "เปลี่ยนสถานะจาก Dropdown ในแต่ละแถว หรือเลือกหลายรายการแล้วใช้ Bulk Actions"
 
-#: templates/admin/docs-page.php:240
+#: templates/admin/docs-page.php:241
 msgid "Admin Notes"
 msgstr "โน้ตแอดมิน"
 
-#: templates/admin/docs-page.php:241
+#: templates/admin/docs-page.php:242
 msgid ""
 "Click <strong>\"✏️ + Add Note\"</strong> to save a message, e.g. \"Called the "
 "customer\" — saved instantly without reloading"
@@ -1701,27 +1711,27 @@ msgstr ""
 "คลิก <strong>\"✏️ + เพิ่มโน้ต\"</strong> เพื่อบันทึกข้อความ เช่น \"โทรหาลูกค้าแล้ว\" — "
 "บันทึกทันทีไม่ต้อง reload"
 
-#: templates/admin/docs-page.php:246
+#: templates/admin/docs-page.php:247
 msgid "📊 CSV Export & Dashboard"
 msgstr "📊 ส่งออก CSV & Dashboard"
 
-#: templates/admin/docs-page.php:248
+#: templates/admin/docs-page.php:249
 msgid "CSV Export"
 msgstr "ส่งออก CSV"
 
-#: templates/admin/docs-page.php:249
+#: templates/admin/docs-page.php:250
 msgid "Set the filters you want (form / date / status)"
 msgstr "ตั้งค่าตัวกรองที่ต้องการ (ฟอร์ม / วันที่ / สถานะ)"
 
-#: templates/admin/docs-page.php:250
+#: templates/admin/docs-page.php:251
 msgid "Click the <strong>\"📊 Export CSV\"</strong> button at the top right"
 msgstr "กดปุ่ม <strong>\"📊 ส่งออก CSV\"</strong> ด้านบนขวา"
 
-#: templates/admin/docs-page.php:251
+#: templates/admin/docs-page.php:252
 msgid "The CSV file downloads automatically (Thai language supported)"
 msgstr "ไฟล์ CSV ดาวน์โหลดอัตโนมัติ (รองรับภาษาไทย)"
 
-#: templates/admin/docs-page.php:254
+#: templates/admin/docs-page.php:255
 msgid ""
 "When you open <strong>WP-Admin → Dashboard</strong> you will see the \"📊 "
 "InsightX Form\" widget showing:"
@@ -1729,69 +1739,69 @@ msgstr ""
 "เมื่อเข้า <strong>WP-Admin → Dashboard</strong> จะเห็น Widget \"📊 InsightX "
 "Form\" แสดง:"
 
-#: templates/admin/docs-page.php:256
+#: templates/admin/docs-page.php:257
 msgid "Statistics: Today / 7 days / 30 days / All time"
 msgstr "สถิติ: วันนี้ / 7 วัน / 30 วัน / ทั้งหมด"
 
-#: templates/admin/docs-page.php:257
+#: templates/admin/docs-page.php:258
 msgid "Bar chart of status proportions"
 msgstr "กราฟแท่งสัดส่วนสถานะ"
 
-#: templates/admin/docs-page.php:258
+#: templates/admin/docs-page.php:259
 msgid "The 5 latest entries with a \"View all\" link"
 msgstr "5 รายการล่าสุดพร้อมลิงก์ \"ดูทั้งหมด\""
 
-#: templates/admin/docs-page.php:264
+#: templates/admin/docs-page.php:265
 msgid "📈 Analytics"
 msgstr "📈 Analytics"
 
-#: templates/admin/docs-page.php:266
+#: templates/admin/docs-page.php:267
 msgid "Go to <strong>InsightX Form → 📊 Analytics</strong>"
 msgstr "ไปที่ <strong>InsightX Form → 📊 Analytics</strong>"
 
-#: templates/admin/docs-page.php:268
+#: templates/admin/docs-page.php:269
 msgid ""
 "Stat cards: all entries, entries in the selected range (compared with the "
 "previous period), today and average per day"
 msgstr "การ์ดตัวเลข: ทั้งหมด, ช่วงที่เลือก (เทียบกับช่วงก่อนหน้า), วันนี้ และเฉลี่ยต่อวัน"
 
-#: templates/admin/docs-page.php:269
+#: templates/admin/docs-page.php:270
 msgid "Daily submissions line chart"
 msgstr "กราฟเส้นจำนวนการส่งรายวัน"
 
-#: templates/admin/docs-page.php:270
+#: templates/admin/docs-page.php:271
 msgid "Status breakdown (doughnut chart)"
 msgstr "สัดส่วนสถานะ (กราฟโดนัท)"
 
-#: templates/admin/docs-page.php:271
+#: templates/admin/docs-page.php:272
 msgid "Top forms and the latest entries"
 msgstr "ฟอร์มยอดนิยม และรายการล่าสุด"
 
-#: templates/admin/docs-page.php:273
+#: templates/admin/docs-page.php:274
 msgid ""
 "Choose a range at the top right: 7 / 30 / 90 days, 1 year or a custom date "
 "range"
 msgstr "เลือกช่วงเวลาได้ที่มุมขวาบน: 7 / 30 / 90 วัน, 1 ปี หรือกำหนดวันที่เอง"
 
-#: templates/admin/docs-page.php:278
+#: templates/admin/docs-page.php:279
 msgid "❓ Frequently Asked Questions (FAQ)"
 msgstr "❓ คำถามที่พบบ่อย (FAQ)"
 
-#: templates/admin/docs-page.php:280
+#: templates/admin/docs-page.php:281
 msgid "The form is not sending email — what should I do?"
 msgstr "ฟอร์มไม่ส่งอีเมล ทำอย่างไร?"
 
-#: templates/admin/docs-page.php:281
+#: templates/admin/docs-page.php:282
 msgid ""
 "Check your SMTP settings → use the \"Send Test Email\" button to see the "
 "error message"
 msgstr "ตรวจสอบการตั้งค่า SMTP → ใช้ปุ่ม \"ทดสอบส่งอีเมล\" เพื่อดู Error Message"
 
-#: templates/admin/docs-page.php:283
+#: templates/admin/docs-page.php:284
 msgid "Which email provider should I choose?"
 msgstr "ควรเลือกผู้ให้บริการอีเมลเจ้าไหน?"
 
-#: templates/admin/docs-page.php:284
+#: templates/admin/docs-page.php:285
 msgid ""
 "Google Workspace → Google. Microsoft 365 → Microsoft 365. Your own domain "
 "without a mail server → Resend or Cloudflare. A mail server from your host "
@@ -1801,39 +1811,39 @@ msgstr ""
 "มีโดเมนแต่ไม่มีเมลเซิร์ฟเวอร์ → Resend หรือ Cloudflare / "
 "มีเมลเซิร์ฟเวอร์ของโฮสติ้งหรือเจ้าอื่น → กำหนดเอง"
 
-#: templates/admin/docs-page.php:286
+#: templates/admin/docs-page.php:287
 msgid "Customer entered an email but did not receive the confirmation email?"
 msgstr "ลูกค้ากรอก Email แล้วไม่ได้รับอีเมลยืนยัน?"
 
-#: templates/admin/docs-page.php:287
+#: templates/admin/docs-page.php:288
 msgid ""
 "Make sure the form has an <code>Email</code> field — the system "
 "automatically sends the confirmation email to that address"
 msgstr ""
 "ตรวจสอบว่ามีฟิลด์ประเภท <code>Email</code> ในฟอร์ม — ระบบจะส่งอีเมลไปยังที่อยู่นั้นอัตโนมัติ"
 
-#: templates/admin/docs-page.php:289
+#: templates/admin/docs-page.php:290
 msgid "Can I use the same form on multiple pages?"
 msgstr "ใช้ฟอร์มเดียวกันหลายหน้าได้ไหม?"
 
-#: templates/admin/docs-page.php:290
+#: templates/admin/docs-page.php:291
 msgid "Yes — copy the same shortcode and paste it on as many pages as you like"
 msgstr "ได้ คัดลอก Shortcode เดียวกันไปวางได้ไม่จำกัด"
 
-#: templates/admin/docs-page.php:292
+#: templates/admin/docs-page.php:293
 msgid "Will my data be lost after updating the plugin?"
 msgstr "อัพเดตปลั๊กอินแล้วข้อมูลเก่าหายไหม?"
 
-#: templates/admin/docs-page.php:293
+#: templates/admin/docs-page.php:294
 msgid ""
 "No — data is stored in the WordPress database, separate from the plugin files"
 msgstr "ไม่หาย ข้อมูลเก็บในฐานข้อมูล WordPress แยกจากไฟล์ปลั๊กอิน"
 
-#: templates/admin/docs-page.php:295
+#: templates/admin/docs-page.php:296
 msgid "Is the SMTP password secure?"
 msgstr "Password SMTP ปลอดภัยไหม?"
 
-#: templates/admin/docs-page.php:296
+#: templates/admin/docs-page.php:297
 msgid ""
 "Yes — the password is encrypted with AES-256-CBC using WordPress "
 "authentication salts as the key before being saved to the database"
@@ -1841,11 +1851,11 @@ msgstr ""
 "ปลอดภัย — Password ถูกเข้ารหัสด้วย AES-256-CBC ก่อนบันทึกลงฐานข้อมูล โดยใช้ WordPress "
 "authentication salts เป็น key"
 
-#: templates/admin/docs-page.php:298
+#: templates/admin/docs-page.php:299
 msgid "Will data be deleted when the plugin is uninstalled?"
 msgstr "Uninstall ปลั๊กอินแล้วข้อมูลจะหายไหม?"
 
-#: templates/admin/docs-page.php:299
+#: templates/admin/docs-page.php:300
 msgid ""
 "Yes — uninstalling the plugin deletes all data tables and settings. If you "
 "want to keep your data, export a CSV first"
@@ -2030,37 +2040,17 @@ msgstr "วิธียืนยันตัวตน"
 msgid "App Password / Password (Basic Auth)"
 msgstr "App Password / รหัสผ่าน (Basic Auth)"
 
-#: templates/admin/settings-page.php:138
-msgid "From Email"
-msgstr "อีเมลผู้ส่ง (From Email)"
-
-#: templates/admin/settings-page.php:140
-msgid ""
-"Must be on a domain your provider has verified (required for Resend and "
-"Cloudflare). Leave empty to use the Username if it is an email address."
-msgstr ""
-"ต้องเป็นอีเมลบนโดเมนที่ผู้ให้บริการ verify แล้ว (จำเป็นสำหรับ Resend และ Cloudflare) "
-"เว้นว่างไว้จะใช้ Username แทนถ้าเป็นอีเมล"
-
-#: templates/admin/settings-page.php:143
-msgid "From Name"
-msgstr "ชื่อผู้ส่ง (From Name)"
-
-#: templates/admin/settings-page.php:145
-msgid "Leave empty to use the site name."
-msgstr "เว้นว่างไว้จะใช้ชื่อเว็บไซต์"
-
-#: templates/admin/settings-page.php:154
+#: templates/admin/settings-page.php:144
 msgid ""
 "🔒 Password is encrypted before saving — leave empty to keep it unchanged."
 msgstr "🔒 รหัสผ่านถูกเข้ารหัสก่อนบันทึก — เว้นว่างหากไม่ต้องการเปลี่ยน"
 
-#: templates/admin/settings-page.php:160
+#: templates/admin/settings-page.php:150
 msgid "Connect"
 msgstr "เชื่อมต่อ"
 
 #. translators: 1: username "resend" in <code> tags, 2: link to the Resend API keys page.
-#: templates/admin/settings-page.php:169
+#: templates/admin/settings-page.php:159
 #, php-format
 msgid ""
 "Username is %1$s and Password is your API key from %2$s. The From Email "
@@ -2070,7 +2060,7 @@ msgstr ""
 "verify ใน Resend แล้ว"
 
 #. translators: 1: username "api_token" in <code> tags, 2: "Email Sending: Edit" permission name in <code> tags.
-#: templates/admin/settings-page.php:173
+#: templates/admin/settings-page.php:163
 #, php-format
 msgid ""
 "Username is %1$s and Password is a Cloudflare API token with the %2$s "
@@ -2080,29 +2070,29 @@ msgstr ""
 "Username คือ %1$s และ Password คือ Cloudflare API token ที่มีสิทธิ์ %2$s ส่วนโดเมนของ "
 "From Email ต้องเพิ่มไว้ในเมนู Email Service → Email Sending ของ Cloudflare แล้ว"
 
-#: templates/admin/settings-page.php:182
+#: templates/admin/settings-page.php:172
 msgid "Connected"
 msgstr "เชื่อมต่อแล้ว"
 
-#: templates/admin/settings-page.php:183
+#: templates/admin/settings-page.php:173
 msgid "Disconnect"
 msgstr "ตัดการเชื่อมต่อ"
 
-#: templates/admin/settings-page.php:187
+#: templates/admin/settings-page.php:177
 msgid "Not connected"
 msgstr "ยังไม่ได้เชื่อมต่อ"
 
-#: templates/admin/settings-page.php:188
+#: templates/admin/settings-page.php:178
 msgid ""
 "Enter your Client ID / Secret. Changes are saved automatically before you "
 "connect."
 msgstr "กรอก Client ID / Secret ระบบจะบันทึกให้อัตโนมัติก่อนเชื่อมต่อ"
 
-#: templates/admin/settings-page.php:201
+#: templates/admin/settings-page.php:191
 msgid "🔒 Encrypted before saving — leave empty to keep it unchanged."
 msgstr "🔒 เข้ารหัสก่อนบันทึก — เว้นว่างหากไม่ต้องการเปลี่ยน"
 
-#: templates/admin/settings-page.php:206
+#: templates/admin/settings-page.php:196
 msgid ""
 "Directory (tenant) ID or domain from Azure Portal. Leave empty to allow any "
 "work or school account."
@@ -2110,7 +2100,7 @@ msgstr ""
 "Directory (tenant) ID หรือโดเมนจาก Azure Portal เว้นว่าง = รับบัญชีองค์กร/"
 "สถานศึกษาได้ทุก tenant"
 
-#: templates/admin/settings-page.php:211
+#: templates/admin/settings-page.php:201
 msgid ""
 "Copy this value into Google Cloud Console or Azure Portal (App registrations "
 "→ Authentication → Web)"
@@ -2118,19 +2108,19 @@ msgstr ""
 "คัดลอกค่านี้ไปใส่ใน Google Cloud Console หรือ Azure Portal (App registrations → "
 "Authentication → Web)"
 
-#: templates/admin/settings-page.php:216
+#: templates/admin/settings-page.php:206
 msgid "Reconnect"
 msgstr "เชื่อมต่อใหม่"
 
-#: templates/admin/settings-page.php:216
+#: templates/admin/settings-page.php:206
 msgid "Connect Account"
 msgstr "เชื่อมต่อบัญชี"
 
-#: templates/admin/settings-page.php:220
+#: templates/admin/settings-page.php:210
 msgid "💡 See the \"User Guide\" page for OAuth2 setup instructions"
 msgstr "💡 ดูวิธีตั้งค่า OAuth2 ได้ที่หน้า \"คู่มือการใช้งาน\""
 
-#: templates/admin/settings-page.php:221
+#: templates/admin/settings-page.php:211
 msgid ""
 "You need to register an OAuth app in Google Cloud Console (Gmail) or Azure "
 "Portal (Microsoft 365), then configure the Redirect URI above to match."
@@ -2138,34 +2128,58 @@ msgstr ""
 "ต้องลงทะเบียน OAuth App ที่ Google Cloud Console (Gmail) หรือ Azure Portal "
 "(Microsoft 365) แล้วนำ Redirect URI ด้านบนไปตั้งค่าให้ตรงกัน"
 
-#: templates/admin/settings-page.php:229
+#: templates/admin/settings-page.php:218
+msgid "From Email"
+msgstr "อีเมลผู้ส่ง (From Email)"
+
+#: templates/admin/settings-page.php:220
+msgid ""
+"Leave empty to send as the SMTP Username or the connected account. Resend "
+"and Cloudflare need a verified domain; Google and Microsoft 365 need an "
+"address the connected account may send as (e.g. a Microsoft 365 shared "
+"mailbox with Send As permission)."
+msgstr ""
+"เว้นว่าง = ส่งในนาม Username ของ SMTP หรือบัญชีที่เชื่อมไว้ Resend และ Cloudflare "
+"ต้องใช้โดเมนที่ verify แล้ว ส่วน Google และ Microsoft 365 "
+"ต้องเป็นอีเมลที่บัญชีที่เชื่อมไว้มีสิทธิ์ส่งในนามได้ (เช่น shared mailbox ของ Microsoft 365 "
+"ที่ให้สิทธิ์ Send As)"
+
+#: templates/admin/settings-page.php:223
+msgid "From Name"
+msgstr "ชื่อผู้ส่ง (From Name)"
+
+#: templates/admin/settings-page.php:225
+msgid "Leave empty to use the site name."
+msgstr "เว้นว่างไว้จะใช้ชื่อเว็บไซต์"
+
+#: templates/admin/settings-page.php:233
 msgid "⚠️ Disable SSL Certificate Verification"
 msgstr "⚠️ ปิดการตรวจสอบ SSL Certificate"
 
-#: templates/admin/settings-page.php:229
+#: templates/admin/settings-page.php:233
 msgid "(Development only)"
 msgstr "(สำหรับ Development เท่านั้น)"
 
 #. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:233
+#: templates/admin/settings-page.php:237
 #, php-format
 msgid "Enable only when the server does not have a valid SSL certificate — %s"
 msgstr "เปิดใช้เฉพาะเมื่อเซิร์ฟเวอร์ไม่มี SSL certificate ที่ถูกต้อง — %s"
 
 #. translators: %s: "Not recommended for Production" label wrapped in <strong> tags.
-#: templates/admin/settings-page.php:233
+#: templates/admin/settings-page.php:237
 msgid "Not recommended for Production"
 msgstr "ไม่แนะนำสำหรับ Production"
 
-#: templates/admin/settings-page.php:240
+#: templates/admin/settings-page.php:244
 msgid "🛡️ Security Settings (Captcha)"
 msgstr "🛡️ ตั้งค่าระบบความปลอดภัย (Captcha)"
 
-#: templates/admin/settings-page.php:275
+#: templates/admin/settings-page.php:279
 msgid "Block form submissions when CAPTCHA is not configured (recommended)"
 msgstr "บล็อกการส่งฟอร์มเมื่อยังไม่ได้ตั้งค่า CAPTCHA (แนะนำ)"
 
-#: templates/admin/settings-page.php:277
+#: templates/admin/settings-page.php:281
 msgid ""
 "When enabled, if the selected CAPTCHA service has no Secret Key, all form "
 "submissions will be rejected instead of allowed through — disable this only "
@@ -2174,12 +2188,12 @@ msgstr ""
 "เมื่อเปิดไว้ หากบริการ CAPTCHA ที่เลือกยังไม่มี Secret Key "
 "ระบบจะปฏิเสธการส่งฟอร์มทั้งหมดแทนที่จะปล่อยผ่าน — ปิดเฉพาะเมื่อตั้งใจใช้ฟอร์มโดยไม่มี CAPTCHA"
 
-#: templates/admin/settings-page.php:282
+#: templates/admin/settings-page.php:286
 msgid "🌐 Trusted Proxies (for sites behind a Reverse Proxy / CDN)"
 msgstr "🌐 Trusted Proxies (สำหรับเว็บหลัง Reverse Proxy / CDN)"
 
 #. translators: %1$s: CF-Connecting-IP header name wrapped in <code> tags, %2$s: X-Forwarded-For header name wrapped in <code> tags.
-#: templates/admin/settings-page.php:288
+#: templates/admin/settings-page.php:292
 #, php-format
 msgid ""
 "Enter the IPs or CIDRs of trusted proxies (e.g. Cloudflare, Nginx reverse "
@@ -2190,21 +2204,21 @@ msgstr ""
 "บรรทัดละ 1 ค่า — ระบบจะอ่าน IP ผู้ใช้จริงจาก header %1$s / %2$s เฉพาะเมื่อ request "
 "มาจาก proxy เหล่านี้เท่านั้น"
 
-#: templates/admin/settings-page.php:289
+#: templates/admin/settings-page.php:293
 msgid "Leave empty = trust REMOTE_ADDR only (default, safest)"
 msgstr "เว้นว่าง = เชื่อ REMOTE_ADDR อย่างเดียว (ค่าเริ่มต้น ปลอดภัยสุด)"
 
-#: templates/admin/settings-page.php:298
+#: templates/admin/settings-page.php:302
 msgid "📨 Test Email Sending (SMTP Test)"
 msgstr "📨 ทดสอบส่งอีเมล (SMTP Test)"
 
-#: templates/admin/settings-page.php:299
+#: templates/admin/settings-page.php:303
 msgid ""
 "Send a test email to the specified address to verify that your SMTP settings "
 "are correct."
 msgstr "ทดสอบว่าการตั้งค่า SMTP ถูกต้องหรือไม่ โดยส่งอีเมลทดสอบไปยังอีเมลที่ระบุ"
 
-#: templates/admin/settings-page.php:302
+#: templates/admin/settings-page.php:306
 msgid "Recipient email:"
 msgstr "อีเมลปลายทาง:"
 
@@ -2297,6 +2311,13 @@ msgstr "โปรดเลือก"
 #: templates/frontend/form.php:96
 msgid "Please fill in all required fields to submit the form."
 msgstr "กรุณากรอกข้อมูลในช่องที่จำเป็นให้ครบก่อนส่งแบบฟอร์ม"
+
+#~ msgid ""
+#~ "Must be on a domain your provider has verified (required for Resend and "
+#~ "Cloudflare). Leave empty to use the Username if it is an email address."
+#~ msgstr ""
+#~ "ต้องเป็นอีเมลบนโดเมนที่ผู้ให้บริการ verify แล้ว (จำเป็นสำหรับ Resend และ Cloudflare) "
+#~ "เว้นว่างไว้จะใช้ Username แทนถ้าเป็นอีเมล"
 
 #~ msgid "Copy the shortcode, e.g. <code>[advanced_form id=\"123\"]</code>"
 #~ msgstr "คัดลอก Shortcode เช่น <code>[advanced_form id=\"123\"]</code>"
