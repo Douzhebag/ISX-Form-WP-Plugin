@@ -36,7 +36,7 @@ class SettingsController extends AbstractAjaxController {
             'isxf_admin_notify_enable', 'isxf_admin_notify_email',
             'isxf_smtp_enable', 'isxf_smtp_host', 'isxf_smtp_port', 'isxf_smtp_user', 'isxf_smtp_pass',
             'isxf_smtp_secure', 'isxf_smtp_from_email', 'isxf_smtp_from_name', 'isxf_smtp_disable_ssl_verify',
-            'isxf_smtp_auth_method', 'isxf_smtp_oauth_client_id', 'isxf_smtp_oauth_client_secret', 'isxf_smtp_oauth_tenant',
+            'isxf_smtp_auth_method', 'isxf_smtp_oauth_client_id', 'isxf_smtp_oauth_client_secret',
             'isxf_captcha_service', 'isxf_recaptcha_site_key', 'isxf_recaptcha_secret_key',
             'isxf_turnstile_site_key', 'isxf_turnstile_secret_key', 'isxf_captcha_required',
             'isxf_trusted_proxies',
@@ -74,12 +74,10 @@ class SettingsController extends AbstractAjaxController {
         if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) {
             $this->finish_smtp_check( false, __( 'SMTP is disabled. Enable it and save the settings first.', 'insightx-form' ) );
         }
-        $oauth_provider = OAuth::current_provider();
-        if ( $oauth_provider !== null && ! OAuth::is_connected() ) {
-            /* translators: %s: OAuth provider name, e.g. "Microsoft 365". */
-            $this->finish_smtp_check( false, sprintf( __( '%s is not connected. Connect the account and save the settings first.', 'insightx-form' ), OAuth::label( $oauth_provider ) ) );
+        if ( get_option( 'isxf_smtp_auth_method', 'password' ) === 'oauth_google' && ! OAuth::is_connected() ) {
+            $this->finish_smtp_check( false, __( 'Google is not connected. Connect the account and save the settings first.', 'insightx-form' ) );
         }
-        if ( $oauth_provider === null && empty( Crypto::decrypt( get_option( 'isxf_smtp_pass', '' ) ) ) ) {
+        if ( get_option( 'isxf_smtp_auth_method', 'password' ) !== 'oauth_google' && empty( Crypto::decrypt( get_option( 'isxf_smtp_pass', '' ) ) ) ) {
             $this->finish_smtp_check( false, __( 'SMTP password or API key is missing. Enter it and save the settings first.', 'insightx-form' ) );
         }
 
@@ -150,7 +148,7 @@ class SettingsController extends AbstractAjaxController {
      * @return string
      */
     public static function smtp_config_hash() {
-        $keys = [ 'isxf_smtp_enable', 'isxf_smtp_auth_method', 'isxf_smtp_host', 'isxf_smtp_port', 'isxf_smtp_user', 'isxf_smtp_pass', 'isxf_smtp_oauth_connected', 'isxf_smtp_oauth_provider' ];
+        $keys = [ 'isxf_smtp_enable', 'isxf_smtp_auth_method', 'isxf_smtp_host', 'isxf_smtp_port', 'isxf_smtp_user', 'isxf_smtp_pass', 'isxf_smtp_oauth_connected' ];
         return md5( (string) wp_json_encode( array_map( 'get_option', $keys ) ) );
     }
 

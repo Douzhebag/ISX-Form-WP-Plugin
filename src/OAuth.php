@@ -3,7 +3,7 @@
  * ISXF\OAuth — OAuth2 (XOAUTH2) support for SMTP sending.
  *
  * Handles the OAuth2 authorization-code flow and access-token refresh for
- * Google (Gmail) and Microsoft 365, so the plugin can send mail via XOAUTH2 instead of basic
+ * Google (Gmail), so the plugin can send mail via XOAUTH2 instead of basic
  * SMTP authentication.
  *
  * No external library is required — WordPress already bundles PHPMailer with
@@ -18,13 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class OAuth {
 
-        const OPT_AUTH_METHOD   = 'isxf_smtp_auth_method';   // password | oauth_google | oauth_microsoft
+        const OPT_AUTH_METHOD   = 'isxf_smtp_auth_method';   // password | oauth_google
         const OPT_CLIENT_ID     = 'isxf_smtp_oauth_client_id';
         const OPT_CLIENT_SECRET = 'isxf_smtp_oauth_client_secret'; // encrypted
         const OPT_REFRESH_TOKEN = 'isxf_smtp_oauth_refresh_token'; // encrypted
         const OPT_CONNECTED     = 'isxf_smtp_oauth_connected';      // connected account email
-        const OPT_PROVIDER      = 'isxf_smtp_oauth_provider';       // provider the refresh token belongs to
-        const OPT_TENANT        = 'isxf_smtp_oauth_tenant';         // Microsoft tenant (ID, domain, or "organizations")
 
         const TOKEN_TRANSIENT   = 'isxf_oauth_access_token';
 
@@ -36,8 +34,6 @@ class OAuth {
             add_action( 'admin_post_isxf_oauth_connect',    [ $this, 'handle_connect' ] );
             add_action( 'admin_post_isxf_oauth_callback',   [ $this, 'handle_callback' ] );
             add_action( 'admin_post_isxf_oauth_disconnect', [ $this, 'handle_disconnect' ] );
-            // Microsoft's callback has no ?action= (see redirect_uri()).
-            add_action( 'admin_post',                        [ $this, 'maybe_handle_bare_callback' ] );
         }
 
         /**
@@ -54,15 +50,6 @@ class OAuth {
                     'host'      => 'smtp.gmail.com',
                     'port'      => 587,
                 ],
-                'microsoft' => [
-                    'label'     => 'Microsoft 365',
-                    'authorize' => 'https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize',
-                    'token'     => 'https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token',
-                    'scope'     => 'https://outlook.office.com/SMTP.Send offline_access openid email',
-                    'extra'     => [ 'prompt' => 'select_account' ],
-                    'host'      => 'smtp.office365.com',
-                    'port'      => 587,
-                ],
             ];
         }
 
@@ -72,7 +59,6 @@ class OAuth {
         public static function current_provider() {
             $method = get_option( self::OPT_AUTH_METHOD, 'password' );
             if ( $method === 'oauth_google' )    return 'google';
-            if ( $method === 'oauth_microsoft' ) return 'microsoft';
             return null;
         }
 
@@ -93,57 +79,17 @@ class OAuth {
         }
 
         /**
-         * Display label of a provider ('' if unknown).
-         */
-        public static function label( $provider ) {
-            $providers = self::providers();
-            return isset( $providers[ $provider ] ) ? $providers[ $provider ]['label'] : '';
-        }
-
-        /**
-         * Whether OAuth is fully connected (refresh token + email present) for
-         * the selected provider — a token from another provider doesn't count.
+         * Whether OAuth is fully connected (refresh token + email present).
          */
         public static function is_connected() {
-            // Connections made before 0.10.0 have no stored provider — they were Google.
-            return self::connected_email() !== ''
-                && get_option( self::OPT_REFRESH_TOKEN, '' ) !== ''
-                && get_option( self::OPT_PROVIDER, 'google' ) === self::current_provider();
+            return self::connected_email() !== '' && get_option( self::OPT_REFRESH_TOKEN, '' ) !== '';
         }
 
         /**
-         * Microsoft tenant used in the endpoint URLs. Only characters valid in a
-         * tenant ID / domain are kept; empty falls back to "organizations".
+         * The redirect URI to register in the Google Cloud console.
          */
-        public static function tenant() {
-            $tenant = preg_replace( '/[^A-Za-z0-9.\-]/', '', (string) get_option( self::OPT_TENANT, '' ) );
-            return $tenant !== '' ? $tenant : 'organizations';
-        }
-
-        /**
-         * The redirect URI to register in Google Cloud Console / Azure App registrations.
-         *
-         * Microsoft: no query string — Entra rejects redirect URIs with one when
-         * the app also allows personal Microsoft accounts. admin-post.php with no
-         * action fires the bare `admin_post` hook (maybe_handle_bare_callback()).
-         * Google keeps the old URI so existing registrations don't break.
-         *
-         * @param string|null $provider Provider key; defaults to the selected one.
-         */
-        public static function redirect_uri( $provider = null ) {
-            if ( $provider === null ) $provider = self::current_provider();
-            if ( $provider === 'microsoft' ) return admin_url( 'admin-post.php' );
+        public static function redirect_uri() {
             return admin_url( 'admin-post.php?action=isxf_oauth_callback' );
-        }
-
-        /**
-         * `admin_post` (no action) — run the callback only when it is ours: the
-         * current user has a pending connect state. Anything else is left alone.
-         */
-        public function maybe_handle_bare_callback() {
-            if ( ! isset( $_GET['state'] ) ) return;
-            if ( ! get_transient( self::STATE_TRANSIENT . get_current_user_id() ) ) return;
-            $this->handle_callback();
         }
 
         private function settings_url( $args = [] ) {
@@ -153,8 +99,7 @@ class OAuth {
 
         private static function endpoint( $provider, $which ) {
             $providers = self::providers();
-            if ( ! isset( $providers[ $provider ][ $which ] ) ) return '';
-            return str_replace( '{tenant}', rawurlencode( self::tenant() ), $providers[ $provider ][ $which ] );
+            return isset( $providers[ $provider ][ $which ] ) ? $providers[ $provider ][ $which ] : '';
         }
 
         /**
@@ -179,14 +124,14 @@ class OAuth {
 
             $args = array_merge( [
                 'client_id'     => $client_id,
-                'redirect_uri'  => self::redirect_uri( $provider ),
+                'redirect_uri'  => self::redirect_uri(),
                 'response_type' => 'code',
                 'scope'         => $providers[ $provider ]['scope'],
                 'state'         => $state,
             ], $providers[ $provider ]['extra'] );
 
             $authorize_url = self::endpoint( $provider, 'authorize' ) . '?' . http_build_query( $args );
-            // The consent screen is an external URL (accounts.google.com / login.microsoftonline.com)
+            // The consent screen is an external URL (accounts.google.com)
             // — whitelist its host so
             // wp_safe_redirect() accepts it for this redirect.
             add_filter( 'allowed_redirect_hosts', function ( $hosts ) use ( $authorize_url ) {
@@ -229,7 +174,7 @@ class OAuth {
                     'client_id'     => get_option( self::OPT_CLIENT_ID, '' ),
                     'client_secret' => Crypto::decrypt( get_option( self::OPT_CLIENT_SECRET, '' ) ),
                     'code'          => $code,
-                    'redirect_uri'  => self::redirect_uri( $provider ),
+                    'redirect_uri'  => self::redirect_uri(),
                     'grant_type'    => 'authorization_code',
                     'scope'         => $providers[ $provider ]['scope'],
                 ],
@@ -259,9 +204,6 @@ class OAuth {
 
             update_option( self::OPT_REFRESH_TOKEN, $encrypted_token );
             update_option( self::OPT_CONNECTED, $email !== '' ? sanitize_email( $email ) : 'connected' );
-            update_option( self::OPT_PROVIDER, $provider );
-            // Connecting with a provider means sending through it.
-            update_option( self::OPT_AUTH_METHOD, 'oauth_' . $provider );
 
             // Cache the access token we just received.
             $expires = isset( $body['expires_in'] ) ? intval( $body['expires_in'] ) : 3600;
@@ -280,7 +222,6 @@ class OAuth {
 
             delete_option( self::OPT_REFRESH_TOKEN );
             delete_option( self::OPT_CONNECTED );
-            delete_option( self::OPT_PROVIDER );
             delete_transient( self::TOKEN_TRANSIENT );
 
             wp_safe_redirect( $this->settings_url( [ 'isxf_oauth' => 'disconnected' ] ) );
@@ -358,7 +299,7 @@ class OAuth {
             $body = json_decode( wp_remote_retrieve_body( $response ), true );
             if ( empty( $body['access_token'] ) ) {
                 isxf_log_error( 'OAuth refresh response error: ' . wp_remote_retrieve_body( $response ) );
-                // First line only — Microsoft appends Trace / Correlation IDs.
+                // First line of the provider's description only — keep the message short.
                 $desc = isset( $body['error_description'] ) ? strtok( (string) $body['error_description'], "\r\n" ) : '';
                 $code = isset( $body['error'] ) ? (string) $body['error'] : 'unknown_error';
                 self::$last_error = trim( 'OAuth: ' . $code . ( $desc ? ' — ' . $desc : '' ) );

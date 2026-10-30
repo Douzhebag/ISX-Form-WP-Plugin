@@ -264,13 +264,10 @@ abstract class AbstractAjaxController {
      */
     public static function explain_smtp_error( $raw ) {
         $bad_login = OAuth::current_provider() !== null
-            ? __( 'The provider rejected the OAuth login — check that SMTP.Send has admin consent and Authenticated SMTP is enabled for the mailbox, then click Reconnect.', 'insightx-form' )
+            ? __( 'Google rejected the OAuth login — click Reconnect to connect the account again.', 'insightx-form' )
             : __( 'The username or password / API key is incorrect.', 'insightx-form' );
         $checks = [
-            '5.7.139'            => __( 'SMTP AUTH is turned off for this mailbox or tenant — enable Authenticated SMTP for the mailbox (Microsoft 365 admin center → Users → Mail → Manage email apps), wait up to an hour, then try again.', 'insightx-form' ),
-            'SendAsDenied'       => __( 'The connected account may not send as the From Email — give it Send As permission on that mailbox, or leave From Email empty.', 'insightx-form' ),
-            'AADSTS7000215'      => __( 'The OAuth Client Secret is wrong or expired — create a new one (copy its Value, not the Secret ID), save it, then click Reconnect.', 'insightx-form' ),
-            'invalid_client'     => __( 'The OAuth Client Secret is wrong or expired — create a new one (copy its Value, not the Secret ID), save it, then click Reconnect.', 'insightx-form' ),
+            'invalid_client'     => __( 'The OAuth Client ID or Client Secret is wrong — copy them again from Google Cloud Console and save.', 'insightx-form' ),
             'invalid_grant'      => __( 'The OAuth connection has expired or was revoked — click Reconnect.', 'insightx-form' ),
             'authenticat'        => $bad_login,
             'certificate'        => __( 'SSL certificate problem — check the port (465 = SSL, 587 = TLS).', 'insightx-form' ),
@@ -310,7 +307,7 @@ abstract class AbstractAjaxController {
 
     /**
      * Sender mailbox for SMTP: the configured From Email, else the SMTP
-     * username (Basic Auth) or the connected OAuth account — but
+     * username (Basic Auth) or the connected Google account (OAuth) — but
      * only if it is a real address ('' otherwise).
      *
      * @return string
@@ -323,7 +320,7 @@ abstract class AbstractAjaxController {
         if ( ! empty( $from ) && is_email( $from ) ) {
             return $from;
         }
-        $fallback = OAuth::current_provider() !== null && OAuth::is_connected()
+        $fallback = get_option( 'isxf_smtp_auth_method', 'password' ) === 'oauth_google' && OAuth::is_connected()
             ? OAuth::connected_email()
             : get_option( 'isxf_smtp_user' );
         return is_email( $fallback ) ? $fallback : '';
@@ -360,12 +357,13 @@ abstract class AbstractAjaxController {
         $phpmailer->SMTPDebug   = 2; // SMTP::DEBUG_SERVER — client lines are dropped in the callback.
         $phpmailer->Debugoutput = [ $this, 'capture_smtp_debug' ];
 
-        // === OAuth2 (XOAUTH2) — Google / Microsoft 365 ===
-        $provider = OAuth::current_provider();
-        if ( $provider !== null
-            && class_exists( OAuthTokenProvider::class )
+        // === OAuth2 (XOAUTH2) — Google ===
+        $auth_method = get_option( 'isxf_smtp_auth_method', 'password' );
+        if ( $auth_method === 'oauth_google'
+            && class_exists( OAuth::class ) && class_exists( OAuthTokenProvider::class )
             && OAuth::is_connected() ) {
 
+            $provider = 'google';
             $email    = OAuth::connected_email();
             if ( ! is_email( $email ) ) {
                 // id_token ไม่ได้คืน email — fallback ไปที่ช่อง Username เดิม

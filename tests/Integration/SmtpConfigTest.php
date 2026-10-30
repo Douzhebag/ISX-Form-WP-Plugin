@@ -2,7 +2,7 @@
 /**
  * Integration tests for AbstractAjaxController::configure_smtp() — what the
  * phpmailer_init hook does to PHPMailer for each provider card on the
- * settings page (Resend / Cloudflare / Custom / Microsoft 365 OAuth).
+ * settings page (Resend / Cloudflare / Custom).
  *
  * Covers: SMTP left alone when disabled, host/port/username/password,
  * port 465 → SSL (Cloudflare only accepts implicit TLS), 587 → TLS,
@@ -17,7 +17,6 @@
 
 use ISXF\Ajax\SettingsController;
 use ISXF\Crypto;
-use ISXF\OAuth;
 use PHPMailer\PHPMailer\PHPMailer;
 
 if ( ! class_exists( 'WP_UnitTestCase' ) ) {
@@ -199,72 +198,5 @@ class SmtpConfigTest extends WP_UnitTestCase {
         $this->assertSame( 'hello@example.com', $mailer->From );
         $this->assertSame( 'Acme', $mailer->FromName );
         $this->assertFalse( has_filter( 'wp_mail_from', [ $controller, 'filter_mail_from' ] ), 'unhook_smtp() removes the filter again' );
-    }
-
-    /* ---------- Microsoft 365 OAuth2 ---------- */
-
-    private function connect_oauth( string $provider ): void {
-        update_option( 'isxf_smtp_auth_method', 'oauth_' . $provider );
-        update_option( 'isxf_smtp_oauth_refresh_token', Crypto::encrypt( 'refresh' ) );
-        update_option( 'isxf_smtp_oauth_connected', 'me@contoso.com' );
-        update_option( 'isxf_smtp_oauth_provider', $provider );
-    }
-
-    public function test_microsoft_oauth_uses_office365_xoauth2(): void {
-        $this->connect_oauth( 'microsoft' );
-
-        $mailer = $this->configure();
-
-        $this->assertSame( 'smtp.office365.com', $mailer->Host );
-        $this->assertSame( 587, $mailer->Port );
-        $this->assertSame( 'tls', $mailer->SMTPSecure );
-        $this->assertSame( 'XOAUTH2', $mailer->AuthType );
-        $this->assertSame( 'me@contoso.com', $mailer->From );
-    }
-
-    public function test_token_from_another_provider_is_not_used(): void {
-        $this->connect_oauth( 'google' );
-        update_option( 'isxf_smtp_auth_method', 'oauth_microsoft' );
-
-        $this->assertFalse( OAuth::is_connected() );
-        $this->assertNotSame( 'XOAUTH2', $this->configure()->AuthType );
-    }
-
-    public function test_pre_0_10_google_connection_still_counts(): void {
-        $this->connect_oauth( 'google' );
-        delete_option( 'isxf_smtp_oauth_provider' );
-
-        $this->assertTrue( OAuth::is_connected() );
-    }
-
-    public function test_microsoft_endpoints_use_a_sanitized_tenant(): void {
-        update_option( 'isxf_smtp_oauth_tenant', 'contoso.onmicrosoft.com/../x?y' );
-        $this->assertSame( 'contoso.onmicrosoft.com..xy', OAuth::tenant() );
-
-        delete_option( 'isxf_smtp_oauth_tenant' );
-        $this->assertSame( 'organizations', OAuth::tenant() );
-    }
-
-    /* ---------- redirect URI (Entra rejects query strings for some apps) ---------- */
-
-    public function test_microsoft_redirect_uri_has_no_query_string(): void {
-        $this->assertSame( admin_url( 'admin-post.php' ), OAuth::redirect_uri( 'microsoft' ) );
-    }
-
-    public function test_google_keeps_its_registered_redirect_uri(): void {
-        $this->assertSame( admin_url( 'admin-post.php?action=isxf_oauth_callback' ), OAuth::redirect_uri( 'google' ) );
-    }
-
-    public function test_bare_admin_post_without_our_state_is_left_alone(): void {
-        wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
-        $_GET['state'] = 'someone-elses-state';
-
-        $oauth = new OAuth();
-        $this->assertSame( 10, has_action( 'admin_post', [ $oauth, 'maybe_handle_bare_callback' ] ) );
-
-        // Would redirect + exit (killing the test run) if it treated this as our callback.
-        $oauth->maybe_handle_bare_callback();
-        unset( $_GET['state'] );
-        $this->assertFalse( get_transient( OAuth::STATE_TRANSIENT . get_current_user_id() ) );
     }
 }

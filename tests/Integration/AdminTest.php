@@ -6,6 +6,8 @@
  *   builder value is sanitized (fields, colours, radius, advanced CSS,
  *   custom email body).
  * - Frontend::sanitize_custom_css() — no way out of the <style> block.
+ * - Admin::maybe_drop_microsoft_oauth() — sites still on the removed
+ *   Microsoft 365 provider fall back to Basic Auth.
  * - Admin::render_settings_page() — which SMTP provider card starts
  *   selected and which setup note is shown.
  * - process_merge_tags() — submitted values are escaped in emails.
@@ -145,6 +147,32 @@ class AdminTest extends WP_UnitTestCase {
         $this->assertSame( 'letter-spacing: 1px; text-transform: uppercase;', Frontend::sanitize_custom_css( '  letter-spacing: 1px; text-transform: uppercase;  ' ) );
     }
 
+    /* ---------- maybe_drop_microsoft_oauth ---------- */
+
+    public function test_microsoft_oauth_falls_back_to_basic_auth(): void {
+        update_option( 'isxf_smtp_auth_method', 'oauth_microsoft' );
+        update_option( 'isxf_smtp_oauth_refresh_token', 'old-token' );
+        update_option( 'isxf_smtp_oauth_tenant', 'contoso' );
+        update_option( 'isxf_smtp_oauth_provider', 'microsoft' ); // left by 0.10.x
+
+        $this->admin->maybe_drop_microsoft_oauth();
+
+        $this->assertSame( 'password', get_option( 'isxf_smtp_auth_method' ) );
+        $this->assertFalse( get_option( 'isxf_smtp_oauth_refresh_token' ) );
+        $this->assertFalse( get_option( 'isxf_smtp_oauth_tenant' ) );
+        $this->assertFalse( get_option( 'isxf_smtp_oauth_provider' ) );
+    }
+
+    public function test_google_oauth_is_left_alone(): void {
+        update_option( 'isxf_smtp_auth_method', 'oauth_google' );
+        update_option( 'isxf_smtp_oauth_refresh_token', 'google-token' );
+
+        $this->admin->maybe_drop_microsoft_oauth();
+
+        $this->assertSame( 'oauth_google', get_option( 'isxf_smtp_auth_method' ) );
+        $this->assertSame( 'google-token', get_option( 'isxf_smtp_oauth_refresh_token' ) );
+    }
+
     /* ---------- double-encryption repair (v0.9.3 autosave bug) ---------- */
 
     public function test_double_encrypted_password_is_repaired(): void {
@@ -187,7 +215,7 @@ class AdminTest extends WP_UnitTestCase {
     }
 
     public function test_from_fields_stay_visible_with_oauth(): void {
-        update_option( 'isxf_smtp_auth_method', 'oauth_microsoft' );
+        update_option( 'isxf_smtp_auth_method', 'oauth_google' );
 
         $html = $this->render_settings();
 
@@ -226,7 +254,6 @@ class AdminTest extends WP_UnitTestCase {
     public function saved_provider_settings(): array {
         return [
             'google oauth'        => [ 'oauth_google', 'smtp.gmail.com', 'oauth_google' ],
-            'microsoft oauth'     => [ 'oauth_microsoft', '', 'oauth_microsoft' ],
             'resend'              => [ 'password', 'smtp.resend.com', 'resend' ],
             'resend upper case'   => [ 'password', ' SMTP.Resend.com ', 'resend' ],
             'cloudflare'          => [ 'password', 'smtp.mx.cloudflare.net', 'cloudflare' ],

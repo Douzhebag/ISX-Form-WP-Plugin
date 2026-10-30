@@ -101,23 +101,11 @@
     if (authSelect) {
         var toggleAuth = function () {
             var v = authSelect.value;
-            var isOauth = (v.indexOf('oauth_') === 0);
-            var provider = isOauth ? v.slice(6) : '';
+            var isOauth = (v === 'oauth_google');
             var basic = document.getElementById('isxf_auth_password');
             var oauth = document.getElementById('isxf_auth_oauth');
             if (basic) basic.style.display = isOauth ? 'none' : 'block';
             if (oauth) oauth.style.display = isOauth ? 'block' : 'none';
-            if (!isOauth) return;
-            // Provider-specific fields (Tenant ID) + point "Connect" at the chosen provider.
-            document.querySelectorAll('[data-oauth-only]').forEach(function (el) {
-                el.hidden = (el.dataset.oauthOnly !== provider);
-            });
-            var connect = document.getElementById('isxf-oauth-connect');
-            if (connect) {
-                var url = new URL(connect.href);
-                url.searchParams.set('provider', provider);
-                connect.href = url.toString();
-            }
         };
         authSelect.onchange = toggleAuth;
         toggleAuth();
@@ -158,7 +146,7 @@
             setSmtpBadge('idle', isxf_admin_env.i18n.smtp_not_checked);
             applyPreset(card.dataset.preset);
 
-            // Show only the setup note of the chosen provider (none for OAuth / Custom).
+            // Show only the setup note of the chosen provider (none for Google / Custom).
             var notes = document.getElementById('isxf-provider-notes');
             if (notes) {
                 var any = false;
