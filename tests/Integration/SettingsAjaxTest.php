@@ -165,7 +165,19 @@ class SettingsAjaxTest extends WP_Ajax_UnitTestCase {
         $response = $this->handle_ajax( 'isxf_test_smtp_connection' );
 
         $this->assertFalse( $response['success'] );
-        $this->assertStringContainsString( 'Google is not connected', $response['data']['message'] );
+        $this->assertStringContainsString( 'Google / Gmail is not connected', $response['data']['message'] );
+    }
+
+    public function test_smtp_test_reports_unconnected_microsoft(): void {
+        update_option( 'isxf_smtp_enable', 'yes' );
+        update_option( 'isxf_smtp_auth_method', 'oauth_microsoft' );
+        delete_option( 'isxf_smtp_oauth_refresh_token' );
+        $_POST = [ 'nonce' => wp_create_nonce( 'isxf_smtp_connection_nonce' ) ];
+
+        $response = $this->handle_ajax( 'isxf_test_smtp_connection' );
+
+        $this->assertFalse( $response['success'] );
+        $this->assertStringContainsString( 'Microsoft 365 is not connected', $response['data']['message'] );
     }
 
     public function test_test_email_rejects_invalid_address(): void {

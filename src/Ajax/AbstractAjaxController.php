@@ -229,7 +229,7 @@ abstract class AbstractAjaxController {
 
     /**
      * Sender mailbox for SMTP: the configured From Email, else the SMTP
-     * username (Basic Auth) or the connected Google account (OAuth) — but
+     * username (Basic Auth) or the connected OAuth account — but
      * only if it is a real address ('' otherwise).
      *
      * @return string
@@ -242,7 +242,7 @@ abstract class AbstractAjaxController {
         if ( ! empty( $from ) && is_email( $from ) ) {
             return $from;
         }
-        $fallback = get_option( 'isxf_smtp_auth_method', 'password' ) === 'oauth_google' && OAuth::is_connected()
+        $fallback = OAuth::current_provider() !== null && OAuth::is_connected()
             ? OAuth::connected_email()
             : get_option( 'isxf_smtp_user' );
         return is_email( $fallback ) ? $fallback : '';
@@ -275,13 +275,12 @@ abstract class AbstractAjaxController {
     public function configure_smtp( $phpmailer ) {
         if ( get_option( 'isxf_smtp_enable' ) !== 'yes' ) return;
 
-        // === OAuth2 (XOAUTH2) — Google ===
-        $auth_method = get_option( 'isxf_smtp_auth_method', 'password' );
-        if ( $auth_method === 'oauth_google'
-            && class_exists( OAuth::class ) && class_exists( OAuthTokenProvider::class )
+        // === OAuth2 (XOAUTH2) — Google / Microsoft 365 ===
+        $provider = OAuth::current_provider();
+        if ( $provider !== null
+            && class_exists( OAuthTokenProvider::class )
             && OAuth::is_connected() ) {
 
-            $provider = 'google';
             $email    = OAuth::connected_email();
             if ( ! is_email( $email ) ) {
                 // id_token ไม่ได้คืน email — fallback ไปที่ช่อง Username เดิม
