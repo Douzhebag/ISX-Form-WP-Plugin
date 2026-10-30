@@ -1,3 +1,10 @@
+**0.10.2 - 2026-10-30**
+
+**แก้บั๊ก**
+
+- **Azure ขึ้น "URL may not contain a query string" ตอนใส่ Redirect URI ของ Microsoft 365** — การ์ด Microsoft 365 ใช้ Redirect URI แบบไม่มี query string แล้ว (`/wp-admin/admin-post.php`) ใช้ได้ทุกประเภทบัญชีของ app ใน Azure ส่วนการ์ด Google ใช้ URI เดิม ไม่ต้องแก้ใน Google Cloud Console
+- เว็บที่เชื่อม Microsoft 365 ไว้แล้วส่งอีเมลได้ตามเดิม แต่ถ้าจะกด "เชื่อมต่อใหม่" ต้องเพิ่ม Redirect URI ใหม่ใน Azure ก่อน
+
 **0.10.1 - 2026-10-30**
 
 **แก้บั๊ก**

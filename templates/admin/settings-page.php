@@ -15,7 +15,7 @@
  * @var string $auth_method        SMTP auth method option value.
  * @var bool   $is_oauth           Whether an OAuth2 auth method is selected.
  * @var string $oauth_provider     Selected OAuth provider key ('google'|'microsoft').
- * @var string $redirect_uri       OAuth redirect URI.
+ * @var array  $redirect_uris      OAuth redirect URI per provider key.
  * @var string $connected_email    Connected OAuth account email ('' if none).
  * @var bool   $is_connected       Whether an OAuth account is connected.
  * @var string $connect_url        Nonce'd OAuth connect URL.
@@ -195,10 +195,15 @@
                                     <input type="text" name="<?php echo $opt['oauth_tenant']; ?>" value="<?php echo esc_attr( $v['oauth_tenant'] ); ?>" placeholder="organizations">
                                     <p class="isxf-hint"><?php esc_html_e( 'Directory (tenant) ID or domain from Azure Portal. Leave empty to allow any work or school account.', 'insightx-form' ); ?></p>
                                 </div>
-                                <div class="isxf-field isxf-field-wide">
+                                <div class="isxf-field isxf-field-wide" data-oauth-only="google"<?php echo $oauth_provider === 'google' ? '' : ' hidden'; ?>>
                                     <label>Redirect URI</label>
-                                    <input type="text" readonly value="<?php echo esc_attr($redirect_uri); ?>" onclick="this.select();">
-                                    <p class="isxf-hint"><?php esc_html_e( 'Copy this value into Google Cloud Console or Azure Portal (App registrations → Authentication → Web)', 'insightx-form' ); ?></p>
+                                    <input type="text" readonly value="<?php echo esc_attr( $redirect_uris['google'] ); ?>" onclick="this.select();">
+                                    <p class="isxf-hint"><?php esc_html_e( 'Copy this value into Google Cloud Console', 'insightx-form' ); ?></p>
+                                </div>
+                                <div class="isxf-field isxf-field-wide" data-oauth-only="microsoft"<?php echo $oauth_provider === 'microsoft' ? '' : ' hidden'; ?>>
+                                    <label>Redirect URI</label>
+                                    <input type="text" readonly value="<?php echo esc_attr( $redirect_uris['microsoft'] ); ?>" onclick="this.select();">
+                                    <p class="isxf-hint"><?php esc_html_e( 'Copy this value into Azure Portal (App registrations → Authentication → Web)', 'insightx-form' ); ?></p>
                                 </div>
                             </div>
 

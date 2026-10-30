@@ -273,7 +273,7 @@ class Admin {
                 'smtp_check'         => $this->smtp_check_state(),
                 'is_oauth'           => $is_oauth,
                 'oauth_provider'     => $oauth_provider ?: 'google',
-                'redirect_uri'       => OAuth::redirect_uri(),
+                'redirect_uris'      => [ 'google' => OAuth::redirect_uri( 'google' ), 'microsoft' => OAuth::redirect_uri( 'microsoft' ) ],
                 'connected_email'    => OAuth::connected_email(),
                 'is_connected'       => OAuth::is_connected(),
                 'connect_url'        => wp_nonce_url( admin_url( 'admin-post.php?action=isxf_oauth_connect&provider=' . ( $oauth_provider ?: 'google' ) ), 'isxf_oauth_connect' ),

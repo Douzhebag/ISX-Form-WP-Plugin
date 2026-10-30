@@ -33,6 +33,8 @@ class OAuth {
             add_action( 'admin_post_isxf_oauth_connect',    [ $this, 'handle_connect' ] );
             add_action( 'admin_post_isxf_oauth_callback',   [ $this, 'handle_callback' ] );
             add_action( 'admin_post_isxf_oauth_disconnect', [ $this, 'handle_disconnect' ] );
+            // Microsoft's callback has no ?action= (see redirect_uri()).
+            add_action( 'admin_post',                        [ $this, 'maybe_handle_bare_callback' ] );
         }
 
         /**
@@ -117,9 +119,28 @@ class OAuth {
 
         /**
          * The redirect URI to register in Google Cloud Console / Azure App registrations.
+         *
+         * Microsoft: no query string — Entra rejects redirect URIs with one when
+         * the app also allows personal Microsoft accounts. admin-post.php with no
+         * action fires the bare `admin_post` hook (maybe_handle_bare_callback()).
+         * Google keeps the old URI so existing registrations don't break.
+         *
+         * @param string|null $provider Provider key; defaults to the selected one.
          */
-        public static function redirect_uri() {
+        public static function redirect_uri( $provider = null ) {
+            if ( $provider === null ) $provider = self::current_provider();
+            if ( $provider === 'microsoft' ) return admin_url( 'admin-post.php' );
             return admin_url( 'admin-post.php?action=isxf_oauth_callback' );
+        }
+
+        /**
+         * `admin_post` (no action) — run the callback only when it is ours: the
+         * current user has a pending connect state. Anything else is left alone.
+         */
+        public function maybe_handle_bare_callback() {
+            if ( ! isset( $_GET['state'] ) ) return;
+            if ( ! get_transient( self::STATE_TRANSIENT . get_current_user_id() ) ) return;
+            $this->handle_callback();
         }
 
         private function settings_url( $args = [] ) {
@@ -155,7 +176,7 @@ class OAuth {
 
             $args = array_merge( [
                 'client_id'     => $client_id,
-                'redirect_uri'  => self::redirect_uri(),
+                'redirect_uri'  => self::redirect_uri( $provider ),
                 'response_type' => 'code',
                 'scope'         => $providers[ $provider ]['scope'],
                 'state'         => $state,
@@ -205,7 +226,7 @@ class OAuth {
                     'client_id'     => get_option( self::OPT_CLIENT_ID, '' ),
                     'client_secret' => Crypto::decrypt( get_option( self::OPT_CLIENT_SECRET, '' ) ),
                     'code'          => $code,
-                    'redirect_uri'  => self::redirect_uri(),
+                    'redirect_uri'  => self::redirect_uri( $provider ),
                     'grant_type'    => 'authorization_code',
                     'scope'         => $providers[ $provider ]['scope'],
                 ],

@@ -4,7 +4,7 @@
 
 ระบบฟอร์มและจัดการข้อมูลลูกค้าสำหรับธุรกิจ — สร้างฟอร์มง่าย ส่งอีเมลอัตโนมัติ (รองรับ OAuth2) จัดการข้อมูลครบจบในที่เดียว
 
-**Version:** 0.10.1
+**Version:** 0.10.2
 **Author:** [InsightX](https://www.insightx.in.th)
 
 ---
@@ -214,7 +214,7 @@ Asset (CSS/JS) โหลดเฉพาะหน้าที่มี shortcode 
 
 1. ไปที่ [Azure Portal → App registrations](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade) → **New registration**
    - Supported account types: เลือก *Accounts in this organizational directory only* (ปกติ)
-   - Redirect URI: เลือก **Web** แล้วใส่ค่าจากช่อง Redirect URI ของหน้าตั้งค่า (ต้องตรงกัน 100%)
+   - Redirect URI: เลือก **Web** แล้วใส่ค่าจากช่อง Redirect URI ของหน้าตั้งค่า (ต้องตรงกัน 100%) — ของ Microsoft คือ `https://เว็บของคุณ/wp-admin/admin-post.php` ไม่มี `?action=` ต่อท้าย (Azure ไม่รับ URI ที่มี query string ถ้า app รับบัญชี Microsoft ส่วนตัวด้วย)
 2. **API permissions** → Add a permission → *APIs my organization uses* → **Office 365 Exchange Online** → Delegated → `SMTP.Send` และ Microsoft Graph → `offline_access`, `openid`, `email` → กด **Grant admin consent**
 3. **Certificates & secrets** → New client secret → คัดลอกช่อง **Value** (ไม่ใช่ Secret ID)
 4. จดค่า **Application (client) ID** และ **Directory (tenant) ID** จากหน้า Overview

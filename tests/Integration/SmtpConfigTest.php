@@ -244,4 +244,27 @@ class SmtpConfigTest extends WP_UnitTestCase {
         delete_option( 'isxf_smtp_oauth_tenant' );
         $this->assertSame( 'organizations', OAuth::tenant() );
     }
+
+    /* ---------- redirect URI (Entra rejects query strings for some apps) ---------- */
+
+    public function test_microsoft_redirect_uri_has_no_query_string(): void {
+        $this->assertSame( admin_url( 'admin-post.php' ), OAuth::redirect_uri( 'microsoft' ) );
+    }
+
+    public function test_google_keeps_its_registered_redirect_uri(): void {
+        $this->assertSame( admin_url( 'admin-post.php?action=isxf_oauth_callback' ), OAuth::redirect_uri( 'google' ) );
+    }
+
+    public function test_bare_admin_post_without_our_state_is_left_alone(): void {
+        wp_set_current_user( self::factory()->user->create( [ 'role' => 'administrator' ] ) );
+        $_GET['state'] = 'someone-elses-state';
+
+        $oauth = new OAuth();
+        $this->assertSame( 10, has_action( 'admin_post', [ $oauth, 'maybe_handle_bare_callback' ] ) );
+
+        // Would redirect + exit (killing the test run) if it treated this as our callback.
+        $oauth->maybe_handle_bare_callback();
+        unset( $_GET['state'] );
+        $this->assertFalse( get_transient( OAuth::STATE_TRANSIENT . get_current_user_id() ) );
+    }
 }
