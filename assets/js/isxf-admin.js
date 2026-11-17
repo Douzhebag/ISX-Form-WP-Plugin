@@ -291,7 +291,7 @@
                     optionsInput.prop('disabled', true).prop('placeholder', isxf_admin_env.i18n.options_none).val('').css('opacity', '0.3');
                 }
 
-                if (['text', 'textarea', 'email', 'tel', 'number', 'date', 'check_in', 'check_out'].indexOf(type) !== -1) {
+                if (['text', 'textarea', 'email', 'tel', 'number', 'date', 'check_in', 'check_out', 'select'].indexOf(type) !== -1) {
                     placeholderInput.prop('disabled', false).prop('placeholder', isxf_admin_env.i18n.placeholder_sample).css('opacity', '1');
                 } else {
                     placeholderInput.prop('disabled', true).prop('placeholder', isxf_admin_env.i18n.placeholder_none).val('').css('opacity', '0.3');

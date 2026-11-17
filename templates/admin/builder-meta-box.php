@@ -14,6 +14,7 @@
  * @var string $btn_hover_color Button hover color (hex, '' = auto shade).
  * @var string $btn_radius      Button border radius in px ('' = default 6).
  * @var string $btn_font_size   Button font size in px ('' = default 16).
+ * @var string $btn_label       Submit button text ('' = default "Submit Form").
  * @var string $btn_custom_css  Advanced custom CSS for the button (sanitized).
  */
 ?>
@@ -21,6 +22,10 @@
             <div class="isxf-settings-panel" style="margin-bottom: 10px;">
                 <label style="font-weight:bold; font-size:14px; display:block; margin-bottom:10px;"><?php esc_html_e( '🎨 Submit Button Style', 'insightx-form' ); ?></label>
                 <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;">
+                    <div>
+                        <label for="isxf-button-text" style="display:block; font-size:12px; margin-bottom:4px;"><?php esc_html_e( 'Button text', 'insightx-form' ); ?></label>
+                        <input type="text" name="isxf_form_button_text" id="isxf-button-text" value="<?php echo esc_attr( $btn_label ); ?>" placeholder="<?php esc_attr_e( 'Submit Form', 'insightx-form' ); ?>" style="width:200px;">
+                    </div>
                     <div>
                         <label for="isxf-button-color" style="display:block; font-size:12px; margin-bottom:4px;"><?php esc_html_e( 'Background', 'insightx-form' ); ?></label>
                         <input type="text" name="isxf_form_button_color" id="isxf-button-color" value="<?php echo esc_attr( $button_color ); ?>" class="isxf-color-picker" data-default-color="#0f172a">

@@ -842,6 +842,10 @@ msgstr "เมื่อชี้เมาส์ (Hover)"
 msgid "Radius (px)"
 msgstr "มุมมน (px)"
 
+#: templates/admin/builder-meta-box.php:26
+msgid "Button text"
+msgstr "ข้อความปุ่ม"
+
 #: templates/admin/builder-meta-box.php:41
 msgid "Font size (px)"
 msgstr "ขนาดตัวอักษร (px)"

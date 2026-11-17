@@ -10,7 +10,7 @@
  */
 ?>
 <select id="<?php echo esc_attr($field_id); ?>" name="<?php echo esc_attr($f['name']); ?>"<?php if ( $is_required ) echo ' aria-required="true"'; ?> aria-describedby="<?php echo esc_attr($error_id); ?>">
-                                        <option value="">-- <?php echo esc_html__( 'Please select', 'insightx-form' ); ?> --</option>
+                                        <option value=""><?php echo ! empty( $f['placeholder'] ) ? esc_html( $f['placeholder'] ) : '-- ' . esc_html__( 'Please select', 'insightx-form' ) . ' --'; ?></option>
                                         <?php foreach($options_array as $opt): if(empty($opt)) continue; ?>
                                             <option value="<?php echo esc_attr($opt); ?>"><?php echo esc_html($opt); ?></option>
                                         <?php endforeach; ?>

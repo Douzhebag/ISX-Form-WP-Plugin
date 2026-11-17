@@ -181,4 +181,30 @@ class FrontendRenderTest extends WP_UnitTestCase {
         $this->assertStringNotContainsString( '<script>', $html );
         $this->assertStringNotContainsString( '@import', $html );
     }
+    public function test_default_button_text(): void {
+        $this->assertMatchesRegularExpression( '#<button type="submit" class="isxf-submit-btn"[^>]*>Submit Form</button>#', $this->html );
+    }
+
+    public function test_custom_button_text_is_escaped(): void {
+        update_post_meta( $this->form_id, '_isxf_form_button_text', 'Call me <b>back</b>' );
+        $html = do_shortcode( '[isxf_form id="' . $this->form_id . '"]' );
+
+        $this->assertStringContainsString( 'aria-label="Call me &lt;b&gt;back&lt;/b&gt;"', $html );
+        $this->assertStringContainsString( '>Call me &lt;b&gt;back&lt;/b&gt;</button>', $html );
+    }
+
+    public function test_select_uses_placeholder_as_first_option(): void {
+        $this->assertStringContainsString( '<option value="">-- Please select --</option>', $this->html );
+
+        $fields = get_post_meta( $this->form_id, '_isxf_form_fields', true );
+        foreach ( $fields as &$field ) {
+            if ( $field['name'] === 'topic' ) {
+                $field['placeholder'] = 'Pick a topic';
+            }
+        }
+        update_post_meta( $this->form_id, '_isxf_form_fields', $fields );
+        $html = do_shortcode( '[isxf_form id="' . $this->form_id . '"]' );
+
+        $this->assertStringContainsString( '<option value="">Pick a topic</option>', $html );
+    }
 }

@@ -846,6 +846,10 @@ msgstr ""
 msgid "Radius (px)"
 msgstr ""
 
+#: templates/admin/builder-meta-box.php:26
+msgid "Button text"
+msgstr ""
+
 #: templates/admin/builder-meta-box.php:41
 msgid "Font size (px)"
 msgstr ""

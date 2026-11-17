@@ -375,6 +375,7 @@ class Admin {
             $btn_radius      = get_post_meta( $post->ID, '_isxf_form_button_radius', true );
             $btn_font_size   = get_post_meta( $post->ID, '_isxf_form_button_font_size', true );
             $btn_custom_css  = get_post_meta( $post->ID, '_isxf_form_button_css', true );
+            $btn_label       = get_post_meta( $post->ID, '_isxf_form_button_text', true );
             
             if ( ! is_array($fields) || empty($fields) ) {
                 $fields = [[ 'name' => 'your_name', 'label' => __( 'Your Name', 'insightx-form' ), 'type' => 'text', 'width' => '100', 'options' => '', 'required' => 'yes' ]];
@@ -393,6 +394,7 @@ class Admin {
                 'btn_radius'      => $btn_radius,
                 'btn_font_size'   => $btn_font_size,
                 'btn_custom_css'  => is_string( $btn_custom_css ) ? $btn_custom_css : '',
+                'btn_label'       => is_string( $btn_label ) ? $btn_label : '',
             ] );
         }
 
@@ -527,6 +529,9 @@ class Admin {
                     $v = absint( $_POST[ $field ] );
                     update_post_meta( $post_id, $meta, ( $v >= 1 && $v <= 100 ) ? $v : '' );
                 }
+            }
+            if ( isset( $_POST['isxf_form_button_text'] ) ) {
+                update_post_meta( $post_id, '_isxf_form_button_text', sanitize_text_field( wp_unslash( $_POST['isxf_form_button_text'] ) ) );
             }
             if ( isset( $_POST['isxf_form_button_css'] ) ) {
                 update_post_meta( $post_id, '_isxf_form_button_css', \ISXF\Frontend::sanitize_custom_css( wp_unslash( $_POST['isxf_form_button_css'] ) ) );

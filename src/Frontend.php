@@ -19,44 +19,57 @@ class Frontend {
 
         global $post;
         if ( is_a( $post, 'WP_Post' ) && ( has_shortcode( $post->post_content, 'advanced_form' ) || has_shortcode( $post->post_content, 'isxf_form' ) ) ) {
-            $service = get_option('isxf_captcha_service', 'google');
-            if ( $service === 'google' ) {
-                $site_key = get_option('isxf_recaptcha_site_key');
-                if($site_key) wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . $site_key, [], null, true );
-            } else {
-                wp_enqueue_script( 'cloudflare-turnstile', 'https://challenges.cloudflare.com/turnstile/v0/api.js', [], null, true );
-            }
-
-            // Bundled flatpickr v4.6.13 (source: https://cdn.jsdelivr.net/npm/flatpickr@4.6.13) —
-            // served locally so the frontend has no CDN dependency.
-            wp_enqueue_style( 'flatpickr-css', ISXF_PLUGIN_URL . 'assets/libs/flatpickr/flatpickr.min.css', [], '4.6.13' );
-            wp_enqueue_script( 'flatpickr-js', ISXF_PLUGIN_URL . 'assets/libs/flatpickr/flatpickr.min.js', [], '4.6.13', true );
-            wp_enqueue_script( 'flatpickr-th', ISXF_PLUGIN_URL . 'assets/libs/flatpickr/th.js', ['flatpickr-js'], '4.6.13', true );
-
-            wp_enqueue_style( 'isxf-frontend-style', ISXF_PLUGIN_URL . 'assets/css/isxf-frontend.css', [], \isxf_asset_ver( 'assets/css/isxf-frontend.css' ) );
-            // isxf-frontend.js is vanilla JS — no jQuery dependency.
-            wp_enqueue_script( 'isxf-frontend-script', ISXF_PLUGIN_URL . 'assets/js/isxf-frontend.js', ['flatpickr-js'], \isxf_asset_ver( 'assets/js/isxf-frontend.js' ), true );
-
-            wp_localize_script( 'isxf-frontend-script', 'isxf_env', [
-                'ajax_url' => admin_url( 'admin-ajax.php' ),
-                'service'  => $service,
-                'site_key' => ($service === 'google') ? get_option('isxf_recaptcha_site_key') : get_option('isxf_turnstile_site_key'),
-                'i18n'     => [
-                    'checking_security' => __( 'Checking security...', 'insightx-form' ),
-                    'recaptcha_error'   => __( 'Security check failed (reCAPTCHA)', 'insightx-form' ),
-                    'please_wait'       => __( 'Please wait, verifying your security...', 'insightx-form' ),
-                    'processing'        => __( 'Processing...', 'insightx-form' ),
-                    'conn_error'        => __( 'Connection error', 'insightx-form' ),
-                    'submit_form'       => __( 'Submit Form', 'insightx-form' ),
-                    'field_required'    => __( 'This field is required', 'insightx-form' ),
-                    'email_invalid'     => __( 'Please enter a valid email address', 'insightx-form' ),
-                    'form_has_errors'   => __( 'Please correct the highlighted fields and try again', 'insightx-form' ),
-                    'toast_success_title' => __( 'Sent successfully', 'insightx-form' ),
-                    'toast_error_title'   => __( 'Could not send', 'insightx-form' ),
-                    'toast_close'         => __( 'Close', 'insightx-form' )
-                ]
-            ]);
+            self::enqueue_form_assets();
         }
+    }
+
+    /**
+     * Captcha, flatpickr and the form CSS/JS. Called from wp_enqueue_scripts when the
+     * post content has the shortcode, and again from the shortcode itself so forms in
+     * widgets, footers and templates work too (late styles/scripts print in the footer).
+     */
+    public static function enqueue_form_assets() {
+        static $done = false;
+        if ( $done ) return;
+        $done = true;
+
+        $service = get_option('isxf_captcha_service', 'google');
+        if ( $service === 'google' ) {
+            $site_key = get_option('isxf_recaptcha_site_key');
+            if($site_key) wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . $site_key, [], null, true );
+        } else {
+            wp_enqueue_script( 'cloudflare-turnstile', 'https://challenges.cloudflare.com/turnstile/v0/api.js', [], null, true );
+        }
+
+        // Bundled flatpickr v4.6.13 (source: https://cdn.jsdelivr.net/npm/flatpickr@4.6.13) —
+        // served locally so the frontend has no CDN dependency.
+        wp_enqueue_style( 'flatpickr-css', ISXF_PLUGIN_URL . 'assets/libs/flatpickr/flatpickr.min.css', [], '4.6.13' );
+        wp_enqueue_script( 'flatpickr-js', ISXF_PLUGIN_URL . 'assets/libs/flatpickr/flatpickr.min.js', [], '4.6.13', true );
+        wp_enqueue_script( 'flatpickr-th', ISXF_PLUGIN_URL . 'assets/libs/flatpickr/th.js', ['flatpickr-js'], '4.6.13', true );
+
+        wp_enqueue_style( 'isxf-frontend-style', ISXF_PLUGIN_URL . 'assets/css/isxf-frontend.css', [], \isxf_asset_ver( 'assets/css/isxf-frontend.css' ) );
+        // isxf-frontend.js is vanilla JS — no jQuery dependency.
+        wp_enqueue_script( 'isxf-frontend-script', ISXF_PLUGIN_URL . 'assets/js/isxf-frontend.js', ['flatpickr-js'], \isxf_asset_ver( 'assets/js/isxf-frontend.js' ), true );
+
+        wp_localize_script( 'isxf-frontend-script', 'isxf_env', [
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'service'  => $service,
+            'site_key' => ($service === 'google') ? get_option('isxf_recaptcha_site_key') : get_option('isxf_turnstile_site_key'),
+            'i18n'     => [
+                'checking_security' => __( 'Checking security...', 'insightx-form' ),
+                'recaptcha_error'   => __( 'Security check failed (reCAPTCHA)', 'insightx-form' ),
+                'please_wait'       => __( 'Please wait, verifying your security...', 'insightx-form' ),
+                'processing'        => __( 'Processing...', 'insightx-form' ),
+                'conn_error'        => __( 'Connection error', 'insightx-form' ),
+                'submit_form'       => __( 'Submit Form', 'insightx-form' ),
+                'field_required'    => __( 'This field is required', 'insightx-form' ),
+                'email_invalid'     => __( 'Please enter a valid email address', 'insightx-form' ),
+                'form_has_errors'   => __( 'Please correct the highlighted fields and try again', 'insightx-form' ),
+                'toast_success_title' => __( 'Sent successfully', 'insightx-form' ),
+                'toast_error_title'   => __( 'Could not send', 'insightx-form' ),
+                'toast_close'         => __( 'Close', 'insightx-form' )
+            ]
+        ]);
     }
 
     public function render_dynamic_form( $atts ) {
@@ -67,6 +80,8 @@ class Frontend {
 
         if ( empty($fields) ) return '<p>' . esc_html__( 'No fields found in this form', 'insightx-form' ) . '</p>';
 
+        self::enqueue_form_assets();
+
         $button = self::button_styles( $form_id );
 
         return Template::get( 'frontend/form', [
@@ -76,6 +91,7 @@ class Frontend {
             'turnstile_site_key' => get_option('isxf_turnstile_site_key'),
             'button_style'       => $button['vars'],
             'button_css'         => $button['css'],
+            'button_label'       => self::button_label( $form_id ),
         ] );
     }
 
@@ -114,6 +130,13 @@ class Frontend {
         $css = is_string( $css ) ? self::sanitize_custom_css( $css ) : '';
 
         return [ 'vars' => implode( ';', $vars ), 'css' => $css ];
+    }
+
+    /** Submit button text for a form; empty setting = the default "Submit Form". */
+    public static function button_label( $form_id ) {
+        $label = get_post_meta( $form_id, '_isxf_form_button_text', true );
+        $label = is_string( $label ) ? trim( $label ) : '';
+        return $label !== '' ? $label : __( 'Submit Form', 'insightx-form' );
     }
 
     /**

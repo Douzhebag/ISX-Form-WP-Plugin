@@ -12,6 +12,7 @@
  * @var string $turnstile_site_key Turnstile site key ('' when unset).
  * @var string $button_style       Inline CSS vars for custom button style ('' = default).
  * @var string $button_css         Sanitized advanced custom CSS ('' = none), scoped below.
+ * @var string $button_label       Submit button text (per-form setting or the default).
  *
  * Each field type renders through a partial in templates/frontend/fields/.
  *
@@ -94,7 +95,7 @@
                 <?php endif; ?>
                 
                 <p class="isxf-submit-hint" id="isxf-submit-hint-<?php echo esc_attr($form_id); ?>"><?php esc_html_e( 'Please fill in all required fields to submit the form.', 'insightx-form' ); ?></p>
-                <button type="submit" class="isxf-submit-btn" aria-label="<?php esc_attr_e( 'Submit Form', 'insightx-form' ); ?>" aria-busy="false" aria-describedby="isxf-submit-hint-<?php echo esc_attr($form_id); ?>"><?php esc_html_e( 'Submit Form', 'insightx-form' ); ?></button>
+                <button type="submit" class="isxf-submit-btn" aria-label="<?php echo esc_attr( $button_label ); ?>" aria-busy="false" aria-describedby="isxf-submit-hint-<?php echo esc_attr($form_id); ?>"><?php echo esc_html( $button_label ); ?></button>
             </form>
         </div>
         <?php if ( ! empty( $button_css ) ) : ?>
