@@ -40,6 +40,8 @@ jobs:
           for required in \
             "insightx-form/libs/plugin-update-checker/vendor/ParsedownModern.php" \
             "insightx-form/advanced-secure-form.php" \
+            "insightx-form/assets/icon-128x128.png" \
+            "insightx-form/assets/icon-256x256.png" \
             "insightx-form/src/Crypto.php" \
             "insightx-form/languages/insightx-form-th.mo"; do
             unzip -l "$ZIP" | grep -q "$required" || { echo "::error::Missing from zip: $required"; exit 1; }

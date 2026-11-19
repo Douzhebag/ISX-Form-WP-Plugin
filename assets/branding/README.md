@@ -1,8 +1,12 @@
 # InsightX Form artwork
 
-Created with the built-in image_gen tool. Original: banner-original.png.
+Created with the built-in image_gen tool. Originals: banner-original.png and icon-original.png.
 
-Exports: ../banner-1544x500.png and ../banner-772x250.png. The bundled plugin update checker discovers these filenames automatically. README.md uses the larger banner. Exported with a centered vertical crop and macOS sips resizing.
+Exports: ../banner-1544x500.png, ../banner-772x250.png, ../icon-256x256.png, and ../icon-128x128.png. The bundled plugin update checker discovers these filenames automatically. README.md uses the larger banner. Banner exports use a centered vertical crop; icon exports are resized directly with macOS sips.
+
+## Icon prompt
+
+Use case: logo-brand. Create a square WordPress plugin icon for InsightX Form, matching the existing banner. Deep navy #0f172a background, centered sculpted electric-blue form document with three white field lines and a white checkmark badge, subtle cyan highlights. Keep the silhouette clear at 128px. No text, letters, envelope, border, or watermark.
 
 ## Generation prompt
 
