@@ -168,17 +168,20 @@ class Admin {
                 $this->smtp_enable, $this->smtp_host, $this->smtp_port, $this->smtp_user, $this->smtp_pass, $this->smtp_secure, $this->smtp_from_e, $this->smtp_from_n,
                 $this->admin_notify_enable, $this->admin_notify_email,
                 $this->smtp_ssl_verify_off,
-                $this->smtp_auth_method, $this->oauth_client_id, $this->oauth_client_secret
+                $this->smtp_auth_method, $this->oauth_client_id, $this->oauth_client_secret,
+                LineNotify::OPT_ENABLE, LineNotify::OPT_TOKEN, LineNotify::OPT_TARGETS
             ];
             // Checkbox options submit nothing when unchecked → the sanitize
             // callback receives null. They get a dedicated null-safe callback
             // (KNOWN-ISSUES A1); stored values stay 'yes' (checked) / '' (unchecked).
-            $checkbox_options = [ $this->smtp_enable, $this->captcha_required_opt, $this->admin_notify_enable, $this->smtp_ssl_verify_off ];
+            $checkbox_options = [ $this->smtp_enable, $this->captcha_required_opt, $this->admin_notify_enable, $this->smtp_ssl_verify_off, LineNotify::OPT_ENABLE ];
             foreach ( $options as $opt ) {
                 if ( $opt === $this->smtp_pass ) {
                     $callback = [ $this, 'sanitize_smtp_password' ];
                 } elseif ( $opt === $this->oauth_client_secret ) {
                     $callback = [ $this, 'sanitize_oauth_secret' ];
+                } elseif ( $opt === LineNotify::OPT_TOKEN ) {
+                    $callback = [ $this, 'sanitize_line_token' ];
                 } elseif ( $opt === $this->trusted_proxies_opt ) {
                     $callback = 'sanitize_textarea_field'; // เก็บขึ้นบรรทัดใหม่ไว้ (IP/CIDR บรรทัดละ 1 ค่า)
                 } elseif ( in_array( $opt, $checkbox_options, true ) ) {
@@ -241,6 +244,9 @@ class Admin {
                     'oauth_client_id'     => $this->oauth_client_id,
                     'oauth_client_secret' => $this->oauth_client_secret,
                     'smtp_ssl_verify_off' => $this->smtp_ssl_verify_off,
+                    'line_enable'         => LineNotify::OPT_ENABLE,
+                    'line_token'          => LineNotify::OPT_TOKEN,
+                    'line_targets'        => LineNotify::OPT_TARGETS,
                 ],
                 'v' => [
                     'admin_notify_enable' => get_option($this->admin_notify_enable),
@@ -261,6 +267,9 @@ class Admin {
                     'oauth_client_id'     => get_option($this->oauth_client_id),
                     'oauth_client_secret' => get_option($this->oauth_client_secret),
                     'smtp_ssl_verify_off' => get_option($this->smtp_ssl_verify_off),
+                    'line_enable'         => get_option( LineNotify::OPT_ENABLE ),
+                    'line_token'          => get_option( LineNotify::OPT_TOKEN ),
+                    'line_targets'        => get_option( LineNotify::OPT_TARGETS ),
                 ],
                 'service'            => $service,
                 'captcha_configured' => $captcha_configured,
@@ -432,6 +441,24 @@ class Admin {
                 // เข้ารหัสไม่สำเร็จ — ห้ามบันทึก plaintext เด็ดขาด ให้คงค่าเดิมไว้
                 add_settings_error( $this->oauth_client_secret, 'isxf_encrypt_failed', __( '❌ Failed to encrypt the Client Secret — the new value was not saved (the previous value is kept). Please check your server\'s OpenSSL.', 'insightx-form' ) );
                 return get_option( $this->oauth_client_secret, '' );
+            }
+            return $encrypted;
+        }
+
+        public function sanitize_line_token( $value ) {
+            $value = wp_strip_all_tags( trim( (string) $value ) );
+            if ( Crypto::is_encrypted( $value ) ) {
+                return $value;
+            }
+            if ( empty( $value ) ) {
+                // เว้นว่าง = ใช้ค่าเดิม (ไม่เปลี่ยน token)
+                return get_option( LineNotify::OPT_TOKEN, '' );
+            }
+            $encrypted = Crypto::encrypt( $value );
+            if ( is_wp_error( $encrypted ) || empty( $encrypted ) ) {
+                // เข้ารหัสไม่สำเร็จ — ห้ามบันทึก plaintext เด็ดขาด ให้คงค่าเดิมไว้
+                add_settings_error( LineNotify::OPT_TOKEN, 'isxf_encrypt_failed', __( '❌ Failed to encrypt the LINE Channel Access Token — the new value was not saved (the previous value is kept). Please check your server\'s OpenSSL.', 'insightx-form' ) );
+                return get_option( LineNotify::OPT_TOKEN, '' );
             }
             return $encrypted;
         }

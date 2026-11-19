@@ -46,17 +46,42 @@
                     <!-- ===== Admin notification ===== -->
                     <div class="isxf-section">
                         <h2 class="isxf-section-title"><?php esc_html_e( '🔔 Admin Notification', 'insightx-form' ); ?></h2>
-                        <label class="isxf-check">
-                            <input type="checkbox" name="<?php echo $opt['admin_notify_enable']; ?>" value="yes" <?php checked($v['admin_notify_enable'], 'yes'); ?>>
-                            <span><?php esc_html_e( 'Enable admin email notifications', 'insightx-form' ); ?></span>
-                        </label>
-                        <div class="isxf-grid">
-                            <div class="isxf-field isxf-field-wide">
-                                <input type="text" name="<?php echo $opt['admin_notify_email']; ?>" value="<?php echo esc_attr($v['admin_notify_email']); ?>" placeholder="<?php esc_attr_e( 'e.g. admin@example.com', 'insightx-form' ); ?>">
-                                <p class="isxf-hint"><?php
-                                    /* translators: %s: fallback admin email address wrapped in <code> tags. */
-                                    printf( esc_html__( 'Recipient email (if left empty, emails will be sent to: %s)', 'insightx-form' ), '<code>' . $admin_email . '</code>' );
-                                ?></p>
+                        <p class="isxf-hint"><?php esc_html_e( 'Choose how you are notified of new submissions: email, LINE, or both. The customer confirmation email is not affected.', 'insightx-form' ); ?></p>
+
+                        <div class="isxf-channel">
+                            <label class="isxf-switch">
+                                <input type="checkbox" role="switch" name="<?php echo $opt['admin_notify_enable']; ?>" value="yes" <?php checked($v['admin_notify_enable'], 'yes'); ?>>
+                                <span class="isxf-switch-track" aria-hidden="true"></span>
+                                <span><?php esc_html_e( '📧 Email (SMTP)', 'insightx-form' ); ?></span>
+                            </label>
+                            <div class="isxf-grid isxf-channel-body">
+                                <div class="isxf-field isxf-field-wide">
+                                    <input type="text" name="<?php echo $opt['admin_notify_email']; ?>" value="<?php echo esc_attr($v['admin_notify_email']); ?>" placeholder="<?php esc_attr_e( 'e.g. admin@example.com', 'insightx-form' ); ?>">
+                                    <p class="isxf-hint"><?php
+                                        /* translators: %s: fallback admin email address wrapped in <code> tags. */
+                                        printf( esc_html__( 'Recipient email (if left empty, emails will be sent to: %s)', 'insightx-form' ), '<code>' . $admin_email . '</code>' );
+                                    ?></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="isxf-channel">
+                            <label class="isxf-switch">
+                                <input type="checkbox" role="switch" name="<?php echo $opt['line_enable']; ?>" value="yes" <?php checked($v['line_enable'], 'yes'); ?>>
+                                <span class="isxf-switch-track" aria-hidden="true"></span>
+                                <span><?php esc_html_e( '💬 LINE OA', 'insightx-form' ); ?></span>
+                            </label>
+                            <div class="isxf-grid isxf-channel-body">
+                                <div class="isxf-field isxf-field-wide">
+                                    <label for="isxf_line_token"><?php esc_html_e( 'Channel Access Token (long-lived)', 'insightx-form' ); ?></label>
+                                    <input type="password" id="isxf_line_token" name="<?php echo $opt['line_token']; ?>" value="" autocomplete="new-password" placeholder="<?php echo $v['line_token'] ? '••••••••••••••••' : ''; ?>">
+                                    <p class="isxf-hint"><?php esc_html_e( 'LINE Developers Console → your Messaging API channel → Messaging API tab. Leave empty to keep the saved token.', 'insightx-form' ); ?></p>
+                                </div>
+                                <div class="isxf-field isxf-field-wide">
+                                    <label for="isxf_line_targets"><?php esc_html_e( 'Send to (User ID / Group ID)', 'insightx-form' ); ?></label>
+                                    <input type="text" id="isxf_line_targets" name="<?php echo $opt['line_targets']; ?>" value="<?php echo esc_attr( $v['line_targets'] ); ?>" placeholder="U1234abcd..., C5678efgh...">
+                                    <p class="isxf-hint"><?php esc_html_e( 'Separate multiple IDs with commas. Your own User ID is under Basic settings → "Your user ID". Each recipient must have added the OA as a friend (or the OA must be in the group).', 'insightx-form' ); ?></p>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -40,8 +40,9 @@ class SettingsController extends AbstractAjaxController {
             'isxf_captcha_service', 'isxf_recaptcha_site_key', 'isxf_recaptcha_secret_key',
             'isxf_turnstile_site_key', 'isxf_turnstile_secret_key', 'isxf_captcha_required',
             'isxf_trusted_proxies',
+            'isxf_line_enable', 'isxf_line_token', 'isxf_line_targets',
         ];
-        $checkboxes = [ 'isxf_admin_notify_enable', 'isxf_smtp_enable', 'isxf_smtp_disable_ssl_verify', 'isxf_captcha_required' ];
+        $checkboxes = [ 'isxf_admin_notify_enable', 'isxf_smtp_enable', 'isxf_smtp_disable_ssl_verify', 'isxf_captcha_required', 'isxf_line_enable' ];
         $posted = isset( $_POST['settings'] ) && is_array( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : [];
         $saved = false;
 

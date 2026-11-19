@@ -392,6 +392,71 @@
   margin: 1px 0 0;
 }
 
+/* Notification channel toggles (Email / LINE) */
+.isxf-settings .isxf-channel {
+  border-top: 1px solid var(--isxf-line);
+  padding: 14px 0 4px;
+}
+
+.isxf-settings .isxf-channel:not(:has(> .isxf-switch input:checked)) > .isxf-channel-body {
+  display: none;
+}
+
+.isxf-settings .isxf-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--isxf-ink);
+  cursor: pointer;
+}
+
+.isxf-settings .isxf-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+
+.isxf-settings .isxf-switch-track {
+  position: relative;
+  flex: none;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  transition: background 0.15s;
+}
+
+.isxf-settings .isxf-switch-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+  transition: transform 0.15s;
+}
+
+.isxf-settings .isxf-switch input:checked + .isxf-switch-track {
+  background: var(--isxf-accent);
+}
+
+.isxf-settings .isxf-switch input:checked + .isxf-switch-track::after {
+  transform: translateX(16px);
+}
+
+.isxf-settings .isxf-switch input:focus-visible + .isxf-switch-track {
+  outline: 2px solid var(--isxf-accent);
+  outline-offset: 2px;
+}
+
 .isxf-settings .isxf-check em {
   font-style: normal;
   font-size: 12px;

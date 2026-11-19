@@ -1750,6 +1750,43 @@ msgstr ""
 msgid "Enable admin email notifications"
 msgstr ""
 
+#. translators: %s: form title.
+#: src/LineNotify.php
+msgid "📩 New submission: %s"
+msgstr ""
+
+#: src/Admin.php
+msgid "❌ Failed to encrypt the LINE Channel Access Token — the new value was not saved (the previous value is kept). Please check your server's OpenSSL."
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "Choose how you are notified of new submissions: email, LINE, or both. The customer confirmation email is not affected."
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "📧 Email (SMTP)"
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "💬 LINE OA"
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "Channel Access Token (long-lived)"
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "LINE Developers Console → your Messaging API channel → Messaging API tab. Leave empty to keep the saved token."
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "Send to (User ID / Group ID)"
+msgstr ""
+
+#: templates/admin/settings-page.php
+msgid "Separate multiple IDs with commas. Your own User ID is under Basic settings → \"Your user ID\". Each recipient must have added the OA as a friend (or the OA must be in the group)."
+msgstr ""
+
 #: templates/admin/settings-page.php:55
 msgid "e.g. admin@example.com"
 msgstr ""

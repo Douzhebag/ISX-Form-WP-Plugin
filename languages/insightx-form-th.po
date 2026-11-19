@@ -1954,6 +1954,43 @@ msgstr "🔔 การแจ้งเตือนผู้ดูแลระบ�
 msgid "Enable admin email notifications"
 msgstr "เปิดใช้งานการส่งอีเมลแจ้งเตือน Admin"
 
+#. translators: %s: form title.
+#: src/LineNotify.php
+msgid "📩 New submission: %s"
+msgstr "📩 มีฟอร์มส่งเข้ามาใหม่: %s"
+
+#: src/Admin.php
+msgid "❌ Failed to encrypt the LINE Channel Access Token — the new value was not saved (the previous value is kept). Please check your server's OpenSSL."
+msgstr "❌ เข้ารหัส LINE Channel Access Token ไม่สำเร็จ — ค่าใหม่ยังไม่ถูกบันทึก (ใช้ค่าเดิมต่อ) ลองเช็ก OpenSSL ของเซิร์ฟเวอร์"
+
+#: templates/admin/settings-page.php
+msgid "Choose how you are notified of new submissions: email, LINE, or both. The customer confirmation email is not affected."
+msgstr "เลือกช่องทางแจ้งเตือนเมื่อมีคนส่งฟอร์ม: อีเมล, LINE หรือทั้งคู่ (อีเมลยืนยันถึงลูกค้าส่งตามปกติ)"
+
+#: templates/admin/settings-page.php
+msgid "📧 Email (SMTP)"
+msgstr "📧 อีเมล (SMTP)"
+
+#: templates/admin/settings-page.php
+msgid "💬 LINE OA"
+msgstr "💬 LINE OA"
+
+#: templates/admin/settings-page.php
+msgid "Channel Access Token (long-lived)"
+msgstr "Channel Access Token (long-lived)"
+
+#: templates/admin/settings-page.php
+msgid "LINE Developers Console → your Messaging API channel → Messaging API tab. Leave empty to keep the saved token."
+msgstr "LINE Developers Console → channel Messaging API ของคุณ → แท็บ Messaging API (เว้นว่างไว้ = ใช้ token เดิม)"
+
+#: templates/admin/settings-page.php
+msgid "Send to (User ID / Group ID)"
+msgstr "ส่งถึง (User ID / Group ID)"
+
+#: templates/admin/settings-page.php
+msgid "Separate multiple IDs with commas. Your own User ID is under Basic settings → \"Your user ID\". Each recipient must have added the OA as a friend (or the OA must be in the group)."
+msgstr "ใส่หลาย ID ได้ คั่นด้วยคอมมา User ID ของตัวเองดูได้ที่ Basic settings → \"Your user ID\" ผู้รับต้องแอดเพื่อน OA ไว้แล้ว (หรือ OA ต้องอยู่ในกลุ่มนั้น)"
+
 #: templates/admin/settings-page.php:55
 msgid "e.g. admin@example.com"
 msgstr "เช่น admin@example.com"
