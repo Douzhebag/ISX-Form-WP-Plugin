@@ -77,7 +77,7 @@ class LineNotifyTest extends WP_UnitTestCase {
         $body = json_decode( $args['body'], true );
         $this->assertSame( self::USER_ID, $body['to'] );
         $this->assertStringContainsString( 'Contact', $body['messages'][0]['text'] );
-        $this->assertStringContainsString( 'ชื่อ: สมชาย', $body['messages'][0]['text'] );
+        $this->assertStringContainsString( 'ชื่อ : สมชาย', $body['messages'][0]['text'] );
         $this->assertSame( self::GROUP_ID, json_decode( $this->requests[1][1]['body'], true )['to'] );
     }
 
@@ -99,8 +99,16 @@ class LineNotifyTest extends WP_UnitTestCase {
         $this->assertCount( 2, $this->requests );
     }
 
+    public function test_message_formats_fields_and_dashes_empty_values() {
+        $text = LineNotify::build_message( [ 'ชื่อ' => ' สมชาย ', 'อีเมล' => '', 'รายละเอียด' => "  \n" ], 'Contact' );
+        $lines = explode( "\n", $text );
+        $this->assertStringContainsString( 'Contact', $lines[0] );
+        $this->assertSame( [ '', 'ชื่อ : สมชาย', 'อีเมล : -', 'รายละเอียด : -' ], array_slice( $lines, -4 ) );
+        $this->assertStringNotContainsString( 'IP', $text );
+    }
+
     public function test_message_is_truncated_to_line_limit() {
-        $text = LineNotify::build_message( [ 'msg' => str_repeat( 'ก', 6000 ) ], 'F', '1.1.1.1' );
+        $text = LineNotify::build_message( [ 'msg' => str_repeat( 'ก', 6000 ) ], 'F' );
         $this->assertSame( LineNotify::MAX_TEXT, mb_strlen( $text ) );
     }
 }

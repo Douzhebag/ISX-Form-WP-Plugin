@@ -1957,7 +1957,8 @@ msgstr "เปิดใช้งานการส่งอีเมลแจ้
 #. translators: %s: form title.
 #: src/LineNotify.php
 msgid "📩 New submission: %s"
-msgstr "📩 มีฟอร์มส่งเข้ามาใหม่: %s"
+msgstr "🔔 มีลูกค้าติดต่อเข้ามาใหม่\n"
+"ฟอร์ม : %s"
 
 #: src/Admin.php
 msgid "❌ Failed to encrypt the LINE Channel Access Token — the new value was not saved (the previous value is kept). Please check your server's OpenSSL."

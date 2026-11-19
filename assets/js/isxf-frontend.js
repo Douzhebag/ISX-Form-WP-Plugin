@@ -113,6 +113,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        // A required field counts as empty when nothing is typed / picked / checked.
+        function isFieldEmpty(wrapper) {
+            const type = wrapper.dataset.type;
+            if (type === 'radio' || type === 'checkbox') {
+                return wrapper.querySelectorAll('input:checked').length === 0;
+            }
+            const field = wrapper.querySelector('input, select, textarea');
+            return !field || !field.value.trim();
+        }
+
         function clearAllFieldErrors() {
             form.querySelectorAll('.isxf-field-wrapper.isxf-field-has-error').forEach(clearFieldError);
         }
@@ -129,6 +139,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (wrapper && wrapper.classList.contains('isxf-field-has-error')) {
                 clearFieldError(wrapper);
             }
+        });
+
+        // Leaving a required field empty shows its error right away: the submit
+        // button stays disabled until all required fields are filled, so the
+        // submit-time check alone would never get to show it.
+        form.addEventListener('focusout', function (e) {
+            const wrapper = e.target.closest('.isxf-field-wrapper[data-required="yes"]');
+            if (!wrapper || wrapper.contains(e.relatedTarget)) return; // still inside (radio/checkbox group)
+            if (isFieldEmpty(wrapper)) setFieldError(wrapper, isxf_env.i18n.field_required);
         });
 
         // --- Email format validation (client-side convenience; the server ---
@@ -157,17 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let firstInvalid = null;
 
             form.querySelectorAll('.isxf-field-wrapper[data-required="yes"]').forEach(wrapper => {
-                const type = wrapper.dataset.type;
-                let isEmpty = true;
-
-                if (type === 'radio' || type === 'checkbox') {
-                    isEmpty = wrapper.querySelectorAll('input:checked').length === 0;
-                } else {
-                    const field = wrapper.querySelector('input, select, textarea');
-                    isEmpty = !field || !field.value.trim();
-                }
-
-                if (isEmpty) {
+                if (isFieldEmpty(wrapper)) {
                     setFieldError(wrapper, isxf_env.i18n.field_required);
                     if (!firstInvalid) firstInvalid = wrapper;
                 }
@@ -265,17 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const requiredFields = form.querySelectorAll('.isxf-field-wrapper[data-required="yes"]');
 
             requiredFields.forEach(wrapper => {
-                const type = wrapper.dataset.type;
-                let isEmpty = true;
-
-                if (type === 'radio' || type === 'checkbox') {
-                    isEmpty = wrapper.querySelectorAll('input:checked').length === 0;
-                } else {
-                    const field = wrapper.querySelector('input, select, textarea');
-                    isEmpty = !field || !field.value.trim();
-                }
-
-                if (isEmpty) isAllFilled = false;
+                if (isFieldEmpty(wrapper)) isAllFilled = false;
             });
 
             submitBtn.disabled = !isAllFilled;

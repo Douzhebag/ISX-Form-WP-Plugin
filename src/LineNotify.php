@@ -39,7 +39,7 @@ class LineNotify {
         $targets = self::parse_targets( (string) get_option( self::OPT_TARGETS, '' ) );
         if ( ! is_string( $token ) || $token === '' || ! $targets ) return;
 
-        $text = self::build_message( (array) $entry_data, get_the_title( $form_id ), (string) $user_ip );
+        $text = self::build_message( (array) $entry_data, get_the_title( $form_id ) );
 
         // ponytail: one push per target; switch to /multicast if lists grow past a handful.
         foreach ( $targets as $to ) {
@@ -78,13 +78,14 @@ class LineNotify {
         } ) ) );
     }
 
-    public static function build_message( array $entry_data, $form_title, $user_ip ) {
+    /** "label : value" per field, "-" for fields left empty. */
+    public static function build_message( array $entry_data, $form_title ) {
         /* translators: %s: form title. */
-        $lines = [ sprintf( __( '📩 New submission: %s', 'insightx-form' ), $form_title ) ];
+        $lines = [ sprintf( __( '📩 New submission: %s', 'insightx-form' ), $form_title ), '' ];
         foreach ( $entry_data as $label => $value ) {
-            $lines[] = $label . ': ' . $value;
+            $value   = trim( (string) $value );
+            $lines[] = $label . ' : ' . ( $value === '' ? '-' : $value );
         }
-        $lines[] = 'IP: ' . $user_ip;
         $text = implode( "\n", $lines );
         return mb_strlen( $text ) > self::MAX_TEXT ? mb_substr( $text, 0, self::MAX_TEXT - 1 ) . '…' : $text;
     }
