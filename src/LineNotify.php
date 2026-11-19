@@ -82,8 +82,8 @@ class LineNotify {
     }
 
     /**
-     * Flex card: coloured header (form button colour), one label/value block per
-     * field ("-" when empty), submit time and a button to the Entries screen.
+     * Flex card: coloured header (form button colour) and one label/value block
+     * per field ("-" when empty).
      * The plain-text version becomes altText, which is what the phone notification shows.
      */
     public static function build_flex( array $entry_data, $form_title, $form_id ) {
@@ -130,21 +130,6 @@ class LineNotify {
                 'type'   => 'bubble',
                 'header' => [ 'type' => 'box', 'layout' => 'vertical', 'backgroundColor' => $color, 'paddingAll' => 'lg', 'contents' => $header ],
                 'body'   => [ 'type' => 'box', 'layout' => 'vertical', 'paddingTop' => 'sm', 'contents' => $rows ],
-                'footer' => [
-                    'type'     => 'box',
-                    'layout'   => 'vertical',
-                    'spacing'  => 'md',
-                    'contents' => [
-                        [ 'type' => 'text', 'text' => wp_date( 'j M Y · H:i' ), 'size' => 'xxs', 'color' => '#aaaaaa', 'align' => 'center' ],
-                        [
-                            'type'   => 'button',
-                            'style'  => 'primary',
-                            'height' => 'sm',
-                            'color'  => $color,
-                            'action' => [ 'type' => 'uri', 'label' => __( 'View entries', 'insightx-form' ), 'uri' => admin_url( 'edit.php?post_type=isxf_form&page=isxf-entries' ) ],
-                        ],
-                    ],
-                ],
             ],
         ];
     }

@@ -1958,10 +1958,6 @@ msgstr "เปิดใช้งานการส่งอีเมลแจ้
 msgid "🔔 New submission"
 msgstr "🔔 มีลูกค้าติดต่อเข้ามาใหม่"
 
-#: src/LineNotify.php
-msgid "View entries"
-msgstr "ดูรายการในระบบ"
-
 #. translators: %s: form title.
 #: src/LineNotify.php
 msgid "📩 New submission: %s"

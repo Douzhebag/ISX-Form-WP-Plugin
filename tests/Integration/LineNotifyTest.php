@@ -121,10 +121,7 @@ class LineNotifyTest extends WP_UnitTestCase {
         $pairs  = array_map( static fn( $b ) => [ $b['contents'][0]['text'], $b['contents'][1]['text'] ], $blocks );
         $this->assertSame( [ [ 'ชื่อ', 'สมชาย' ], [ 'อีเมล', '-' ], [ '-', 'x' ] ], $pairs, 'empty value and empty label both become "-"' );
 
-        $button = $card['footer']['contents'][1];
-        $this->assertSame( 'uri', $button['action']['type'] );
-        $this->assertStringContainsString( 'page=isxf-entries', $button['action']['uri'] );
-        $this->assertLessThanOrEqual( 20, mb_strlen( $button['action']['label'] ), 'LINE action label limit' );
+        $this->assertArrayNotHasKey( 'footer', $card, 'no time / button footer' );
     }
 
     public function test_flex_header_uses_form_button_colour_and_caps_sizes() {
