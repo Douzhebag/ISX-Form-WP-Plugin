@@ -1954,6 +1954,14 @@ msgstr "🔔 การแจ้งเตือนผู้ดูแลระบ�
 msgid "Enable admin email notifications"
 msgstr "เปิดใช้งานการส่งอีเมลแจ้งเตือน Admin"
 
+#: src/LineNotify.php
+msgid "🔔 New submission"
+msgstr "🔔 มีลูกค้าติดต่อเข้ามาใหม่"
+
+#: src/LineNotify.php
+msgid "View entries"
+msgstr "ดูรายการในระบบ"
+
 #. translators: %s: form title.
 #: src/LineNotify.php
 msgid "📩 New submission: %s"

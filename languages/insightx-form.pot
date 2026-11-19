@@ -1750,6 +1750,14 @@ msgstr ""
 msgid "Enable admin email notifications"
 msgstr ""
 
+#: src/LineNotify.php
+msgid "🔔 New submission"
+msgstr ""
+
+#: src/LineNotify.php
+msgid "View entries"
+msgstr ""
+
 #. translators: %s: form title.
 #: src/LineNotify.php
 msgid "📩 New submission: %s"

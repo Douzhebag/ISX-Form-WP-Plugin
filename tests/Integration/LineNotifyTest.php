@@ -76,8 +76,11 @@ class LineNotifyTest extends WP_UnitTestCase {
 
         $body = json_decode( $args['body'], true );
         $this->assertSame( self::USER_ID, $body['to'] );
-        $this->assertStringContainsString( 'Contact', $body['messages'][0]['text'] );
-        $this->assertStringContainsString( 'ชื่อ : สมชาย', $body['messages'][0]['text'] );
+        $message = $body['messages'][0];
+        $this->assertSame( 'flex', $message['type'] );
+        $this->assertSame( 'bubble', $message['contents']['type'] );
+        $this->assertStringContainsString( 'Contact', $message['altText'] );
+        $this->assertStringContainsString( 'ชื่อ : สมชาย', $message['altText'] );
         $this->assertSame( self::GROUP_ID, json_decode( $this->requests[1][1]['body'], true )['to'] );
     }
 
@@ -105,6 +108,33 @@ class LineNotifyTest extends WP_UnitTestCase {
         $this->assertStringContainsString( 'Contact', $lines[0] );
         $this->assertSame( [ '', 'ชื่อ : สมชาย', 'อีเมล : -', 'รายละเอียด : -' ], array_slice( $lines, -4 ) );
         $this->assertStringNotContainsString( 'IP', $text );
+    }
+
+    public function test_flex_card_lists_fields_and_dashes_empty_values() {
+        $flex = LineNotify::build_flex( [ 'ชื่อ' => 'สมชาย', 'อีเมล' => ' ', '' => 'x' ], 'Contact', $this->form_id );
+        $card = $flex['contents'];
+
+        $this->assertSame( LineNotify::HEADER_COLOR, $card['header']['backgroundColor'] );
+        $this->assertSame( 'Contact', $card['header']['contents'][1]['text'] );
+
+        $blocks = array_values( array_filter( $card['body']['contents'], static fn( $c ) => $c['type'] === 'box' ) );
+        $pairs  = array_map( static fn( $b ) => [ $b['contents'][0]['text'], $b['contents'][1]['text'] ], $blocks );
+        $this->assertSame( [ [ 'ชื่อ', 'สมชาย' ], [ 'อีเมล', '-' ], [ '-', 'x' ] ], $pairs, 'empty value and empty label both become "-"' );
+
+        $button = $card['footer']['contents'][1];
+        $this->assertSame( 'uri', $button['action']['type'] );
+        $this->assertStringContainsString( 'page=isxf-entries', $button['action']['uri'] );
+        $this->assertLessThanOrEqual( 20, mb_strlen( $button['action']['label'] ), 'LINE action label limit' );
+    }
+
+    public function test_flex_header_uses_form_button_colour_and_caps_sizes() {
+        update_post_meta( $this->form_id, '_isxf_form_button_color', '#ff6600' );
+        $flex = LineNotify::build_flex( [ 'msg' => str_repeat( 'ก', 6000 ) ], 'Contact', $this->form_id );
+
+        $this->assertSame( '#ff6600', $flex['contents']['header']['backgroundColor'] );
+        $this->assertSame( LineNotify::MAX_ALT_TEXT, mb_strlen( $flex['altText'] ) );
+        $this->assertSame( LineNotify::MAX_VALUE, mb_strlen( $flex['contents']['body']['contents'][0]['contents'][1]['text'] ) );
+        $this->assertLessThan( 10240, strlen( wp_json_encode( $flex['contents'], JSON_UNESCAPED_UNICODE ) ), 'LINE bubble size cap' );
     }
 
     public function test_message_is_truncated_to_line_limit() {
