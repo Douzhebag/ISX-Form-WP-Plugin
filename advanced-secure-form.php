@@ -2,12 +2,12 @@
 /**
  * Plugin Name:       InsightX Form
  * Plugin URI:        https://insightx.in.th/
- * Version:           0.13.3
+ * Version:           0.14.1
  * Author:            InsightX
  * Author URI:        https://www.insightx.in.th
  * Text Domain:       insightx-form
  * Requires at least: 7.0
- * Requires PHP:      8.1
+ * Requires PHP:      7.4
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Description: ระบบฟอร์มและจัดการข้อมูลลูกค้าสำหรับธุรกิจ — สร้างฟอร์มง่าย ส่งอีเมลอัตโนมัติ จัดการข้อมูลครบจบในที่เดียว โดย InsightX
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'ISXF_PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ISXF_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'ISXF_PLUGIN_VERSION', '0.13.3' );
+define( 'ISXF_PLUGIN_VERSION', '0.14.1' );
 define( 'ISXF_DB_VERSION', '1.1' );
 
 /**

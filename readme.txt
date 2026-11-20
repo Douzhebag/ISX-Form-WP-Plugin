@@ -1,9 +1,9 @@
 === InsightX Form ===
 Tags: forms, contact form, email, entries, form builder
 Requires at least: 7.0
-Tested up to: 7.1.2
-Requires PHP: 8.1
-Stable tag: 0.13.3
+Tested up to: 7.1.5
+Requires PHP: 7.4
+Stable tag: 0.14.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 

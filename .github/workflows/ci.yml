@@ -52,6 +52,18 @@ jobs:
       - name: Run unit tests (stub environment, no WordPress)
         run: composer test:unit
 
+  php74-compatibility:
+    name: PHP 7.4 syntax and compatibility
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+      - name: Check PHP syntax
+        run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
+
   # --- Integration tests: real WordPress test suite against MySQL ---
   integration-tests:
     name: Integration (PHP ${{ matrix.php }}, WP ${{ matrix.wp }})

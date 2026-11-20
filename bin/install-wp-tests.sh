@@ -21,6 +21,21 @@ DB_HOST=${4-localhost}
 WP_VERSION=${5-latest}
 SKIP_DB_CREATE=${6-false}
 
+# Resolve "latest" once so core and the PHPUnit test library use the same tag.
+# The version API returns multiple offers; the first is the current release.
+if [[ $WP_VERSION == 'latest' ]]; then
+	WP_VERSION=$(curl -fsSL https://api.wordpress.org/core/version-check/1.7/ | php -r '
+		$data = json_decode( stream_get_contents( STDIN ), true );
+		$version = $data["offers"][0]["version"] ?? "";
+		if ( ! preg_match( "/^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$/", $version ) ) {
+			fwrite( STDERR, "Could not resolve the latest WordPress release.\n" );
+			exit( 1 );
+		}
+		echo $version;
+	') || exit 1
+	echo "Installing WordPress $WP_VERSION and its matching test suite"
+fi
+
 TMPDIR=${TMPDIR-/tmp}
 TMPDIR=$(echo $TMPDIR | sed -e "s/\/$//")
 WP_TESTS_DIR=${WP_TESTS_DIR-$TMPDIR/wordpress-tests-lib}
@@ -50,15 +65,8 @@ elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 elif [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
 	WP_TESTS_TAG="trunk"
 else
-	# http serves a single offer, whereas https serves multiple. we only want one
-	download http://api.wordpress.org/core/version-check/1.7/ /tmp/wp-latest.json
-	grep '[0-9]+\.[0-9]+(\.[0-9]+)?' /tmp/wp-latest.json
-	LATEST_VERSION=$(grep -o '"version":"[^"]*' /tmp/wp-latest.json | sed 's/"version":"//')
-	if [[ -z "$LATEST_VERSION" ]]; then
-		echo "Latest WordPress version could not be found"
-		exit 1
-	fi
-	WP_TESTS_TAG="tags/$LATEST_VERSION"
+	echo "Unsupported WordPress version: $WP_VERSION" >&2
+	exit 1
 fi
 set -ex
 
@@ -76,26 +84,7 @@ install_wp() {
 		svn export --quiet https://core.svn.wordpress.org/trunk $TMPDIR/wordpress-trunk/wordpress
 		mv $TMPDIR/wordpress-trunk/wordpress/* $WP_CORE_DIR
 	else
-		if [ $WP_VERSION == 'latest' ]; then
-			local ARCHIVE_NAME='latest'
-		elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+ ]]; then
-			# http serves a single offer, whereas https serves multiple. We only want one.
-			download http://api.wordpress.org/core/version-check/1.7/ $TMPDIR/wp-latest.json
-			if [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0] ]]; then
-				# version x.x.0 means the first release of the major version, so strip off the .0
-				LATEST_VERSION=${WP_VERSION%??}
-			else
-				# otherwise, scan the releases and get the most up to date minor version
-				LATEST_VERSION=$(grep -o '"version":"'$WP_VERSION'[^"]*' $TMPDIR/wp-latest.json | sed 's/"version":"//' | head -1)
-			fi
-			if [[ -z "$LATEST_VERSION" ]]; then
-				local ARCHIVE_NAME="wordpress-$WP_VERSION"
-			else
-				local ARCHIVE_NAME="wordpress-$LATEST_VERSION"
-			fi
-		else
-			local ARCHIVE_NAME="wordpress-$WP_VERSION"
-		fi
+		local ARCHIVE_NAME="wordpress-$WP_VERSION"
 		download https://wordpress.org/${ARCHIVE_NAME}.tar.gz  $TMPDIR/wordpress.tar.gz
 		tar --strip-components=1 -zxmf $TMPDIR/wordpress.tar.gz -C $WP_CORE_DIR
 	fi
